@@ -1,0 +1,185 @@
+{
+  "observed_at_utc": "2026-10-25T23:47:44.5676454Z",
+  "project": "nexo-cycle",
+  "files_sha256": {
+    "evaluation/cycle_protocol.json": "7a79a9bc1678c2c0c806f226d99e0774a02bd9819b50426fd91b177a1d3e1999",
+    "compose.observability.yaml": "4f932a93a6be9fd0f555e36b13c97ef88c4637adca4f8503ff5fba22febe7e31",
+    "compose.cycle.yaml": "364fd9f7a63829b22cee30aee79a46741e85328e8d6b3579da54b810f76aa334"
+  },
+  "containers": [
+    {
+      "service": "api-lab",
+      "image_id": "sha256:87a33a82f091c388a6f5f740895a3b37e7c36135df3009b9b048bc6795622b5b",
+      "memory_bytes": 67108864,
+      "nano_cpus": 250000000,
+      "readonly_root": true,
+      "mounts": [
+        {
+          "Type": "bind",
+          "Destination": "/run/secrets/lab_control",
+          "RW": false
+        }
+      ],
+      "tmpfs": null,
+      "networks": [
+        "nexo-cycle_default"
+      ],
+      "ports": {}
+    },
+    {
+      "service": "blackbox",
+      "image_id": "sha256:ea1c7aa3ef3f307cd03e85f34abb604478ccb90b567fc690da0cd9776da76b13",
+      "memory_bytes": 100663296,
+      "nano_cpus": 500000000,
+      "readonly_root": true,
+      "mounts": [
+        {
+          "Type": "bind",
+          "Destination": "/etc/blackbox/blackbox.yml",
+          "RW": false
+        }
+      ],
+      "tmpfs": null,
+      "networks": [
+        "nexo-cycle_default"
+      ],
+      "ports": {}
+    },
+    {
+      "service": "loki",
+      "image_id": "sha256:0db216b630ae1f348a1584c67f3cead8b4c1fc839169a39501db664744158e28",
+      "memory_bytes": 402653184,
+      "nano_cpus": 1000000000,
+      "readonly_root": true,
+      "mounts": [
+        {
+          "Type": "bind",
+          "Destination": "/etc/loki/nexo.yml",
+          "RW": false
+        }
+      ],
+      "tmpfs": {
+        "/loki": "uid=10001,gid=10001,mode=0700,size=64m",
+        "/tmp": ""
+      },
+      "networks": [
+        "nexo-cycle_default"
+      ],
+      "ports": {}
+    },
+    {
+      "service": "nexo",
+      "image_id": "sha256:87a33a82f091c388a6f5f740895a3b37e7c36135df3009b9b048bc6795622b5b",
+      "memory_bytes": 268435456,
+      "nano_cpus": 1000000000,
+      "readonly_root": true,
+      "mounts": [
+        {
+          "Type": "bind",
+          "Destination": "/run/secrets/lab_control",
+          "RW": false
+        },
+        {
+          "Type": "bind",
+          "Destination": "/run/secrets/monitoring_discovery",
+          "RW": false
+        },
+        {
+          "Type": "bind",
+          "Destination": "/run/secrets/semantic_access",
+          "RW": false
+        }
+      ],
+      "tmpfs": {
+        "/app/data": "uid=10001,gid=10001,mode=0700,size=64m",
+        "/tmp": ""
+      },
+      "networks": [
+        "nexo-cycle_default",
+        "nexo-cycle_frontend"
+      ],
+      "ports": {
+        "8000/tcp": [
+          {
+            "HostIp": "127.0.0.1",
+            "HostPort": "8011"
+          }
+        ]
+      }
+    },
+    {
+      "service": "portal-lab",
+      "image_id": "sha256:87a33a82f091c388a6f5f740895a3b37e7c36135df3009b9b048bc6795622b5b",
+      "memory_bytes": 67108864,
+      "nano_cpus": 250000000,
+      "readonly_root": true,
+      "mounts": [
+        {
+          "Type": "bind",
+          "Destination": "/run/secrets/lab_control",
+          "RW": false
+        }
+      ],
+      "tmpfs": null,
+      "networks": [
+        "nexo-cycle_default",
+        "nexo-cycle_frontend"
+      ],
+      "ports": {
+        "8080/tcp": [
+          {
+            "HostIp": "127.0.0.1",
+            "HostPort": "8012"
+          }
+        ]
+      }
+    },
+    {
+      "service": "prometheus",
+      "image_id": "sha256:fa3302279710be2f21a8301ec17a8b4f2301fd829bd113839b3b6b02b6f191a2",
+      "memory_bytes": 402653184,
+      "nano_cpus": 1000000000,
+      "readonly_root": true,
+      "mounts": [
+        {
+          "Type": "bind",
+          "Destination": "/etc/prometheus/prometheus.yml",
+          "RW": false
+        },
+        {
+          "Type": "bind",
+          "Destination": "/run/secrets/monitoring_discovery",
+          "RW": false
+        }
+      ],
+      "tmpfs": {
+        "/prometheus": "uid=65534,gid=65534,mode=0700,size=64m"
+      },
+      "networks": [
+        "nexo-cycle_default"
+      ],
+      "ports": {}
+    },
+    {
+      "service": "semantic",
+      "image_id": "sha256:aee6d3b8d0bb06a8a1b459e5559b1378d3a581baf0830e7c6f3d65ce209b124a",
+      "memory_bytes": 1073741824,
+      "nano_cpus": 2000000000,
+      "readonly_root": true,
+      "mounts": [
+        {
+          "Type": "bind",
+          "Destination": "/run/secrets/semantic_access",
+          "RW": false
+        }
+      ],
+      "tmpfs": {
+        "/tmp": ""
+      },
+      "networks": [
+        "nexo-cycle_default"
+      ],
+      "ports": {}
+    }
+  ]
+}

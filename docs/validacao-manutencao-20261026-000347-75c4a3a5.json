@@ -1,0 +1,9 @@
+﻿{
+    "started_at_utc":  "2026-10-26T00:03:47.6118500Z",
+    "status":  "failed",
+    "project":  "nexo-maintenance-test",
+    "archive_sha256":  "d314f4d1b8c14304411798a01268d2b076863ac02f04753d5c717696c46f68fa",
+    "archive_file":  "nexo-20261026-000353-1f9ff605.nexobak",
+    "error":  "Falhou a verificacao HTTP do ensaio.",
+    "finished_at_utc":  "2026-10-26T00:03:57.0073471Z"
+}

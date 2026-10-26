@@ -1,0 +1,38 @@
+{
+  "version": "1.0-frozen-before-first-run",
+  "description": "Casos e consultas sintéticos escritos para avaliação técnica. Não são dados da Aurora nem evidência de desempenho empresarial. Dev verifica o processo; test fica separado, sem ajuste posterior do limiar.",
+  "documents": [
+    {"id":101,"title":"Ligação à base de dados esgotada","description":"A aplicação deixa de aceitar pedidos quando o conjunto de conexões atinge o limite.","root_cause":"Conexões SQL não libertadas no tratamento de exceções.","resolution":"Corrigir a libertação das conexões e reiniciar os trabalhadores de forma controlada.","runbook":"Medir conexões ativas e pedidos em espera. Confirmar recuperação após a correção."},
+    {"id":102,"title":"Certificado TLS expirado","description":"Os clientes recebem avisos de segurança e não conseguem estabelecer uma ligação HTTPS.","root_cause":"A renovação automática do certificado falhou.","resolution":"Renovar o certificado e recarregar o servidor web.","prevention":"Alertar antes do prazo de validade do certificado."},
+    {"id":103,"title":"Disco de logs sem espaço","description":"O serviço não consegue gravar novos ficheiros e devolve erros de escrita.","root_cause":"Acumulação de registos sem rotação nem retenção.","resolution":"Arquivar registos antigos, libertar espaço e configurar rotação.","runbook":"Verificar espaço livre e inodes antes de remover ficheiros dispensáveis."},
+    {"id":104,"title":"DNS com endereço desatualizado","description":"O domínio resolve para o IP anterior e os utilizadores não chegam ao novo servidor.","root_cause":"Registo DNS e cache mantidos após migração.","resolution":"Corrigir o registo DNS e aguardar a expiração do TTL.","runbook":"Comparar respostas do resolvedor com o endereço autorizado."},
+    {"id":105,"title":"Mensagens acumuladas na fila","description":"Os pedidos são aceites mas as tarefas em segundo plano demoram a terminar.","root_cause":"Consumidores da fila parados após uma atualização.","resolution":"Recuperar os consumidores e acompanhar a redução do atraso.","prevention":"Medir profundidade da fila e idade da mensagem mais antiga."},
+    {"id":106,"title":"Limite de memória ultrapassado","description":"O processo termina repetidamente com OOMKilled quando a carga aumenta.","root_cause":"Fuga de memória no processamento de lotes.","resolution":"Reverter a versão e limitar o tamanho dos lotes até corrigir a fuga.","runbook":"Consultar RSS, limites do contentor e eventos de reinício."},
+    {"id":107,"title":"Autenticação bloqueada por segredo rodado","description":"A integração recebe HTTP 401 apesar de a conta continuar ativa.","root_cause":"A aplicação conserva a credencial anterior após rotação do segredo.","resolution":"Atualizar o segredo no serviço e revogar a credencial antiga.","prevention":"Validar a integração após cada rotação sem registar os segredos em logs."},
+    {"id":108,"title":"Consulta SQL lenta sem índice","description":"A listagem de encomendas demora vários segundos e aumenta o uso de CPU da base de dados.","root_cause":"Pesquisa por cliente executa uma leitura integral da tabela.","resolution":"Criar um índice adequado após analisar o plano de execução.","runbook":"Comparar plano e duração antes e depois, com dados representativos."},
+    {"id":109,"title":"Cache apresenta preços antigos","description":"O catálogo continua a apresentar valores anteriores depois da atualização.","root_cause":"A invalidação da cache não foi executada.","resolution":"Invalidar as entradas afetadas e corrigir o evento de atualização.","prevention":"Definir TTL e testar a consistência após alterações de preço."},
+    {"id":110,"title":"HTTP 503 após publicação","description":"Todos os pedidos ao portal falham imediatamente após uma nova versão.","root_cause":"Configuração incorreta do endereço do serviço a montante.","resolution":"Reverter a configuração e validar as sondagens HTTP.","runbook":"Comparar configuração com a última versão estável antes da reversão."}
+  ],
+  "queries": [
+    {"id":"dev-01","split":"dev","text":"conexões SQL esgotadas","relevant":[101]},
+    {"id":"dev-02","split":"dev","text":"certificate expired HTTPS","relevant":[102]},
+    {"id":"dev-03","split":"dev","text":"mensagens em espera sem trabalhadores","relevant":[105]},
+    {"id":"dev-04","split":"dev","text":"receita de bolo de chocolate","relevant":[]},
+    {"id":"test-01","split":"test","text":"Não há mais ligações disponíveis para falar com o banco de dados","relevant":[101]},
+    {"id":"test-02","split":"test","text":"O navegador recusa a conexão segura porque a validade terminou","relevant":[102]},
+    {"id":"test-03","split":"test","text":"Já não cabe mais nada no armazenamento e a aplicação não escreve","relevant":[103]},
+    {"id":"test-04","split":"test","text":"Mudámos de máquina mas o nome do site continua a apontar para a antiga","relevant":[104]},
+    {"id":"test-05","split":"test","text":"As tarefas assíncronas ficam pendentes porque ninguém as processa","relevant":[105]},
+    {"id":"test-06","split":"test","text":"O contentor é morto por consumir demasiada RAM","relevant":[106]},
+    {"id":"test-07","split":"test","text":"Trocaram a chave de acesso e a integração deixou de se autenticar","relevant":[107]},
+    {"id":"test-08","split":"test","text":"A pesquisa de encomendas varre todos os registos e demora imenso","relevant":[108]},
+    {"id":"test-09","split":"test","text":"Atualizei os valores do catálogo mas os clientes veem os montantes anteriores","relevant":[109]},
+    {"id":"test-10","split":"test","text":"O portal passou a devolver 503 assim que fizemos deploy","relevant":[110]},
+    {"id":"test-11","split":"test","text":"database connection pool exhausted","relevant":[101]},
+    {"id":"test-12","split":"test","text":"background queue consumers stopped processing jobs","relevant":[105]},
+    {"id":"test-13","split":"test","text":"como preparar uma tarte de maçã","relevant":[]},
+    {"id":"test-14","split":"test","text":"horário do comboio para Coimbra","relevant":[]},
+    {"id":"test-15","split":"test","text":"criar relatórios contabilísticos em formato PDF","relevant":[]},
+    {"id":"test-16","split":"test","text":"alterar a morada de faturação de um cliente","relevant":[]}
+  ]
+}

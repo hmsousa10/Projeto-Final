@@ -1,0 +1,1196 @@
+﻿{
+    "started_at_utc":  "2026-10-26T00:04:23.7005089Z",
+    "status":  "passed",
+    "project":  "nexo-maintenance-test",
+    "reused_initial_fixture":  true,
+    "archive_sha256":  "dcc161d5876827bc439419c077299088ccaa2aa6537913922c73bf2c43da2a4d",
+    "archive_file":  "nexo-20261026-000427-b8db3db0.nexobak",
+    "before":  {
+                   "health":  {
+                                  "status":  "ok",
+                                  "version":  "0.13.0"
+                              },
+                   "incidents":  3,
+                   "timeline":  15,
+                   "closed_postmortems":  3,
+                   "knowledge_method":  "bm25"
+               },
+    "stage":  {
+                  "action":  "Preparar",
+                  "project":  "nexo-maintenance-test",
+                  "started_at_utc":  "2026-10-26T00:04:33.2844373Z",
+                  "status":  "passed",
+                  "image_id":  "sha256:4f25dbe6122180ed5a4ab4c88c32bd369c876294dc6552aa57e5f9daecbd7b1b",
+                  "before":  {
+                                 "phase":  "none"
+                             },
+                  "result":  {
+                                 "generation":  "cee2a48aed1947d68ce45b1dbcb4f97d",
+                                 "created_at":  "2026-10-26T00:04:35.523886+00:00",
+                                 "archive_sha256":  "dcc161d5876827bc439419c077299088ccaa2aa6537913922c73bf2c43da2a4d",
+                                 "resume_targets":  [
+                                                        {
+                                                            "service_id":  5,
+                                                            "target_url":  "http://portal-lab:8080/health"
+                                                        },
+                                                        {
+                                                            "service_id":  6,
+                                                            "target_url":  "http://api-lab:8080/health"
+                                                        },
+                                                        {
+                                                            "service_id":  7,
+                                                            "target_url":  "http://portal-lab:8080/api/orders"
+                                                        }
+                                                    ],
+                                 "candidate_sha256":  "778f6eeef5d3479611e3ebbec317cb9b33d8ee81bb72d1651e2d75b87be81159",
+                                 "candidate":  {
+                                                   "schema_sha256":  "c81ef1c49ad5a2e38bdd05038a4e3ed873ae748636bc97d50ba59f3262f642de",
+                                                   "tables":  {
+                                                                  "alert_rule_history":  3,
+                                                                  "alert_rules":  2,
+                                                                  "alert_states":  0,
+                                                                  "audit":  109,
+                                                                  "dependencies":  5,
+                                                                  "incident_alert_context":  1,
+                                                                  "incident_escalations":  1,
+                                                                  "incident_evidence":  1,
+                                                                  "incidents":  9,
+                                                                  "knowledge_vectors":  19,
+                                                                  "login_attempts":  2,
+                                                                  "observations":  3752,
+                                                                  "password_change_attempts":  0,
+                                                                  "service_slo_policies":  9,
+                                                                  "services":  8,
+                                                                  "sessions":  0,
+                                                                  "settings":  3,
+                                                                  "telemetry_targets":  4,
+                                                                  "timeline":  60,
+                                                                  "users":  4
+                                                              },
+                                                   "history_sha256":  {
+                                                                          "users":  "dbe629ccb22e1b9c40f7aff02e56a830a1e2f85609278d330100b55ff61c4e4e",
+                                                                          "services":  "e662f6d238a66a0abca9ccc086eb2381f31b78c9125929741ee6426767b0d82e",
+                                                                          "dependencies":  "4e442f6ec0d521ca19086b93000e7bc73b50b8074d889722b1e1efe1182ace8c",
+                                                                          "incidents":  "ed652c7bdfa8161393d4b935d5037160953c965b27c3e0ab89e2c7221265c9d8",
+                                                                          "timeline":  "51da1e6e8004585e5c32d7e7f53e6582ec68e02aa46d198b3b7a17f14f746a83",
+                                                                          "incident_evidence":  "1b490efa27c7d7bc68c18bde8cd30cd2f14d94a8d0161db6e2c3134aa7eb62af",
+                                                                          "alert_rules":  "6851e287bbe0336dd5d3717bd323a532d4dc313de05085d4ef31ec0fc0b055b4",
+                                                                          "alert_rule_history":  "8bc0bb6c8fcd66af10d87614553958bbe9c5c73270372f70394528dc63c9253e",
+                                                                          "incident_alert_context":  "b34bc6e2aedfe8fa87eff3c2be7287405cbd005fa2a30aee6d21a597608e3a73",
+                                                                          "incident_escalations":  "273275d121ac44433d2dbcbedc3770ebec8ebe6d7721e79856760c7d323a9988",
+                                                                          "service_slo_policies":  "20bf2a970a1bc9c6b63bb9e74b1bac2ab8155106d6294580b07d28d1f8675075"
+                                                                      },
+                                                   "enabled_targets":  0
+                                               },
+                                 "phase":  "staged",
+                                 "updated_at":  "2026-10-26T00:04:35.532158+00:00"
+                             },
+                  "finished_at_utc":  "2026-10-26T00:04:35.7943537Z"
+              },
+    "promotion":  {
+                      "action":  "Promover",
+                      "project":  "nexo-maintenance-test",
+                      "started_at_utc":  "2026-10-26T00:04:36.2436081Z",
+                      "status":  "passed",
+                      "image_id":  "sha256:4f25dbe6122180ed5a4ab4c88c32bd369c876294dc6552aa57e5f9daecbd7b1b",
+                      "before":  {
+                                     "generation":  "cee2a48aed1947d68ce45b1dbcb4f97d",
+                                     "created_at":  "2026-10-26T00:04:35.523886+00:00",
+                                     "archive_sha256":  "dcc161d5876827bc439419c077299088ccaa2aa6537913922c73bf2c43da2a4d",
+                                     "resume_targets":  [
+                                                            {
+                                                                "service_id":  5,
+                                                                "target_url":  "http://portal-lab:8080/health"
+                                                            },
+                                                            {
+                                                                "service_id":  6,
+                                                                "target_url":  "http://api-lab:8080/health"
+                                                            },
+                                                            {
+                                                                "service_id":  7,
+                                                                "target_url":  "http://portal-lab:8080/api/orders"
+                                                            }
+                                                        ],
+                                     "candidate_sha256":  "778f6eeef5d3479611e3ebbec317cb9b33d8ee81bb72d1651e2d75b87be81159",
+                                     "candidate":  {
+                                                       "schema_sha256":  "c81ef1c49ad5a2e38bdd05038a4e3ed873ae748636bc97d50ba59f3262f642de",
+                                                       "tables":  {
+                                                                      "alert_rule_history":  3,
+                                                                      "alert_rules":  2,
+                                                                      "alert_states":  0,
+                                                                      "audit":  109,
+                                                                      "dependencies":  5,
+                                                                      "incident_alert_context":  1,
+                                                                      "incident_escalations":  1,
+                                                                      "incident_evidence":  1,
+                                                                      "incidents":  9,
+                                                                      "knowledge_vectors":  19,
+                                                                      "login_attempts":  2,
+                                                                      "observations":  3752,
+                                                                      "password_change_attempts":  0,
+                                                                      "service_slo_policies":  9,
+                                                                      "services":  8,
+                                                                      "sessions":  0,
+                                                                      "settings":  3,
+                                                                      "telemetry_targets":  4,
+                                                                      "timeline":  60,
+                                                                      "users":  4
+                                                                  },
+                                                       "history_sha256":  {
+                                                                              "users":  "dbe629ccb22e1b9c40f7aff02e56a830a1e2f85609278d330100b55ff61c4e4e",
+                                                                              "services":  "e662f6d238a66a0abca9ccc086eb2381f31b78c9125929741ee6426767b0d82e",
+                                                                              "dependencies":  "4e442f6ec0d521ca19086b93000e7bc73b50b8074d889722b1e1efe1182ace8c",
+                                                                              "incidents":  "ed652c7bdfa8161393d4b935d5037160953c965b27c3e0ab89e2c7221265c9d8",
+                                                                              "timeline":  "51da1e6e8004585e5c32d7e7f53e6582ec68e02aa46d198b3b7a17f14f746a83",
+                                                                              "incident_evidence":  "1b490efa27c7d7bc68c18bde8cd30cd2f14d94a8d0161db6e2c3134aa7eb62af",
+                                                                              "alert_rules":  "6851e287bbe0336dd5d3717bd323a532d4dc313de05085d4ef31ec0fc0b055b4",
+                                                                              "alert_rule_history":  "8bc0bb6c8fcd66af10d87614553958bbe9c5c73270372f70394528dc63c9253e",
+                                                                              "incident_alert_context":  "b34bc6e2aedfe8fa87eff3c2be7287405cbd005fa2a30aee6d21a597608e3a73",
+                                                                              "incident_escalations":  "273275d121ac44433d2dbcbedc3770ebec8ebe6d7721e79856760c7d323a9988",
+                                                                              "service_slo_policies":  "20bf2a970a1bc9c6b63bb9e74b1bac2ab8155106d6294580b07d28d1f8675075"
+                                                                          },
+                                                       "enabled_targets":  0
+                                                   },
+                                     "phase":  "staged",
+                                     "updated_at":  "2026-10-26T00:04:35.532158+00:00"
+                                 },
+                      "result":  {
+                                     "generation":  "cee2a48aed1947d68ce45b1dbcb4f97d",
+                                     "created_at":  "2026-10-26T00:04:35.523886+00:00",
+                                     "archive_sha256":  "dcc161d5876827bc439419c077299088ccaa2aa6537913922c73bf2c43da2a4d",
+                                     "resume_targets":  [
+                                                            {
+                                                                "service_id":  5,
+                                                                "target_url":  "http://portal-lab:8080/health"
+                                                            },
+                                                            {
+                                                                "service_id":  6,
+                                                                "target_url":  "http://api-lab:8080/health"
+                                                            },
+                                                            {
+                                                                "service_id":  7,
+                                                                "target_url":  "http://portal-lab:8080/api/orders"
+                                                            }
+                                                        ],
+                                     "candidate_sha256":  "778f6eeef5d3479611e3ebbec317cb9b33d8ee81bb72d1651e2d75b87be81159",
+                                     "candidate":  {
+                                                       "schema_sha256":  "c81ef1c49ad5a2e38bdd05038a4e3ed873ae748636bc97d50ba59f3262f642de",
+                                                       "tables":  {
+                                                                      "alert_rule_history":  3,
+                                                                      "alert_rules":  2,
+                                                                      "alert_states":  0,
+                                                                      "audit":  109,
+                                                                      "dependencies":  5,
+                                                                      "incident_alert_context":  1,
+                                                                      "incident_escalations":  1,
+                                                                      "incident_evidence":  1,
+                                                                      "incidents":  9,
+                                                                      "knowledge_vectors":  19,
+                                                                      "login_attempts":  2,
+                                                                      "observations":  3752,
+                                                                      "password_change_attempts":  0,
+                                                                      "service_slo_policies":  9,
+                                                                      "services":  8,
+                                                                      "sessions":  0,
+                                                                      "settings":  3,
+                                                                      "telemetry_targets":  4,
+                                                                      "timeline":  60,
+                                                                      "users":  4
+                                                                  },
+                                                       "history_sha256":  {
+                                                                              "users":  "dbe629ccb22e1b9c40f7aff02e56a830a1e2f85609278d330100b55ff61c4e4e",
+                                                                              "services":  "e662f6d238a66a0abca9ccc086eb2381f31b78c9125929741ee6426767b0d82e",
+                                                                              "dependencies":  "4e442f6ec0d521ca19086b93000e7bc73b50b8074d889722b1e1efe1182ace8c",
+                                                                              "incidents":  "ed652c7bdfa8161393d4b935d5037160953c965b27c3e0ab89e2c7221265c9d8",
+                                                                              "timeline":  "51da1e6e8004585e5c32d7e7f53e6582ec68e02aa46d198b3b7a17f14f746a83",
+                                                                              "incident_evidence":  "1b490efa27c7d7bc68c18bde8cd30cd2f14d94a8d0161db6e2c3134aa7eb62af",
+                                                                              "alert_rules":  "6851e287bbe0336dd5d3717bd323a532d4dc313de05085d4ef31ec0fc0b055b4",
+                                                                              "alert_rule_history":  "8bc0bb6c8fcd66af10d87614553958bbe9c5c73270372f70394528dc63c9253e",
+                                                                              "incident_alert_context":  "b34bc6e2aedfe8fa87eff3c2be7287405cbd005fa2a30aee6d21a597608e3a73",
+                                                                              "incident_escalations":  "273275d121ac44433d2dbcbedc3770ebec8ebe6d7721e79856760c7d323a9988",
+                                                                              "service_slo_policies":  "20bf2a970a1bc9c6b63bb9e74b1bac2ab8155106d6294580b07d28d1f8675075"
+                                                                          },
+                                                       "enabled_targets":  0
+                                                   },
+                                     "phase":  "promoted",
+                                     "updated_at":  "2026-10-26T00:04:39.362474+00:00",
+                                     "rollback":  {
+                                                      "schema_sha256":  "c81ef1c49ad5a2e38bdd05038a4e3ed873ae748636bc97d50ba59f3262f642de",
+                                                      "tables":  {
+                                                                     "alert_rule_history":  0,
+                                                                     "alert_rules":  0,
+                                                                     "alert_states":  0,
+                                                                     "audit":  4,
+                                                                     "dependencies":  4,
+                                                                     "incident_alert_context":  0,
+                                                                     "incident_escalations":  0,
+                                                                     "incident_evidence":  0,
+                                                                     "incidents":  3,
+                                                                     "knowledge_vectors":  0,
+                                                                     "login_attempts":  1,
+                                                                     "observations":  96,
+                                                                     "password_change_attempts":  0,
+                                                                     "service_slo_policies":  4,
+                                                                     "services":  4,
+                                                                     "sessions":  0,
+                                                                     "settings":  2,
+                                                                     "telemetry_targets":  0,
+                                                                     "timeline":  15,
+                                                                     "users":  3
+                                                                 },
+                                                      "history_sha256":  {
+                                                                             "users":  "30a059882ee7647b5a82e7aae29852a0c34972183485ea107c887cdfab0aa95a",
+                                                                             "services":  "7a6d6bb3d076955a49b874b06ac39793c242e95cf680642a5556fb3901d5c899",
+                                                                             "dependencies":  "89459ed025a9412690fb2bfea3ce7c41fbcaa3a1f4cfea494d9d14a946b10eff",
+                                                                             "incidents":  "c0f2a19c641d3bcea470f6db8ab8d68d536a543c5a97e681008cb32240dbaaa0",
+                                                                             "timeline":  "9dca036588420aed720a0cae68bb9f0da4b77a5bb34ded7aa7d91175380b65b8",
+                                                                             "incident_evidence":  "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+                                                                             "alert_rules":  "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+                                                                             "alert_rule_history":  "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+                                                                             "incident_alert_context":  "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+                                                                             "incident_escalations":  "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+                                                                             "service_slo_policies":  "ae4252fcc25a787e03d1abeddc38c23e67b35f4ea467e6ddb27a2ab1a06443d2"
+                                                                         },
+                                                      "enabled_targets":  0
+                                                  },
+                                     "rollback_sha256":  "0e2c7ff6bc73bfaec3c604138f0c9444a5e12c6005d275f702e847995fad8ae1",
+                                     "verified":  false
+                                 },
+                      "health":  {
+                                     "status":  "ok",
+                                     "version":  "0.13.0"
+                                 },
+                      "verification":  {
+                                           "phase":  "promoted",
+                                           "historical_tables_match":  [
+                                                                           "users",
+                                                                           "services",
+                                                                           "dependencies",
+                                                                           "incidents",
+                                                                           "timeline",
+                                                                           "incident_evidence",
+                                                                           "alert_rules",
+                                                                           "alert_rule_history",
+                                                                           "incident_alert_context",
+                                                                           "incident_escalations",
+                                                                           "service_slo_policies"
+                                                                       ],
+                                           "tables":  {
+                                                          "alert_rule_history":  3,
+                                                          "alert_rules":  2,
+                                                          "alert_states":  0,
+                                                          "audit":  109,
+                                                          "dependencies":  5,
+                                                          "incident_alert_context":  1,
+                                                          "incident_escalations":  1,
+                                                          "incident_evidence":  1,
+                                                          "incidents":  9,
+                                                          "knowledge_vectors":  19,
+                                                          "login_attempts":  2,
+                                                          "observations":  3752,
+                                                          "password_change_attempts":  0,
+                                                          "service_slo_policies":  9,
+                                                          "services":  8,
+                                                          "sessions":  0,
+                                                          "settings":  3,
+                                                          "telemetry_targets":  4,
+                                                          "timeline":  60,
+                                                          "users":  4
+                                                      },
+                                           "enabled_targets":  0
+                                       },
+                      "finished_at_utc":  "2026-10-26T00:04:42.2657004Z"
+                  },
+    "promoted_http":  {
+                          "health":  {
+                                         "status":  "ok",
+                                         "version":  "0.13.0"
+                                     },
+                          "incidents":  9,
+                          "timeline":  60,
+                          "closed_postmortems":  7,
+                          "knowledge_method":  "bm25"
+                      },
+    "resume":  {
+                   "action":  "Retomar",
+                   "project":  "nexo-maintenance-test",
+                   "started_at_utc":  "2026-10-26T00:04:43.4361072Z",
+                   "status":  "passed",
+                   "image_id":  "sha256:4f25dbe6122180ed5a4ab4c88c32bd369c876294dc6552aa57e5f9daecbd7b1b",
+                   "before":  {
+                                  "generation":  "cee2a48aed1947d68ce45b1dbcb4f97d",
+                                  "created_at":  "2026-10-26T00:04:35.523886+00:00",
+                                  "archive_sha256":  "dcc161d5876827bc439419c077299088ccaa2aa6537913922c73bf2c43da2a4d",
+                                  "resume_targets":  [
+                                                         {
+                                                             "service_id":  5,
+                                                             "target_url":  "http://portal-lab:8080/health"
+                                                         },
+                                                         {
+                                                             "service_id":  6,
+                                                             "target_url":  "http://api-lab:8080/health"
+                                                         },
+                                                         {
+                                                             "service_id":  7,
+                                                             "target_url":  "http://portal-lab:8080/api/orders"
+                                                         }
+                                                     ],
+                                  "candidate_sha256":  "778f6eeef5d3479611e3ebbec317cb9b33d8ee81bb72d1651e2d75b87be81159",
+                                  "candidate":  {
+                                                    "schema_sha256":  "c81ef1c49ad5a2e38bdd05038a4e3ed873ae748636bc97d50ba59f3262f642de",
+                                                    "tables":  {
+                                                                   "alert_rule_history":  3,
+                                                                   "alert_rules":  2,
+                                                                   "alert_states":  0,
+                                                                   "audit":  109,
+                                                                   "dependencies":  5,
+                                                                   "incident_alert_context":  1,
+                                                                   "incident_escalations":  1,
+                                                                   "incident_evidence":  1,
+                                                                   "incidents":  9,
+                                                                   "knowledge_vectors":  19,
+                                                                   "login_attempts":  2,
+                                                                   "observations":  3752,
+                                                                   "password_change_attempts":  0,
+                                                                   "service_slo_policies":  9,
+                                                                   "services":  8,
+                                                                   "sessions":  0,
+                                                                   "settings":  3,
+                                                                   "telemetry_targets":  4,
+                                                                   "timeline":  60,
+                                                                   "users":  4
+                                                               },
+                                                    "history_sha256":  {
+                                                                           "users":  "dbe629ccb22e1b9c40f7aff02e56a830a1e2f85609278d330100b55ff61c4e4e",
+                                                                           "services":  "e662f6d238a66a0abca9ccc086eb2381f31b78c9125929741ee6426767b0d82e",
+                                                                           "dependencies":  "4e442f6ec0d521ca19086b93000e7bc73b50b8074d889722b1e1efe1182ace8c",
+                                                                           "incidents":  "ed652c7bdfa8161393d4b935d5037160953c965b27c3e0ab89e2c7221265c9d8",
+                                                                           "timeline":  "51da1e6e8004585e5c32d7e7f53e6582ec68e02aa46d198b3b7a17f14f746a83",
+                                                                           "incident_evidence":  "1b490efa27c7d7bc68c18bde8cd30cd2f14d94a8d0161db6e2c3134aa7eb62af",
+                                                                           "alert_rules":  "6851e287bbe0336dd5d3717bd323a532d4dc313de05085d4ef31ec0fc0b055b4",
+                                                                           "alert_rule_history":  "8bc0bb6c8fcd66af10d87614553958bbe9c5c73270372f70394528dc63c9253e",
+                                                                           "incident_alert_context":  "b34bc6e2aedfe8fa87eff3c2be7287405cbd005fa2a30aee6d21a597608e3a73",
+                                                                           "incident_escalations":  "273275d121ac44433d2dbcbedc3770ebec8ebe6d7721e79856760c7d323a9988",
+                                                                           "service_slo_policies":  "20bf2a970a1bc9c6b63bb9e74b1bac2ab8155106d6294580b07d28d1f8675075"
+                                                                       },
+                                                    "enabled_targets":  0
+                                                },
+                                  "phase":  "promoted",
+                                  "updated_at":  "2026-10-26T00:04:41.992552+00:00",
+                                  "rollback":  {
+                                                   "schema_sha256":  "c81ef1c49ad5a2e38bdd05038a4e3ed873ae748636bc97d50ba59f3262f642de",
+                                                   "tables":  {
+                                                                  "alert_rule_history":  0,
+                                                                  "alert_rules":  0,
+                                                                  "alert_states":  0,
+                                                                  "audit":  4,
+                                                                  "dependencies":  4,
+                                                                  "incident_alert_context":  0,
+                                                                  "incident_escalations":  0,
+                                                                  "incident_evidence":  0,
+                                                                  "incidents":  3,
+                                                                  "knowledge_vectors":  0,
+                                                                  "login_attempts":  1,
+                                                                  "observations":  96,
+                                                                  "password_change_attempts":  0,
+                                                                  "service_slo_policies":  4,
+                                                                  "services":  4,
+                                                                  "sessions":  0,
+                                                                  "settings":  2,
+                                                                  "telemetry_targets":  0,
+                                                                  "timeline":  15,
+                                                                  "users":  3
+                                                              },
+                                                   "history_sha256":  {
+                                                                          "users":  "30a059882ee7647b5a82e7aae29852a0c34972183485ea107c887cdfab0aa95a",
+                                                                          "services":  "7a6d6bb3d076955a49b874b06ac39793c242e95cf680642a5556fb3901d5c899",
+                                                                          "dependencies":  "89459ed025a9412690fb2bfea3ce7c41fbcaa3a1f4cfea494d9d14a946b10eff",
+                                                                          "incidents":  "c0f2a19c641d3bcea470f6db8ab8d68d536a543c5a97e681008cb32240dbaaa0",
+                                                                          "timeline":  "9dca036588420aed720a0cae68bb9f0da4b77a5bb34ded7aa7d91175380b65b8",
+                                                                          "incident_evidence":  "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+                                                                          "alert_rules":  "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+                                                                          "alert_rule_history":  "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+                                                                          "incident_alert_context":  "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+                                                                          "incident_escalations":  "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+                                                                          "service_slo_policies":  "ae4252fcc25a787e03d1abeddc38c23e67b35f4ea467e6ddb27a2ab1a06443d2"
+                                                                      },
+                                                   "enabled_targets":  0
+                                               },
+                                  "rollback_sha256":  "0e2c7ff6bc73bfaec3c604138f0c9444a5e12c6005d275f702e847995fad8ae1",
+                                  "verified":  true
+                              },
+                   "result":  {
+                                  "resumed_targets":  3,
+                                  "fresh_probes_required":  true
+                              },
+                   "finished_at_utc":  "2026-10-26T00:04:45.7879489Z"
+               },
+    "rollback":  {
+                     "action":  "Reverter",
+                     "project":  "nexo-maintenance-test",
+                     "started_at_utc":  "2026-10-26T00:04:46.3346656Z",
+                     "status":  "passed",
+                     "image_id":  "sha256:4f25dbe6122180ed5a4ab4c88c32bd369c876294dc6552aa57e5f9daecbd7b1b",
+                     "before":  {
+                                    "generation":  "cee2a48aed1947d68ce45b1dbcb4f97d",
+                                    "created_at":  "2026-10-26T00:04:35.523886+00:00",
+                                    "archive_sha256":  "dcc161d5876827bc439419c077299088ccaa2aa6537913922c73bf2c43da2a4d",
+                                    "resume_targets":  [
+                                                           {
+                                                               "service_id":  5,
+                                                               "target_url":  "http://portal-lab:8080/health"
+                                                           },
+                                                           {
+                                                               "service_id":  6,
+                                                               "target_url":  "http://api-lab:8080/health"
+                                                           },
+                                                           {
+                                                               "service_id":  7,
+                                                               "target_url":  "http://portal-lab:8080/api/orders"
+                                                           }
+                                                       ],
+                                    "candidate_sha256":  "778f6eeef5d3479611e3ebbec317cb9b33d8ee81bb72d1651e2d75b87be81159",
+                                    "candidate":  {
+                                                      "schema_sha256":  "c81ef1c49ad5a2e38bdd05038a4e3ed873ae748636bc97d50ba59f3262f642de",
+                                                      "tables":  {
+                                                                     "alert_rule_history":  3,
+                                                                     "alert_rules":  2,
+                                                                     "alert_states":  0,
+                                                                     "audit":  109,
+                                                                     "dependencies":  5,
+                                                                     "incident_alert_context":  1,
+                                                                     "incident_escalations":  1,
+                                                                     "incident_evidence":  1,
+                                                                     "incidents":  9,
+                                                                     "knowledge_vectors":  19,
+                                                                     "login_attempts":  2,
+                                                                     "observations":  3752,
+                                                                     "password_change_attempts":  0,
+                                                                     "service_slo_policies":  9,
+                                                                     "services":  8,
+                                                                     "sessions":  0,
+                                                                     "settings":  3,
+                                                                     "telemetry_targets":  4,
+                                                                     "timeline":  60,
+                                                                     "users":  4
+                                                                 },
+                                                      "history_sha256":  {
+                                                                             "users":  "dbe629ccb22e1b9c40f7aff02e56a830a1e2f85609278d330100b55ff61c4e4e",
+                                                                             "services":  "e662f6d238a66a0abca9ccc086eb2381f31b78c9125929741ee6426767b0d82e",
+                                                                             "dependencies":  "4e442f6ec0d521ca19086b93000e7bc73b50b8074d889722b1e1efe1182ace8c",
+                                                                             "incidents":  "ed652c7bdfa8161393d4b935d5037160953c965b27c3e0ab89e2c7221265c9d8",
+                                                                             "timeline":  "51da1e6e8004585e5c32d7e7f53e6582ec68e02aa46d198b3b7a17f14f746a83",
+                                                                             "incident_evidence":  "1b490efa27c7d7bc68c18bde8cd30cd2f14d94a8d0161db6e2c3134aa7eb62af",
+                                                                             "alert_rules":  "6851e287bbe0336dd5d3717bd323a532d4dc313de05085d4ef31ec0fc0b055b4",
+                                                                             "alert_rule_history":  "8bc0bb6c8fcd66af10d87614553958bbe9c5c73270372f70394528dc63c9253e",
+                                                                             "incident_alert_context":  "b34bc6e2aedfe8fa87eff3c2be7287405cbd005fa2a30aee6d21a597608e3a73",
+                                                                             "incident_escalations":  "273275d121ac44433d2dbcbedc3770ebec8ebe6d7721e79856760c7d323a9988",
+                                                                             "service_slo_policies":  "20bf2a970a1bc9c6b63bb9e74b1bac2ab8155106d6294580b07d28d1f8675075"
+                                                                         },
+                                                      "enabled_targets":  0
+                                                  },
+                                    "phase":  "promoted",
+                                    "updated_at":  "2026-10-26T00:04:41.992552+00:00",
+                                    "rollback":  {
+                                                     "schema_sha256":  "c81ef1c49ad5a2e38bdd05038a4e3ed873ae748636bc97d50ba59f3262f642de",
+                                                     "tables":  {
+                                                                    "alert_rule_history":  0,
+                                                                    "alert_rules":  0,
+                                                                    "alert_states":  0,
+                                                                    "audit":  4,
+                                                                    "dependencies":  4,
+                                                                    "incident_alert_context":  0,
+                                                                    "incident_escalations":  0,
+                                                                    "incident_evidence":  0,
+                                                                    "incidents":  3,
+                                                                    "knowledge_vectors":  0,
+                                                                    "login_attempts":  1,
+                                                                    "observations":  96,
+                                                                    "password_change_attempts":  0,
+                                                                    "service_slo_policies":  4,
+                                                                    "services":  4,
+                                                                    "sessions":  0,
+                                                                    "settings":  2,
+                                                                    "telemetry_targets":  0,
+                                                                    "timeline":  15,
+                                                                    "users":  3
+                                                                },
+                                                     "history_sha256":  {
+                                                                            "users":  "30a059882ee7647b5a82e7aae29852a0c34972183485ea107c887cdfab0aa95a",
+                                                                            "services":  "7a6d6bb3d076955a49b874b06ac39793c242e95cf680642a5556fb3901d5c899",
+                                                                            "dependencies":  "89459ed025a9412690fb2bfea3ce7c41fbcaa3a1f4cfea494d9d14a946b10eff",
+                                                                            "incidents":  "c0f2a19c641d3bcea470f6db8ab8d68d536a543c5a97e681008cb32240dbaaa0",
+                                                                            "timeline":  "9dca036588420aed720a0cae68bb9f0da4b77a5bb34ded7aa7d91175380b65b8",
+                                                                            "incident_evidence":  "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+                                                                            "alert_rules":  "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+                                                                            "alert_rule_history":  "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+                                                                            "incident_alert_context":  "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+                                                                            "incident_escalations":  "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+                                                                            "service_slo_policies":  "ae4252fcc25a787e03d1abeddc38c23e67b35f4ea467e6ddb27a2ab1a06443d2"
+                                                                        },
+                                                     "enabled_targets":  0
+                                                 },
+                                    "rollback_sha256":  "0e2c7ff6bc73bfaec3c604138f0c9444a5e12c6005d275f702e847995fad8ae1",
+                                    "verified":  true
+                                },
+                     "result":  {
+                                    "generation":  "cee2a48aed1947d68ce45b1dbcb4f97d",
+                                    "created_at":  "2026-10-26T00:04:35.523886+00:00",
+                                    "archive_sha256":  "dcc161d5876827bc439419c077299088ccaa2aa6537913922c73bf2c43da2a4d",
+                                    "resume_targets":  [
+                                                           {
+                                                               "service_id":  5,
+                                                               "target_url":  "http://portal-lab:8080/health"
+                                                           },
+                                                           {
+                                                               "service_id":  6,
+                                                               "target_url":  "http://api-lab:8080/health"
+                                                           },
+                                                           {
+                                                               "service_id":  7,
+                                                               "target_url":  "http://portal-lab:8080/api/orders"
+                                                           }
+                                                       ],
+                                    "candidate_sha256":  "778f6eeef5d3479611e3ebbec317cb9b33d8ee81bb72d1651e2d75b87be81159",
+                                    "candidate":  {
+                                                      "schema_sha256":  "c81ef1c49ad5a2e38bdd05038a4e3ed873ae748636bc97d50ba59f3262f642de",
+                                                      "tables":  {
+                                                                     "alert_rule_history":  3,
+                                                                     "alert_rules":  2,
+                                                                     "alert_states":  0,
+                                                                     "audit":  109,
+                                                                     "dependencies":  5,
+                                                                     "incident_alert_context":  1,
+                                                                     "incident_escalations":  1,
+                                                                     "incident_evidence":  1,
+                                                                     "incidents":  9,
+                                                                     "knowledge_vectors":  19,
+                                                                     "login_attempts":  2,
+                                                                     "observations":  3752,
+                                                                     "password_change_attempts":  0,
+                                                                     "service_slo_policies":  9,
+                                                                     "services":  8,
+                                                                     "sessions":  0,
+                                                                     "settings":  3,
+                                                                     "telemetry_targets":  4,
+                                                                     "timeline":  60,
+                                                                     "users":  4
+                                                                 },
+                                                      "history_sha256":  {
+                                                                             "users":  "dbe629ccb22e1b9c40f7aff02e56a830a1e2f85609278d330100b55ff61c4e4e",
+                                                                             "services":  "e662f6d238a66a0abca9ccc086eb2381f31b78c9125929741ee6426767b0d82e",
+                                                                             "dependencies":  "4e442f6ec0d521ca19086b93000e7bc73b50b8074d889722b1e1efe1182ace8c",
+                                                                             "incidents":  "ed652c7bdfa8161393d4b935d5037160953c965b27c3e0ab89e2c7221265c9d8",
+                                                                             "timeline":  "51da1e6e8004585e5c32d7e7f53e6582ec68e02aa46d198b3b7a17f14f746a83",
+                                                                             "incident_evidence":  "1b490efa27c7d7bc68c18bde8cd30cd2f14d94a8d0161db6e2c3134aa7eb62af",
+                                                                             "alert_rules":  "6851e287bbe0336dd5d3717bd323a532d4dc313de05085d4ef31ec0fc0b055b4",
+                                                                             "alert_rule_history":  "8bc0bb6c8fcd66af10d87614553958bbe9c5c73270372f70394528dc63c9253e",
+                                                                             "incident_alert_context":  "b34bc6e2aedfe8fa87eff3c2be7287405cbd005fa2a30aee6d21a597608e3a73",
+                                                                             "incident_escalations":  "273275d121ac44433d2dbcbedc3770ebec8ebe6d7721e79856760c7d323a9988",
+                                                                             "service_slo_policies":  "20bf2a970a1bc9c6b63bb9e74b1bac2ab8155106d6294580b07d28d1f8675075"
+                                                                         },
+                                                      "enabled_targets":  0
+                                                  },
+                                    "phase":  "rolled_back",
+                                    "updated_at":  "2026-10-26T00:04:49.707862+00:00",
+                                    "rollback":  {
+                                                     "schema_sha256":  "c81ef1c49ad5a2e38bdd05038a4e3ed873ae748636bc97d50ba59f3262f642de",
+                                                     "tables":  {
+                                                                    "alert_rule_history":  0,
+                                                                    "alert_rules":  0,
+                                                                    "alert_states":  0,
+                                                                    "audit":  4,
+                                                                    "dependencies":  4,
+                                                                    "incident_alert_context":  0,
+                                                                    "incident_escalations":  0,
+                                                                    "incident_evidence":  0,
+                                                                    "incidents":  3,
+                                                                    "knowledge_vectors":  0,
+                                                                    "login_attempts":  1,
+                                                                    "observations":  96,
+                                                                    "password_change_attempts":  0,
+                                                                    "service_slo_policies":  4,
+                                                                    "services":  4,
+                                                                    "sessions":  0,
+                                                                    "settings":  2,
+                                                                    "telemetry_targets":  0,
+                                                                    "timeline":  15,
+                                                                    "users":  3
+                                                                },
+                                                     "history_sha256":  {
+                                                                            "users":  "30a059882ee7647b5a82e7aae29852a0c34972183485ea107c887cdfab0aa95a",
+                                                                            "services":  "7a6d6bb3d076955a49b874b06ac39793c242e95cf680642a5556fb3901d5c899",
+                                                                            "dependencies":  "89459ed025a9412690fb2bfea3ce7c41fbcaa3a1f4cfea494d9d14a946b10eff",
+                                                                            "incidents":  "c0f2a19c641d3bcea470f6db8ab8d68d536a543c5a97e681008cb32240dbaaa0",
+                                                                            "timeline":  "9dca036588420aed720a0cae68bb9f0da4b77a5bb34ded7aa7d91175380b65b8",
+                                                                            "incident_evidence":  "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+                                                                            "alert_rules":  "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+                                                                            "alert_rule_history":  "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+                                                                            "incident_alert_context":  "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+                                                                            "incident_escalations":  "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+                                                                            "service_slo_policies":  "ae4252fcc25a787e03d1abeddc38c23e67b35f4ea467e6ddb27a2ab1a06443d2"
+                                                                        },
+                                                     "enabled_targets":  0
+                                                 },
+                                    "rollback_sha256":  "0e2c7ff6bc73bfaec3c604138f0c9444a5e12c6005d275f702e847995fad8ae1",
+                                    "verified":  true
+                                },
+                     "health":  {
+                                    "status":  "ok",
+                                    "version":  "0.13.0"
+                                },
+                     "verification":  {
+                                          "phase":  "rolled_back",
+                                          "historical_tables_match":  [
+                                                                          "users",
+                                                                          "services",
+                                                                          "dependencies",
+                                                                          "incidents",
+                                                                          "timeline",
+                                                                          "incident_evidence",
+                                                                          "alert_rules",
+                                                                          "alert_rule_history",
+                                                                          "incident_alert_context",
+                                                                          "incident_escalations",
+                                                                          "service_slo_policies"
+                                                                      ],
+                                          "tables":  {
+                                                         "alert_rule_history":  0,
+                                                         "alert_rules":  0,
+                                                         "alert_states":  0,
+                                                         "audit":  4,
+                                                         "dependencies":  4,
+                                                         "incident_alert_context":  0,
+                                                         "incident_escalations":  0,
+                                                         "incident_evidence":  0,
+                                                         "incidents":  3,
+                                                         "knowledge_vectors":  0,
+                                                         "login_attempts":  1,
+                                                         "observations":  96,
+                                                         "password_change_attempts":  0,
+                                                         "service_slo_policies":  4,
+                                                         "services":  4,
+                                                         "sessions":  0,
+                                                         "settings":  2,
+                                                         "telemetry_targets":  0,
+                                                         "timeline":  15,
+                                                         "users":  3
+                                                     },
+                                          "enabled_targets":  0
+                                      },
+                     "finished_at_utc":  "2026-10-26T00:04:52.7699783Z"
+                 },
+    "rolled_back_http":  {
+                             "health":  {
+                                            "status":  "ok",
+                                            "version":  "0.13.0"
+                                        },
+                             "incidents":  3,
+                             "timeline":  15,
+                             "closed_postmortems":  3,
+                             "knowledge_method":  "bm25"
+                         },
+    "second_stage":  {
+                         "action":  "Preparar",
+                         "project":  "nexo-maintenance-test",
+                         "started_at_utc":  "2026-10-26T00:04:53.8802712Z",
+                         "status":  "passed",
+                         "image_id":  "sha256:4f25dbe6122180ed5a4ab4c88c32bd369c876294dc6552aa57e5f9daecbd7b1b",
+                         "before":  {
+                                        "generation":  "cee2a48aed1947d68ce45b1dbcb4f97d",
+                                        "created_at":  "2026-10-26T00:04:35.523886+00:00",
+                                        "archive_sha256":  "dcc161d5876827bc439419c077299088ccaa2aa6537913922c73bf2c43da2a4d",
+                                        "resume_targets":  [
+                                                               {
+                                                                   "service_id":  5,
+                                                                   "target_url":  "http://portal-lab:8080/health"
+                                                               },
+                                                               {
+                                                                   "service_id":  6,
+                                                                   "target_url":  "http://api-lab:8080/health"
+                                                               },
+                                                               {
+                                                                   "service_id":  7,
+                                                                   "target_url":  "http://portal-lab:8080/api/orders"
+                                                               }
+                                                           ],
+                                        "candidate_sha256":  "778f6eeef5d3479611e3ebbec317cb9b33d8ee81bb72d1651e2d75b87be81159",
+                                        "candidate":  {
+                                                          "schema_sha256":  "c81ef1c49ad5a2e38bdd05038a4e3ed873ae748636bc97d50ba59f3262f642de",
+                                                          "tables":  {
+                                                                         "alert_rule_history":  3,
+                                                                         "alert_rules":  2,
+                                                                         "alert_states":  0,
+                                                                         "audit":  109,
+                                                                         "dependencies":  5,
+                                                                         "incident_alert_context":  1,
+                                                                         "incident_escalations":  1,
+                                                                         "incident_evidence":  1,
+                                                                         "incidents":  9,
+                                                                         "knowledge_vectors":  19,
+                                                                         "login_attempts":  2,
+                                                                         "observations":  3752,
+                                                                         "password_change_attempts":  0,
+                                                                         "service_slo_policies":  9,
+                                                                         "services":  8,
+                                                                         "sessions":  0,
+                                                                         "settings":  3,
+                                                                         "telemetry_targets":  4,
+                                                                         "timeline":  60,
+                                                                         "users":  4
+                                                                     },
+                                                          "history_sha256":  {
+                                                                                 "users":  "dbe629ccb22e1b9c40f7aff02e56a830a1e2f85609278d330100b55ff61c4e4e",
+                                                                                 "services":  "e662f6d238a66a0abca9ccc086eb2381f31b78c9125929741ee6426767b0d82e",
+                                                                                 "dependencies":  "4e442f6ec0d521ca19086b93000e7bc73b50b8074d889722b1e1efe1182ace8c",
+                                                                                 "incidents":  "ed652c7bdfa8161393d4b935d5037160953c965b27c3e0ab89e2c7221265c9d8",
+                                                                                 "timeline":  "51da1e6e8004585e5c32d7e7f53e6582ec68e02aa46d198b3b7a17f14f746a83",
+                                                                                 "incident_evidence":  "1b490efa27c7d7bc68c18bde8cd30cd2f14d94a8d0161db6e2c3134aa7eb62af",
+                                                                                 "alert_rules":  "6851e287bbe0336dd5d3717bd323a532d4dc313de05085d4ef31ec0fc0b055b4",
+                                                                                 "alert_rule_history":  "8bc0bb6c8fcd66af10d87614553958bbe9c5c73270372f70394528dc63c9253e",
+                                                                                 "incident_alert_context":  "b34bc6e2aedfe8fa87eff3c2be7287405cbd005fa2a30aee6d21a597608e3a73",
+                                                                                 "incident_escalations":  "273275d121ac44433d2dbcbedc3770ebec8ebe6d7721e79856760c7d323a9988",
+                                                                                 "service_slo_policies":  "20bf2a970a1bc9c6b63bb9e74b1bac2ab8155106d6294580b07d28d1f8675075"
+                                                                             },
+                                                          "enabled_targets":  0
+                                                      },
+                                        "phase":  "rolled_back",
+                                        "updated_at":  "2026-10-26T00:04:49.707862+00:00",
+                                        "rollback":  {
+                                                         "schema_sha256":  "c81ef1c49ad5a2e38bdd05038a4e3ed873ae748636bc97d50ba59f3262f642de",
+                                                         "tables":  {
+                                                                        "alert_rule_history":  0,
+                                                                        "alert_rules":  0,
+                                                                        "alert_states":  0,
+                                                                        "audit":  4,
+                                                                        "dependencies":  4,
+                                                                        "incident_alert_context":  0,
+                                                                        "incident_escalations":  0,
+                                                                        "incident_evidence":  0,
+                                                                        "incidents":  3,
+                                                                        "knowledge_vectors":  0,
+                                                                        "login_attempts":  1,
+                                                                        "observations":  96,
+                                                                        "password_change_attempts":  0,
+                                                                        "service_slo_policies":  4,
+                                                                        "services":  4,
+                                                                        "sessions":  0,
+                                                                        "settings":  2,
+                                                                        "telemetry_targets":  0,
+                                                                        "timeline":  15,
+                                                                        "users":  3
+                                                                    },
+                                                         "history_sha256":  {
+                                                                                "users":  "30a059882ee7647b5a82e7aae29852a0c34972183485ea107c887cdfab0aa95a",
+                                                                                "services":  "7a6d6bb3d076955a49b874b06ac39793c242e95cf680642a5556fb3901d5c899",
+                                                                                "dependencies":  "89459ed025a9412690fb2bfea3ce7c41fbcaa3a1f4cfea494d9d14a946b10eff",
+                                                                                "incidents":  "c0f2a19c641d3bcea470f6db8ab8d68d536a543c5a97e681008cb32240dbaaa0",
+                                                                                "timeline":  "9dca036588420aed720a0cae68bb9f0da4b77a5bb34ded7aa7d91175380b65b8",
+                                                                                "incident_evidence":  "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+                                                                                "alert_rules":  "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+                                                                                "alert_rule_history":  "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+                                                                                "incident_alert_context":  "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+                                                                                "incident_escalations":  "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+                                                                                "service_slo_policies":  "ae4252fcc25a787e03d1abeddc38c23e67b35f4ea467e6ddb27a2ab1a06443d2"
+                                                                            },
+                                                         "enabled_targets":  0
+                                                     },
+                                        "rollback_sha256":  "0e2c7ff6bc73bfaec3c604138f0c9444a5e12c6005d275f702e847995fad8ae1",
+                                        "verified":  true
+                                    },
+                         "result":  {
+                                        "generation":  "272f48ee0acc418cbabcf00e6476be9b",
+                                        "created_at":  "2026-10-26T00:04:56.290376+00:00",
+                                        "archive_sha256":  "dcc161d5876827bc439419c077299088ccaa2aa6537913922c73bf2c43da2a4d",
+                                        "resume_targets":  [
+                                                               {
+                                                                   "service_id":  5,
+                                                                   "target_url":  "http://portal-lab:8080/health"
+                                                               },
+                                                               {
+                                                                   "service_id":  6,
+                                                                   "target_url":  "http://api-lab:8080/health"
+                                                               },
+                                                               {
+                                                                   "service_id":  7,
+                                                                   "target_url":  "http://portal-lab:8080/api/orders"
+                                                               }
+                                                           ],
+                                        "candidate_sha256":  "38db8a4ceb18d9e6700a6e0b32d06772006d7eb8515470fefafb9077b4b5b6f2",
+                                        "candidate":  {
+                                                          "schema_sha256":  "c81ef1c49ad5a2e38bdd05038a4e3ed873ae748636bc97d50ba59f3262f642de",
+                                                          "tables":  {
+                                                                         "alert_rule_history":  3,
+                                                                         "alert_rules":  2,
+                                                                         "alert_states":  0,
+                                                                         "audit":  109,
+                                                                         "dependencies":  5,
+                                                                         "incident_alert_context":  1,
+                                                                         "incident_escalations":  1,
+                                                                         "incident_evidence":  1,
+                                                                         "incidents":  9,
+                                                                         "knowledge_vectors":  19,
+                                                                         "login_attempts":  2,
+                                                                         "observations":  3752,
+                                                                         "password_change_attempts":  0,
+                                                                         "service_slo_policies":  9,
+                                                                         "services":  8,
+                                                                         "sessions":  0,
+                                                                         "settings":  3,
+                                                                         "telemetry_targets":  4,
+                                                                         "timeline":  60,
+                                                                         "users":  4
+                                                                     },
+                                                          "history_sha256":  {
+                                                                                 "users":  "dbe629ccb22e1b9c40f7aff02e56a830a1e2f85609278d330100b55ff61c4e4e",
+                                                                                 "services":  "e662f6d238a66a0abca9ccc086eb2381f31b78c9125929741ee6426767b0d82e",
+                                                                                 "dependencies":  "4e442f6ec0d521ca19086b93000e7bc73b50b8074d889722b1e1efe1182ace8c",
+                                                                                 "incidents":  "ed652c7bdfa8161393d4b935d5037160953c965b27c3e0ab89e2c7221265c9d8",
+                                                                                 "timeline":  "51da1e6e8004585e5c32d7e7f53e6582ec68e02aa46d198b3b7a17f14f746a83",
+                                                                                 "incident_evidence":  "1b490efa27c7d7bc68c18bde8cd30cd2f14d94a8d0161db6e2c3134aa7eb62af",
+                                                                                 "alert_rules":  "6851e287bbe0336dd5d3717bd323a532d4dc313de05085d4ef31ec0fc0b055b4",
+                                                                                 "alert_rule_history":  "8bc0bb6c8fcd66af10d87614553958bbe9c5c73270372f70394528dc63c9253e",
+                                                                                 "incident_alert_context":  "b34bc6e2aedfe8fa87eff3c2be7287405cbd005fa2a30aee6d21a597608e3a73",
+                                                                                 "incident_escalations":  "273275d121ac44433d2dbcbedc3770ebec8ebe6d7721e79856760c7d323a9988",
+                                                                                 "service_slo_policies":  "20bf2a970a1bc9c6b63bb9e74b1bac2ab8155106d6294580b07d28d1f8675075"
+                                                                             },
+                                                          "enabled_targets":  0
+                                                      },
+                                        "phase":  "staged",
+                                        "updated_at":  "2026-10-26T00:04:56.298855+00:00"
+                                    },
+                         "finished_at_utc":  "2026-10-26T00:04:56.6118376Z"
+                     },
+    "simulated_failure":  {
+                              "action":  "Promover",
+                              "project":  "nexo-maintenance-test",
+                              "started_at_utc":  "2026-10-26T00:04:57.0939187Z",
+                              "status":  "failed",
+                              "image_id":  "sha256:4f25dbe6122180ed5a4ab4c88c32bd369c876294dc6552aa57e5f9daecbd7b1b",
+                              "before":  {
+                                             "generation":  "272f48ee0acc418cbabcf00e6476be9b",
+                                             "created_at":  "2026-10-26T00:04:56.290376+00:00",
+                                             "archive_sha256":  "dcc161d5876827bc439419c077299088ccaa2aa6537913922c73bf2c43da2a4d",
+                                             "resume_targets":  [
+                                                                    {
+                                                                        "service_id":  5,
+                                                                        "target_url":  "http://portal-lab:8080/health"
+                                                                    },
+                                                                    {
+                                                                        "service_id":  6,
+                                                                        "target_url":  "http://api-lab:8080/health"
+                                                                    },
+                                                                    {
+                                                                        "service_id":  7,
+                                                                        "target_url":  "http://portal-lab:8080/api/orders"
+                                                                    }
+                                                                ],
+                                             "candidate_sha256":  "38db8a4ceb18d9e6700a6e0b32d06772006d7eb8515470fefafb9077b4b5b6f2",
+                                             "candidate":  {
+                                                               "schema_sha256":  "c81ef1c49ad5a2e38bdd05038a4e3ed873ae748636bc97d50ba59f3262f642de",
+                                                               "tables":  {
+                                                                              "alert_rule_history":  3,
+                                                                              "alert_rules":  2,
+                                                                              "alert_states":  0,
+                                                                              "audit":  109,
+                                                                              "dependencies":  5,
+                                                                              "incident_alert_context":  1,
+                                                                              "incident_escalations":  1,
+                                                                              "incident_evidence":  1,
+                                                                              "incidents":  9,
+                                                                              "knowledge_vectors":  19,
+                                                                              "login_attempts":  2,
+                                                                              "observations":  3752,
+                                                                              "password_change_attempts":  0,
+                                                                              "service_slo_policies":  9,
+                                                                              "services":  8,
+                                                                              "sessions":  0,
+                                                                              "settings":  3,
+                                                                              "telemetry_targets":  4,
+                                                                              "timeline":  60,
+                                                                              "users":  4
+                                                                          },
+                                                               "history_sha256":  {
+                                                                                      "users":  "dbe629ccb22e1b9c40f7aff02e56a830a1e2f85609278d330100b55ff61c4e4e",
+                                                                                      "services":  "e662f6d238a66a0abca9ccc086eb2381f31b78c9125929741ee6426767b0d82e",
+                                                                                      "dependencies":  "4e442f6ec0d521ca19086b93000e7bc73b50b8074d889722b1e1efe1182ace8c",
+                                                                                      "incidents":  "ed652c7bdfa8161393d4b935d5037160953c965b27c3e0ab89e2c7221265c9d8",
+                                                                                      "timeline":  "51da1e6e8004585e5c32d7e7f53e6582ec68e02aa46d198b3b7a17f14f746a83",
+                                                                                      "incident_evidence":  "1b490efa27c7d7bc68c18bde8cd30cd2f14d94a8d0161db6e2c3134aa7eb62af",
+                                                                                      "alert_rules":  "6851e287bbe0336dd5d3717bd323a532d4dc313de05085d4ef31ec0fc0b055b4",
+                                                                                      "alert_rule_history":  "8bc0bb6c8fcd66af10d87614553958bbe9c5c73270372f70394528dc63c9253e",
+                                                                                      "incident_alert_context":  "b34bc6e2aedfe8fa87eff3c2be7287405cbd005fa2a30aee6d21a597608e3a73",
+                                                                                      "incident_escalations":  "273275d121ac44433d2dbcbedc3770ebec8ebe6d7721e79856760c7d323a9988",
+                                                                                      "service_slo_policies":  "20bf2a970a1bc9c6b63bb9e74b1bac2ab8155106d6294580b07d28d1f8675075"
+                                                                                  },
+                                                               "enabled_targets":  0
+                                                           },
+                                             "phase":  "staged",
+                                             "updated_at":  "2026-10-26T00:04:56.298855+00:00"
+                                         },
+                              "result":  {
+                                             "generation":  "272f48ee0acc418cbabcf00e6476be9b",
+                                             "created_at":  "2026-10-26T00:04:56.290376+00:00",
+                                             "archive_sha256":  "dcc161d5876827bc439419c077299088ccaa2aa6537913922c73bf2c43da2a4d",
+                                             "resume_targets":  [
+                                                                    {
+                                                                        "service_id":  5,
+                                                                        "target_url":  "http://portal-lab:8080/health"
+                                                                    },
+                                                                    {
+                                                                        "service_id":  6,
+                                                                        "target_url":  "http://api-lab:8080/health"
+                                                                    },
+                                                                    {
+                                                                        "service_id":  7,
+                                                                        "target_url":  "http://portal-lab:8080/api/orders"
+                                                                    }
+                                                                ],
+                                             "candidate_sha256":  "38db8a4ceb18d9e6700a6e0b32d06772006d7eb8515470fefafb9077b4b5b6f2",
+                                             "candidate":  {
+                                                               "schema_sha256":  "c81ef1c49ad5a2e38bdd05038a4e3ed873ae748636bc97d50ba59f3262f642de",
+                                                               "tables":  {
+                                                                              "alert_rule_history":  3,
+                                                                              "alert_rules":  2,
+                                                                              "alert_states":  0,
+                                                                              "audit":  109,
+                                                                              "dependencies":  5,
+                                                                              "incident_alert_context":  1,
+                                                                              "incident_escalations":  1,
+                                                                              "incident_evidence":  1,
+                                                                              "incidents":  9,
+                                                                              "knowledge_vectors":  19,
+                                                                              "login_attempts":  2,
+                                                                              "observations":  3752,
+                                                                              "password_change_attempts":  0,
+                                                                              "service_slo_policies":  9,
+                                                                              "services":  8,
+                                                                              "sessions":  0,
+                                                                              "settings":  3,
+                                                                              "telemetry_targets":  4,
+                                                                              "timeline":  60,
+                                                                              "users":  4
+                                                                          },
+                                                               "history_sha256":  {
+                                                                                      "users":  "dbe629ccb22e1b9c40f7aff02e56a830a1e2f85609278d330100b55ff61c4e4e",
+                                                                                      "services":  "e662f6d238a66a0abca9ccc086eb2381f31b78c9125929741ee6426767b0d82e",
+                                                                                      "dependencies":  "4e442f6ec0d521ca19086b93000e7bc73b50b8074d889722b1e1efe1182ace8c",
+                                                                                      "incidents":  "ed652c7bdfa8161393d4b935d5037160953c965b27c3e0ab89e2c7221265c9d8",
+                                                                                      "timeline":  "51da1e6e8004585e5c32d7e7f53e6582ec68e02aa46d198b3b7a17f14f746a83",
+                                                                                      "incident_evidence":  "1b490efa27c7d7bc68c18bde8cd30cd2f14d94a8d0161db6e2c3134aa7eb62af",
+                                                                                      "alert_rules":  "6851e287bbe0336dd5d3717bd323a532d4dc313de05085d4ef31ec0fc0b055b4",
+                                                                                      "alert_rule_history":  "8bc0bb6c8fcd66af10d87614553958bbe9c5c73270372f70394528dc63c9253e",
+                                                                                      "incident_alert_context":  "b34bc6e2aedfe8fa87eff3c2be7287405cbd005fa2a30aee6d21a597608e3a73",
+                                                                                      "incident_escalations":  "273275d121ac44433d2dbcbedc3770ebec8ebe6d7721e79856760c7d323a9988",
+                                                                                      "service_slo_policies":  "20bf2a970a1bc9c6b63bb9e74b1bac2ab8155106d6294580b07d28d1f8675075"
+                                                                                  },
+                                                               "enabled_targets":  0
+                                                           },
+                                             "phase":  "promoted",
+                                             "updated_at":  "2026-10-26T00:05:00.407336+00:00",
+                                             "rollback":  {
+                                                              "schema_sha256":  "c81ef1c49ad5a2e38bdd05038a4e3ed873ae748636bc97d50ba59f3262f642de",
+                                                              "tables":  {
+                                                                             "alert_rule_history":  0,
+                                                                             "alert_rules":  0,
+                                                                             "alert_states":  0,
+                                                                             "audit":  7,
+                                                                             "dependencies":  4,
+                                                                             "incident_alert_context":  0,
+                                                                             "incident_escalations":  0,
+                                                                             "incident_evidence":  0,
+                                                                             "incidents":  3,
+                                                                             "knowledge_vectors":  0,
+                                                                             "login_attempts":  2,
+                                                                             "observations":  96,
+                                                                             "password_change_attempts":  0,
+                                                                             "service_slo_policies":  4,
+                                                                             "services":  4,
+                                                                             "sessions":  0,
+                                                                             "settings":  2,
+                                                                             "telemetry_targets":  0,
+                                                                             "timeline":  15,
+                                                                             "users":  3
+                                                                         },
+                                                              "history_sha256":  {
+                                                                                     "users":  "30a059882ee7647b5a82e7aae29852a0c34972183485ea107c887cdfab0aa95a",
+                                                                                     "services":  "7a6d6bb3d076955a49b874b06ac39793c242e95cf680642a5556fb3901d5c899",
+                                                                                     "dependencies":  "89459ed025a9412690fb2bfea3ce7c41fbcaa3a1f4cfea494d9d14a946b10eff",
+                                                                                     "incidents":  "c0f2a19c641d3bcea470f6db8ab8d68d536a543c5a97e681008cb32240dbaaa0",
+                                                                                     "timeline":  "9dca036588420aed720a0cae68bb9f0da4b77a5bb34ded7aa7d91175380b65b8",
+                                                                                     "incident_evidence":  "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+                                                                                     "alert_rules":  "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+                                                                                     "alert_rule_history":  "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+                                                                                     "incident_alert_context":  "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+                                                                                     "incident_escalations":  "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+                                                                                     "service_slo_policies":  "ae4252fcc25a787e03d1abeddc38c23e67b35f4ea467e6ddb27a2ab1a06443d2"
+                                                                                 },
+                                                              "enabled_targets":  0
+                                                          },
+                                             "rollback_sha256":  "d95f7894f3bb564c49b985089db13bf75de8f991dfc7a785dd202380d737938f",
+                                             "verified":  false
+                                         },
+                              "health":  {
+                                             "status":  "ok",
+                                             "version":  "0.13.0"
+                                         },
+                              "error":  "Falha de verificacao provocada exclusivamente no ensaio.",
+                              "automatic_rollback":  {
+                                                         "generation":  "272f48ee0acc418cbabcf00e6476be9b",
+                                                         "created_at":  "2026-10-26T00:04:56.290376+00:00",
+                                                         "archive_sha256":  "dcc161d5876827bc439419c077299088ccaa2aa6537913922c73bf2c43da2a4d",
+                                                         "resume_targets":  [
+                                                                                {
+                                                                                    "service_id":  5,
+                                                                                    "target_url":  "http://portal-lab:8080/health"
+                                                                                },
+                                                                                {
+                                                                                    "service_id":  6,
+                                                                                    "target_url":  "http://api-lab:8080/health"
+                                                                                },
+                                                                                {
+                                                                                    "service_id":  7,
+                                                                                    "target_url":  "http://portal-lab:8080/api/orders"
+                                                                                }
+                                                                            ],
+                                                         "candidate_sha256":  "38db8a4ceb18d9e6700a6e0b32d06772006d7eb8515470fefafb9077b4b5b6f2",
+                                                         "candidate":  {
+                                                                           "schema_sha256":  "c81ef1c49ad5a2e38bdd05038a4e3ed873ae748636bc97d50ba59f3262f642de",
+                                                                           "tables":  {
+                                                                                          "alert_rule_history":  3,
+                                                                                          "alert_rules":  2,
+                                                                                          "alert_states":  0,
+                                                                                          "audit":  109,
+                                                                                          "dependencies":  5,
+                                                                                          "incident_alert_context":  1,
+                                                                                          "incident_escalations":  1,
+                                                                                          "incident_evidence":  1,
+                                                                                          "incidents":  9,
+                                                                                          "knowledge_vectors":  19,
+                                                                                          "login_attempts":  2,
+                                                                                          "observations":  3752,
+                                                                                          "password_change_attempts":  0,
+                                                                                          "service_slo_policies":  9,
+                                                                                          "services":  8,
+                                                                                          "sessions":  0,
+                                                                                          "settings":  3,
+                                                                                          "telemetry_targets":  4,
+                                                                                          "timeline":  60,
+                                                                                          "users":  4
+                                                                                      },
+                                                                           "history_sha256":  {
+                                                                                                  "users":  "dbe629ccb22e1b9c40f7aff02e56a830a1e2f85609278d330100b55ff61c4e4e",
+                                                                                                  "services":  "e662f6d238a66a0abca9ccc086eb2381f31b78c9125929741ee6426767b0d82e",
+                                                                                                  "dependencies":  "4e442f6ec0d521ca19086b93000e7bc73b50b8074d889722b1e1efe1182ace8c",
+                                                                                                  "incidents":  "ed652c7bdfa8161393d4b935d5037160953c965b27c3e0ab89e2c7221265c9d8",
+                                                                                                  "timeline":  "51da1e6e8004585e5c32d7e7f53e6582ec68e02aa46d198b3b7a17f14f746a83",
+                                                                                                  "incident_evidence":  "1b490efa27c7d7bc68c18bde8cd30cd2f14d94a8d0161db6e2c3134aa7eb62af",
+                                                                                                  "alert_rules":  "6851e287bbe0336dd5d3717bd323a532d4dc313de05085d4ef31ec0fc0b055b4",
+                                                                                                  "alert_rule_history":  "8bc0bb6c8fcd66af10d87614553958bbe9c5c73270372f70394528dc63c9253e",
+                                                                                                  "incident_alert_context":  "b34bc6e2aedfe8fa87eff3c2be7287405cbd005fa2a30aee6d21a597608e3a73",
+                                                                                                  "incident_escalations":  "273275d121ac44433d2dbcbedc3770ebec8ebe6d7721e79856760c7d323a9988",
+                                                                                                  "service_slo_policies":  "20bf2a970a1bc9c6b63bb9e74b1bac2ab8155106d6294580b07d28d1f8675075"
+                                                                                              },
+                                                                           "enabled_targets":  0
+                                                                       },
+                                                         "phase":  "rolled_back",
+                                                         "updated_at":  "2026-10-26T00:05:04.203855+00:00",
+                                                         "rollback":  {
+                                                                          "schema_sha256":  "c81ef1c49ad5a2e38bdd05038a4e3ed873ae748636bc97d50ba59f3262f642de",
+                                                                          "tables":  {
+                                                                                         "alert_rule_history":  0,
+                                                                                         "alert_rules":  0,
+                                                                                         "alert_states":  0,
+                                                                                         "audit":  7,
+                                                                                         "dependencies":  4,
+                                                                                         "incident_alert_context":  0,
+                                                                                         "incident_escalations":  0,
+                                                                                         "incident_evidence":  0,
+                                                                                         "incidents":  3,
+                                                                                         "knowledge_vectors":  0,
+                                                                                         "login_attempts":  2,
+                                                                                         "observations":  96,
+                                                                                         "password_change_attempts":  0,
+                                                                                         "service_slo_policies":  4,
+                                                                                         "services":  4,
+                                                                                         "sessions":  0,
+                                                                                         "settings":  2,
+                                                                                         "telemetry_targets":  0,
+                                                                                         "timeline":  15,
+                                                                                         "users":  3
+                                                                                     },
+                                                                          "history_sha256":  {
+                                                                                                 "users":  "30a059882ee7647b5a82e7aae29852a0c34972183485ea107c887cdfab0aa95a",
+                                                                                                 "services":  "7a6d6bb3d076955a49b874b06ac39793c242e95cf680642a5556fb3901d5c899",
+                                                                                                 "dependencies":  "89459ed025a9412690fb2bfea3ce7c41fbcaa3a1f4cfea494d9d14a946b10eff",
+                                                                                                 "incidents":  "c0f2a19c641d3bcea470f6db8ab8d68d536a543c5a97e681008cb32240dbaaa0",
+                                                                                                 "timeline":  "9dca036588420aed720a0cae68bb9f0da4b77a5bb34ded7aa7d91175380b65b8",
+                                                                                                 "incident_evidence":  "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+                                                                                                 "alert_rules":  "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+                                                                                                 "alert_rule_history":  "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+                                                                                                 "incident_alert_context":  "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+                                                                                                 "incident_escalations":  "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+                                                                                                 "service_slo_policies":  "ae4252fcc25a787e03d1abeddc38c23e67b35f4ea467e6ddb27a2ab1a06443d2"
+                                                                                             },
+                                                                          "enabled_targets":  0
+                                                                      },
+                                                         "rollback_sha256":  "d95f7894f3bb564c49b985089db13bf75de8f991dfc7a785dd202380d737938f",
+                                                         "verified":  false
+                                                     },
+                              "rollback_health":  {
+                                                      "status":  "ok",
+                                                      "version":  "0.13.0"
+                                                  },
+                              "rollback_check":  {
+                                                     "phase":  "rolled_back",
+                                                     "historical_tables_match":  [
+                                                                                     "users",
+                                                                                     "services",
+                                                                                     "dependencies",
+                                                                                     "incidents",
+                                                                                     "timeline",
+                                                                                     "incident_evidence",
+                                                                                     "alert_rules",
+                                                                                     "alert_rule_history",
+                                                                                     "incident_alert_context",
+                                                                                     "incident_escalations",
+                                                                                     "service_slo_policies"
+                                                                                 ],
+                                                     "tables":  {
+                                                                    "alert_rule_history":  0,
+                                                                    "alert_rules":  0,
+                                                                    "alert_states":  0,
+                                                                    "audit":  7,
+                                                                    "dependencies":  4,
+                                                                    "incident_alert_context":  0,
+                                                                    "incident_escalations":  0,
+                                                                    "incident_evidence":  0,
+                                                                    "incidents":  3,
+                                                                    "knowledge_vectors":  0,
+                                                                    "login_attempts":  2,
+                                                                    "observations":  96,
+                                                                    "password_change_attempts":  0,
+                                                                    "service_slo_policies":  4,
+                                                                    "services":  4,
+                                                                    "sessions":  0,
+                                                                    "settings":  2,
+                                                                    "telemetry_targets":  0,
+                                                                    "timeline":  15,
+                                                                    "users":  3
+                                                                },
+                                                     "enabled_targets":  0
+                                                 },
+                              "finished_at_utc":  "2026-10-26T00:05:07.0780699Z"
+                          },
+    "after_failure_http":  {
+                               "health":  {
+                                              "status":  "ok",
+                                              "version":  "0.13.0"
+                                          },
+                               "incidents":  3,
+                               "timeline":  15,
+                               "closed_postmortems":  3,
+                               "knowledge_method":  "bm25"
+                           },
+    "finished_at_utc":  "2026-10-26T00:05:07.8419974Z"
+}

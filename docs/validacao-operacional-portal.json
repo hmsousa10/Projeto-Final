@@ -1,0 +1,17 @@
+{
+  "checked_at_utc": "2026-10-25T23:51:57.728981+00:00",
+  "version": "0.12.0",
+  "before_experiment": {
+    "incidents": 9,
+    "timeline": 60
+  },
+  "after_experiment": {
+    "incidents": 9,
+    "timeline": 60
+  },
+  "reader_login": "passed",
+  "knowledge_actual_method": "hybrid",
+  "cycle_marker_http": 404,
+  "footer_version": "0.12",
+  "status": "passed"
+}

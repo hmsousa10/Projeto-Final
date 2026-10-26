@@ -1,0 +1,22 @@
+{
+  "status": "passed",
+  "executed_at": "2026-10-24T20:15:25Z",
+  "closed_incident_id": 6,
+  "followup_incident_id": 7,
+  "service_id": 5,
+  "company_http_status": 200,
+  "knowledge_method": "TF-IDF",
+  "steps": [
+    "actual HTTP 503",
+    "automatic P1",
+    "deduplication",
+    "Loki evidence",
+    "assignment",
+    "investigation",
+    "HTTP recovery",
+    "manual resolution",
+    "post-mortem closure",
+    "knowledge retrieval",
+    "new occurrence"
+  ]
+}

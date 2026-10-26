@@ -1,0 +1,1446 @@
+{
+  "started_at": "2026-10-24T22:25:56.889226+00:00",
+  "completed_at": "2026-10-24T22:26:15.972407+00:00",
+  "fixture": {
+    "fixture": "nexo-disposable-load-v1",
+    "version": "0.10.0",
+    "counts": {
+      "observations": 17376,
+      "incidents": 103,
+      "services": 6
+    },
+    "source_sha256": {
+      "app/main.py": "d50c6ce6b122242f39de1632836432b1bf28119df170fc7afc9631c9525183e7",
+      "app/slo.py": "782fdce14a98363102bbbd81bdf28a61d8aeb6180fa9f27b04730f87beca2a05",
+      "app/security.py": "309265420b805e6752c920ae21aac91ee87b28c339964d54d37cadd5028d66ad",
+      "app/request_limits.py": "b44c172e15761f4814a3834eced9aafd810d550841a911e9bf64292a0259ca52",
+      "evaluation/benchmark.json": "cb8ccc150e818acfebe1acdb89ca35949bd593270ed625081bea3843b60a8c4c",
+      "evaluation/load_server.py": "765b016572004f99e7e528b3e48d96c73410c162b0b7cb8fd29f0a5ba0ae85c0"
+    },
+    "max_rss_kib": 62704,
+    "cgroup_memory_peak_bytes": "52068352",
+    "cgroup_cpu_stat": "usage_usec 2015166\nuser_usec 1910795\nsystem_usec 104371\nnr_periods 28\nnr_throttled 0\nthrottled_usec 0\nnr_bursts 0\nburst_usec 0",
+    "limits": {
+      "app_cpus": 1,
+      "app_memory_mib": 256,
+      "encoder_cpus": 2,
+      "encoder_memory_mib": 1024,
+      "concurrency": 32
+    }
+  },
+  "after": {
+    "fixture": "nexo-disposable-load-v1",
+    "version": "0.10.0",
+    "counts": {
+      "observations": 17376,
+      "incidents": 103,
+      "services": 6
+    },
+    "source_sha256": {
+      "app/main.py": "d50c6ce6b122242f39de1632836432b1bf28119df170fc7afc9631c9525183e7",
+      "app/slo.py": "782fdce14a98363102bbbd81bdf28a61d8aeb6180fa9f27b04730f87beca2a05",
+      "app/security.py": "309265420b805e6752c920ae21aac91ee87b28c339964d54d37cadd5028d66ad",
+      "app/request_limits.py": "b44c172e15761f4814a3834eced9aafd810d550841a911e9bf64292a0259ca52",
+      "evaluation/benchmark.json": "cb8ccc150e818acfebe1acdb89ca35949bd593270ed625081bea3843b60a8c4c",
+      "evaluation/load_server.py": "765b016572004f99e7e528b3e48d96c73410c162b0b7cb8fd29f0a5ba0ae85c0"
+    },
+    "max_rss_kib": 83952,
+    "cgroup_memory_peak_bytes": "73863168",
+    "cgroup_cpu_stat": "usage_usec 10759515\nuser_usec 5970271\nsystem_usec 4789243\nnr_periods 147\nnr_throttled 78\nthrottled_usec 15834566\nnr_bursts 0\nburst_usec 0",
+    "limits": {
+      "app_cpus": 1,
+      "app_memory_mib": 256,
+      "encoder_cpus": 2,
+      "encoder_memory_mib": 1024,
+      "concurrency": 32
+    }
+  },
+  "phases": [
+    {
+      "clients": 1,
+      "requests": 40,
+      "closed_loop": true,
+      "overload_probe": false,
+      "seconds": 0.861,
+      "status_counts": {
+        "200": 40
+      },
+      "accepted_rps": 46.48,
+      "accepted_p50_ms": 13.2,
+      "accepted_p95_ms": 40.02,
+      "accepted_max_ms": 66.45,
+      "knowledge_methods": {
+        "hybrid": 8
+      },
+      "requests_detail": [
+        {
+          "endpoint": "/api/summary",
+          "status": 200,
+          "ms": 21.65,
+          "knowledge_method": null
+        },
+        {
+          "endpoint": "/api/services",
+          "status": 200,
+          "ms": 11.24,
+          "knowledge_method": null
+        },
+        {
+          "endpoint": "/api/incidents",
+          "status": 200,
+          "ms": 8.55,
+          "knowledge_method": null
+        },
+        {
+          "endpoint": "/api/knowledge",
+          "status": 200,
+          "ms": 38.29,
+          "knowledge_method": "hybrid"
+        },
+        {
+          "endpoint": "/api/slo",
+          "status": 200,
+          "ms": 25.39,
+          "knowledge_method": null
+        },
+        {
+          "endpoint": "/api/summary",
+          "status": 200,
+          "ms": 11.17,
+          "knowledge_method": null
+        },
+        {
+          "endpoint": "/api/services",
+          "status": 200,
+          "ms": 21.26,
+          "knowledge_method": null
+        },
+        {
+          "endpoint": "/api/incidents",
+          "status": 200,
+          "ms": 8.67,
+          "knowledge_method": null
+        },
+        {
+          "endpoint": "/api/knowledge",
+          "status": 200,
+          "ms": 34.68,
+          "knowledge_method": "hybrid"
+        },
+        {
+          "endpoint": "/api/slo",
+          "status": 200,
+          "ms": 20.81,
+          "knowledge_method": null
+        },
+        {
+          "endpoint": "/api/summary",
+          "status": 200,
+          "ms": 11.51,
+          "knowledge_method": null
+        },
+        {
+          "endpoint": "/api/services",
+          "status": 200,
+          "ms": 11.38,
+          "knowledge_method": null
+        },
+        {
+          "endpoint": "/api/incidents",
+          "status": 200,
+          "ms": 22.52,
+          "knowledge_method": null
+        },
+        {
+          "endpoint": "/api/knowledge",
+          "status": 200,
+          "ms": 40.02,
+          "knowledge_method": "hybrid"
+        },
+        {
+          "endpoint": "/api/slo",
+          "status": 200,
+          "ms": 36.7,
+          "knowledge_method": null
+        },
+        {
+          "endpoint": "/api/summary",
+          "status": 200,
+          "ms": 66.45,
+          "knowledge_method": null
+        },
+        {
+          "endpoint": "/api/services",
+          "status": 200,
+          "ms": 32.51,
+          "knowledge_method": null
+        },
+        {
+          "endpoint": "/api/incidents",
+          "status": 200,
+          "ms": 29.42,
+          "knowledge_method": null
+        },
+        {
+          "endpoint": "/api/knowledge",
+          "status": 200,
+          "ms": 53.05,
+          "knowledge_method": "hybrid"
+        },
+        {
+          "endpoint": "/api/slo",
+          "status": 200,
+          "ms": 7.68,
+          "knowledge_method": null
+        },
+        {
+          "endpoint": "/api/summary",
+          "status": 200,
+          "ms": 13.2,
+          "knowledge_method": null
+        },
+        {
+          "endpoint": "/api/services",
+          "status": 200,
+          "ms": 27.71,
+          "knowledge_method": null
+        },
+        {
+          "endpoint": "/api/incidents",
+          "status": 200,
+          "ms": 9.4,
+          "knowledge_method": null
+        },
+        {
+          "endpoint": "/api/knowledge",
+          "status": 200,
+          "ms": 39.48,
+          "knowledge_method": "hybrid"
+        },
+        {
+          "endpoint": "/api/slo",
+          "status": 200,
+          "ms": 8.43,
+          "knowledge_method": null
+        },
+        {
+          "endpoint": "/api/summary",
+          "status": 200,
+          "ms": 14.19,
+          "knowledge_method": null
+        },
+        {
+          "endpoint": "/api/services",
+          "status": 200,
+          "ms": 12.39,
+          "knowledge_method": null
+        },
+        {
+          "endpoint": "/api/incidents",
+          "status": 200,
+          "ms": 9.6,
+          "knowledge_method": null
+        },
+        {
+          "endpoint": "/api/knowledge",
+          "status": 200,
+          "ms": 39.57,
+          "knowledge_method": "hybrid"
+        },
+        {
+          "endpoint": "/api/slo",
+          "status": 200,
+          "ms": 7.03,
+          "knowledge_method": null
+        },
+        {
+          "endpoint": "/api/summary",
+          "status": 200,
+          "ms": 13.39,
+          "knowledge_method": null
+        },
+        {
+          "endpoint": "/api/services",
+          "status": 200,
+          "ms": 12.54,
+          "knowledge_method": null
+        },
+        {
+          "endpoint": "/api/incidents",
+          "status": 200,
+          "ms": 11.73,
+          "knowledge_method": null
+        },
+        {
+          "endpoint": "/api/knowledge",
+          "status": 200,
+          "ms": 38.39,
+          "knowledge_method": "hybrid"
+        },
+        {
+          "endpoint": "/api/slo",
+          "status": 200,
+          "ms": 7.07,
+          "knowledge_method": null
+        },
+        {
+          "endpoint": "/api/summary",
+          "status": 200,
+          "ms": 13.02,
+          "knowledge_method": null
+        },
+        {
+          "endpoint": "/api/services",
+          "status": 200,
+          "ms": 12.45,
+          "knowledge_method": null
+        },
+        {
+          "endpoint": "/api/incidents",
+          "status": 200,
+          "ms": 9.21,
+          "knowledge_method": null
+        },
+        {
+          "endpoint": "/api/knowledge",
+          "status": 200,
+          "ms": 37.74,
+          "knowledge_method": "hybrid"
+        },
+        {
+          "endpoint": "/api/slo",
+          "status": 200,
+          "ms": 7.31,
+          "knowledge_method": null
+        }
+      ]
+    },
+    {
+      "clients": 4,
+      "requests": 40,
+      "closed_loop": true,
+      "overload_probe": false,
+      "seconds": 1.605,
+      "status_counts": {
+        "200": 40
+      },
+      "accepted_rps": 24.93,
+      "accepted_p50_ms": 150.5,
+      "accepted_p95_ms": 298.62,
+      "accepted_max_ms": 392.26,
+      "knowledge_methods": {
+        "hybrid": 8
+      },
+      "requests_detail": [
+        {
+          "endpoint": "/api/summary",
+          "status": 200,
+          "ms": 263.9,
+          "knowledge_method": null
+        },
+        {
+          "endpoint": "/api/services",
+          "status": 200,
+          "ms": 103.81,
+          "knowledge_method": null
+        },
+        {
+          "endpoint": "/api/incidents",
+          "status": 200,
+          "ms": 66.12,
+          "knowledge_method": null
+        },
+        {
+          "endpoint": "/api/knowledge",
+          "status": 200,
+          "ms": 214.51,
+          "knowledge_method": "hybrid"
+        },
+        {
+          "endpoint": "/api/slo",
+          "status": 200,
+          "ms": 20.34,
+          "knowledge_method": null
+        },
+        {
+          "endpoint": "/api/summary",
+          "status": 200,
+          "ms": 212.4,
+          "knowledge_method": null
+        },
+        {
+          "endpoint": "/api/services",
+          "status": 200,
+          "ms": 165.53,
+          "knowledge_method": null
+        },
+        {
+          "endpoint": "/api/incidents",
+          "status": 200,
+          "ms": 149.24,
+          "knowledge_method": null
+        },
+        {
+          "endpoint": "/api/knowledge",
+          "status": 200,
+          "ms": 150.5,
+          "knowledge_method": "hybrid"
+        },
+        {
+          "endpoint": "/api/slo",
+          "status": 200,
+          "ms": 20.42,
+          "knowledge_method": null
+        },
+        {
+          "endpoint": "/api/summary",
+          "status": 200,
+          "ms": 298.62,
+          "knowledge_method": null
+        },
+        {
+          "endpoint": "/api/services",
+          "status": 200,
+          "ms": 164.27,
+          "knowledge_method": null
+        },
+        {
+          "endpoint": "/api/incidents",
+          "status": 200,
+          "ms": 62.18,
+          "knowledge_method": null
+        },
+        {
+          "endpoint": "/api/knowledge",
+          "status": 200,
+          "ms": 263.51,
+          "knowledge_method": "hybrid"
+        },
+        {
+          "endpoint": "/api/slo",
+          "status": 200,
+          "ms": 55.03,
+          "knowledge_method": null
+        },
+        {
+          "endpoint": "/api/summary",
+          "status": 200,
+          "ms": 224.07,
+          "knowledge_method": null
+        },
+        {
+          "endpoint": "/api/services",
+          "status": 200,
+          "ms": 147.28,
+          "knowledge_method": null
+        },
+        {
+          "endpoint": "/api/incidents",
+          "status": 200,
+          "ms": 33.66,
+          "knowledge_method": null
+        },
+        {
+          "endpoint": "/api/knowledge",
+          "status": 200,
+          "ms": 283.63,
+          "knowledge_method": "hybrid"
+        },
+        {
+          "endpoint": "/api/slo",
+          "status": 200,
+          "ms": 69.05,
+          "knowledge_method": null
+        },
+        {
+          "endpoint": "/api/summary",
+          "status": 200,
+          "ms": 300.4,
+          "knowledge_method": null
+        },
+        {
+          "endpoint": "/api/services",
+          "status": 200,
+          "ms": 187.64,
+          "knowledge_method": null
+        },
+        {
+          "endpoint": "/api/incidents",
+          "status": 200,
+          "ms": 70.37,
+          "knowledge_method": null
+        },
+        {
+          "endpoint": "/api/knowledge",
+          "status": 200,
+          "ms": 195.3,
+          "knowledge_method": "hybrid"
+        },
+        {
+          "endpoint": "/api/slo",
+          "status": 200,
+          "ms": 42.06,
+          "knowledge_method": null
+        },
+        {
+          "endpoint": "/api/summary",
+          "status": 200,
+          "ms": 274.77,
+          "knowledge_method": null
+        },
+        {
+          "endpoint": "/api/services",
+          "status": 200,
+          "ms": 269.36,
+          "knowledge_method": null
+        },
+        {
+          "endpoint": "/api/incidents",
+          "status": 200,
+          "ms": 137.43,
+          "knowledge_method": null
+        },
+        {
+          "endpoint": "/api/knowledge",
+          "status": 200,
+          "ms": 208.5,
+          "knowledge_method": "hybrid"
+        },
+        {
+          "endpoint": "/api/slo",
+          "status": 200,
+          "ms": 83.83,
+          "knowledge_method": null
+        },
+        {
+          "endpoint": "/api/summary",
+          "status": 200,
+          "ms": 392.26,
+          "knowledge_method": null
+        },
+        {
+          "endpoint": "/api/services",
+          "status": 200,
+          "ms": 55.81,
+          "knowledge_method": null
+        },
+        {
+          "endpoint": "/api/incidents",
+          "status": 200,
+          "ms": 223.15,
+          "knowledge_method": null
+        },
+        {
+          "endpoint": "/api/knowledge",
+          "status": 200,
+          "ms": 292.37,
+          "knowledge_method": "hybrid"
+        },
+        {
+          "endpoint": "/api/slo",
+          "status": 200,
+          "ms": 45.04,
+          "knowledge_method": null
+        },
+        {
+          "endpoint": "/api/summary",
+          "status": 200,
+          "ms": 43.14,
+          "knowledge_method": null
+        },
+        {
+          "endpoint": "/api/services",
+          "status": 200,
+          "ms": 173.06,
+          "knowledge_method": null
+        },
+        {
+          "endpoint": "/api/incidents",
+          "status": 200,
+          "ms": 156.42,
+          "knowledge_method": null
+        },
+        {
+          "endpoint": "/api/knowledge",
+          "status": 200,
+          "ms": 124.04,
+          "knowledge_method": "hybrid"
+        },
+        {
+          "endpoint": "/api/slo",
+          "status": 200,
+          "ms": 21.28,
+          "knowledge_method": null
+        }
+      ]
+    },
+    {
+      "clients": 12,
+      "requests": 40,
+      "closed_loop": true,
+      "overload_probe": false,
+      "seconds": 3.674,
+      "status_counts": {
+        "200": 39,
+        "503": 1
+      },
+      "accepted_rps": 10.61,
+      "accepted_p50_ms": 886.96,
+      "accepted_p95_ms": 2553.4,
+      "accepted_max_ms": 2862.57,
+      "knowledge_methods": {
+        "hybrid": 8
+      },
+      "requests_detail": [
+        {
+          "endpoint": "/api/summary",
+          "status": 200,
+          "ms": 1468.93,
+          "knowledge_method": null
+        },
+        {
+          "endpoint": "/api/services",
+          "status": 200,
+          "ms": 562.82,
+          "knowledge_method": null
+        },
+        {
+          "endpoint": "/api/incidents",
+          "status": 200,
+          "ms": 66.17,
+          "knowledge_method": null
+        },
+        {
+          "endpoint": "/api/knowledge",
+          "status": 200,
+          "ms": 596.16,
+          "knowledge_method": "hybrid"
+        },
+        {
+          "endpoint": "/api/slo",
+          "status": 200,
+          "ms": 110.8,
+          "knowledge_method": null
+        },
+        {
+          "endpoint": "/api/summary",
+          "status": 200,
+          "ms": 2196.02,
+          "knowledge_method": null
+        },
+        {
+          "endpoint": "/api/services",
+          "status": 200,
+          "ms": 1383.12,
+          "knowledge_method": null
+        },
+        {
+          "endpoint": "/api/incidents",
+          "status": 200,
+          "ms": 857.98,
+          "knowledge_method": null
+        },
+        {
+          "endpoint": "/api/knowledge",
+          "status": 200,
+          "ms": 1368.29,
+          "knowledge_method": "hybrid"
+        },
+        {
+          "endpoint": "/api/slo",
+          "status": 200,
+          "ms": 210.7,
+          "knowledge_method": null
+        },
+        {
+          "endpoint": "/api/summary",
+          "status": 200,
+          "ms": 1066.1,
+          "knowledge_method": null
+        },
+        {
+          "endpoint": "/api/services",
+          "status": 200,
+          "ms": 1399.69,
+          "knowledge_method": null
+        },
+        {
+          "endpoint": "/api/incidents",
+          "status": 200,
+          "ms": 97.35,
+          "knowledge_method": null
+        },
+        {
+          "endpoint": "/api/knowledge",
+          "status": 200,
+          "ms": 1594.57,
+          "knowledge_method": "hybrid"
+        },
+        {
+          "endpoint": "/api/slo",
+          "status": 200,
+          "ms": 150.77,
+          "knowledge_method": null
+        },
+        {
+          "endpoint": "/api/summary",
+          "status": 200,
+          "ms": 2553.4,
+          "knowledge_method": null
+        },
+        {
+          "endpoint": "/api/services",
+          "status": 200,
+          "ms": 1467.99,
+          "knowledge_method": null
+        },
+        {
+          "endpoint": "/api/incidents",
+          "status": 200,
+          "ms": 723.32,
+          "knowledge_method": null
+        },
+        {
+          "endpoint": "/api/knowledge",
+          "status": 200,
+          "ms": 203.33,
+          "knowledge_method": "hybrid"
+        },
+        {
+          "endpoint": "/api/slo",
+          "status": 200,
+          "ms": 2862.57,
+          "knowledge_method": null
+        },
+        {
+          "endpoint": "/api/summary",
+          "status": 200,
+          "ms": 1805.15,
+          "knowledge_method": null
+        },
+        {
+          "endpoint": "/api/services",
+          "status": 200,
+          "ms": 1293.82,
+          "knowledge_method": null
+        },
+        {
+          "endpoint": "/api/incidents",
+          "status": 200,
+          "ms": 1579.42,
+          "knowledge_method": null
+        },
+        {
+          "endpoint": "/api/knowledge",
+          "status": 200,
+          "ms": 1287.39,
+          "knowledge_method": "hybrid"
+        },
+        {
+          "endpoint": "/api/slo",
+          "status": 503,
+          "ms": 2029.85,
+          "knowledge_method": null
+        },
+        {
+          "endpoint": "/api/summary",
+          "status": 200,
+          "ms": 868.22,
+          "knowledge_method": null
+        },
+        {
+          "endpoint": "/api/services",
+          "status": 200,
+          "ms": 296.39,
+          "knowledge_method": null
+        },
+        {
+          "endpoint": "/api/incidents",
+          "status": 200,
+          "ms": 1309.63,
+          "knowledge_method": null
+        },
+        {
+          "endpoint": "/api/knowledge",
+          "status": 200,
+          "ms": 738.67,
+          "knowledge_method": "hybrid"
+        },
+        {
+          "endpoint": "/api/slo",
+          "status": 200,
+          "ms": 1883.36,
+          "knowledge_method": null
+        },
+        {
+          "endpoint": "/api/summary",
+          "status": 200,
+          "ms": 1166.56,
+          "knowledge_method": null
+        },
+        {
+          "endpoint": "/api/services",
+          "status": 200,
+          "ms": 886.96,
+          "knowledge_method": null
+        },
+        {
+          "endpoint": "/api/incidents",
+          "status": 200,
+          "ms": 702.93,
+          "knowledge_method": null
+        },
+        {
+          "endpoint": "/api/knowledge",
+          "status": 200,
+          "ms": 1016.77,
+          "knowledge_method": "hybrid"
+        },
+        {
+          "endpoint": "/api/slo",
+          "status": 200,
+          "ms": 1010.99,
+          "knowledge_method": null
+        },
+        {
+          "endpoint": "/api/summary",
+          "status": 200,
+          "ms": 800.77,
+          "knowledge_method": null
+        },
+        {
+          "endpoint": "/api/services",
+          "status": 200,
+          "ms": 822.91,
+          "knowledge_method": null
+        },
+        {
+          "endpoint": "/api/incidents",
+          "status": 200,
+          "ms": 724.89,
+          "knowledge_method": null
+        },
+        {
+          "endpoint": "/api/knowledge",
+          "status": 200,
+          "ms": 577.57,
+          "knowledge_method": "hybrid"
+        },
+        {
+          "endpoint": "/api/slo",
+          "status": 200,
+          "ms": 606.34,
+          "knowledge_method": null
+        }
+      ]
+    },
+    {
+      "clients": 48,
+      "requests": 96,
+      "closed_loop": true,
+      "overload_probe": true,
+      "seconds": 1.747,
+      "status_counts": {
+        "200": 16,
+        "503": 80
+      },
+      "accepted_rps": 9.16,
+      "accepted_p50_ms": 1611.87,
+      "accepted_p95_ms": 1740.89,
+      "accepted_max_ms": 1740.89,
+      "knowledge_methods": {},
+      "requests_detail": [
+        {
+          "endpoint": "/api/summary",
+          "status": 200,
+          "ms": 1084.35,
+          "knowledge_method": null
+        },
+        {
+          "endpoint": "/api/summary",
+          "status": 200,
+          "ms": 1611.87,
+          "knowledge_method": null
+        },
+        {
+          "endpoint": "/api/summary",
+          "status": 200,
+          "ms": 890.59,
+          "knowledge_method": null
+        },
+        {
+          "endpoint": "/api/summary",
+          "status": 200,
+          "ms": 1400.3,
+          "knowledge_method": null
+        },
+        {
+          "endpoint": "/api/summary",
+          "status": 200,
+          "ms": 1623.35,
+          "knowledge_method": null
+        },
+        {
+          "endpoint": "/api/summary",
+          "status": 200,
+          "ms": 1294.08,
+          "knowledge_method": null
+        },
+        {
+          "endpoint": "/api/summary",
+          "status": 200,
+          "ms": 1740.89,
+          "knowledge_method": null
+        },
+        {
+          "endpoint": "/api/summary",
+          "status": 200,
+          "ms": 1507.8,
+          "knowledge_method": null
+        },
+        {
+          "endpoint": "/api/summary",
+          "status": 200,
+          "ms": 1713.75,
+          "knowledge_method": null
+        },
+        {
+          "endpoint": "/api/summary",
+          "status": 200,
+          "ms": 1727.03,
+          "knowledge_method": null
+        },
+        {
+          "endpoint": "/api/summary",
+          "status": 200,
+          "ms": 1736.27,
+          "knowledge_method": null
+        },
+        {
+          "endpoint": "/api/summary",
+          "status": 200,
+          "ms": 1000.63,
+          "knowledge_method": null
+        },
+        {
+          "endpoint": "/api/summary",
+          "status": 200,
+          "ms": 1737.86,
+          "knowledge_method": null
+        },
+        {
+          "endpoint": "/api/summary",
+          "status": 200,
+          "ms": 1528.63,
+          "knowledge_method": null
+        },
+        {
+          "endpoint": "/api/summary",
+          "status": 200,
+          "ms": 1685.12,
+          "knowledge_method": null
+        },
+        {
+          "endpoint": "/api/summary",
+          "status": 503,
+          "ms": 29.45,
+          "knowledge_method": null
+        },
+        {
+          "endpoint": "/api/summary",
+          "status": 200,
+          "ms": 1622.11,
+          "knowledge_method": null
+        },
+        {
+          "endpoint": "/api/summary",
+          "status": 503,
+          "ms": 27.57,
+          "knowledge_method": null
+        },
+        {
+          "endpoint": "/api/summary",
+          "status": 503,
+          "ms": 28.83,
+          "knowledge_method": null
+        },
+        {
+          "endpoint": "/api/summary",
+          "status": 503,
+          "ms": 29.2,
+          "knowledge_method": null
+        },
+        {
+          "endpoint": "/api/summary",
+          "status": 503,
+          "ms": 29.38,
+          "knowledge_method": null
+        },
+        {
+          "endpoint": "/api/summary",
+          "status": 503,
+          "ms": 30.17,
+          "knowledge_method": null
+        },
+        {
+          "endpoint": "/api/summary",
+          "status": 503,
+          "ms": 30.31,
+          "knowledge_method": null
+        },
+        {
+          "endpoint": "/api/summary",
+          "status": 503,
+          "ms": 30.4,
+          "knowledge_method": null
+        },
+        {
+          "endpoint": "/api/summary",
+          "status": 503,
+          "ms": 40.05,
+          "knowledge_method": null
+        },
+        {
+          "endpoint": "/api/summary",
+          "status": 503,
+          "ms": 37.82,
+          "knowledge_method": null
+        },
+        {
+          "endpoint": "/api/summary",
+          "status": 503,
+          "ms": 40.95,
+          "knowledge_method": null
+        },
+        {
+          "endpoint": "/api/summary",
+          "status": 503,
+          "ms": 42.32,
+          "knowledge_method": null
+        },
+        {
+          "endpoint": "/api/summary",
+          "status": 503,
+          "ms": 45.54,
+          "knowledge_method": null
+        },
+        {
+          "endpoint": "/api/summary",
+          "status": 503,
+          "ms": 42.58,
+          "knowledge_method": null
+        },
+        {
+          "endpoint": "/api/summary",
+          "status": 503,
+          "ms": 69.21,
+          "knowledge_method": null
+        },
+        {
+          "endpoint": "/api/summary",
+          "status": 503,
+          "ms": 43.37,
+          "knowledge_method": null
+        },
+        {
+          "endpoint": "/api/summary",
+          "status": 503,
+          "ms": 73.13,
+          "knowledge_method": null
+        },
+        {
+          "endpoint": "/api/summary",
+          "status": 503,
+          "ms": 68.79,
+          "knowledge_method": null
+        },
+        {
+          "endpoint": "/api/summary",
+          "status": 503,
+          "ms": 69.26,
+          "knowledge_method": null
+        },
+        {
+          "endpoint": "/api/summary",
+          "status": 503,
+          "ms": 67.97,
+          "knowledge_method": null
+        },
+        {
+          "endpoint": "/api/summary",
+          "status": 503,
+          "ms": 69.56,
+          "knowledge_method": null
+        },
+        {
+          "endpoint": "/api/summary",
+          "status": 503,
+          "ms": 72.01,
+          "knowledge_method": null
+        },
+        {
+          "endpoint": "/api/summary",
+          "status": 503,
+          "ms": 70.52,
+          "knowledge_method": null
+        },
+        {
+          "endpoint": "/api/summary",
+          "status": 503,
+          "ms": 72.51,
+          "knowledge_method": null
+        },
+        {
+          "endpoint": "/api/summary",
+          "status": 503,
+          "ms": 75.74,
+          "knowledge_method": null
+        },
+        {
+          "endpoint": "/api/summary",
+          "status": 503,
+          "ms": 72.59,
+          "knowledge_method": null
+        },
+        {
+          "endpoint": "/api/summary",
+          "status": 503,
+          "ms": 73.24,
+          "knowledge_method": null
+        },
+        {
+          "endpoint": "/api/summary",
+          "status": 503,
+          "ms": 74.74,
+          "knowledge_method": null
+        },
+        {
+          "endpoint": "/api/summary",
+          "status": 503,
+          "ms": 77.29,
+          "knowledge_method": null
+        },
+        {
+          "endpoint": "/api/summary",
+          "status": 503,
+          "ms": 75.49,
+          "knowledge_method": null
+        },
+        {
+          "endpoint": "/api/summary",
+          "status": 503,
+          "ms": 78.38,
+          "knowledge_method": null
+        },
+        {
+          "endpoint": "/api/summary",
+          "status": 503,
+          "ms": 77.86,
+          "knowledge_method": null
+        },
+        {
+          "endpoint": "/api/summary",
+          "status": 503,
+          "ms": 192.87,
+          "knowledge_method": null
+        },
+        {
+          "endpoint": "/api/summary",
+          "status": 503,
+          "ms": 192.66,
+          "knowledge_method": null
+        },
+        {
+          "endpoint": "/api/summary",
+          "status": 503,
+          "ms": 194.7,
+          "knowledge_method": null
+        },
+        {
+          "endpoint": "/api/summary",
+          "status": 503,
+          "ms": 195.51,
+          "knowledge_method": null
+        },
+        {
+          "endpoint": "/api/summary",
+          "status": 503,
+          "ms": 198.63,
+          "knowledge_method": null
+        },
+        {
+          "endpoint": "/api/summary",
+          "status": 503,
+          "ms": 199.02,
+          "knowledge_method": null
+        },
+        {
+          "endpoint": "/api/summary",
+          "status": 503,
+          "ms": 241.54,
+          "knowledge_method": null
+        },
+        {
+          "endpoint": "/api/summary",
+          "status": 503,
+          "ms": 242.51,
+          "knowledge_method": null
+        },
+        {
+          "endpoint": "/api/summary",
+          "status": 503,
+          "ms": 236.21,
+          "knowledge_method": null
+        },
+        {
+          "endpoint": "/api/summary",
+          "status": 503,
+          "ms": 237.09,
+          "knowledge_method": null
+        },
+        {
+          "endpoint": "/api/summary",
+          "status": 503,
+          "ms": 242.0,
+          "knowledge_method": null
+        },
+        {
+          "endpoint": "/api/summary",
+          "status": 503,
+          "ms": 242.24,
+          "knowledge_method": null
+        },
+        {
+          "endpoint": "/api/summary",
+          "status": 503,
+          "ms": 244.08,
+          "knowledge_method": null
+        },
+        {
+          "endpoint": "/api/summary",
+          "status": 503,
+          "ms": 244.74,
+          "knowledge_method": null
+        },
+        {
+          "endpoint": "/api/summary",
+          "status": 503,
+          "ms": 246.85,
+          "knowledge_method": null
+        },
+        {
+          "endpoint": "/api/summary",
+          "status": 503,
+          "ms": 224.34,
+          "knowledge_method": null
+        },
+        {
+          "endpoint": "/api/summary",
+          "status": 503,
+          "ms": 225.22,
+          "knowledge_method": null
+        },
+        {
+          "endpoint": "/api/summary",
+          "status": 503,
+          "ms": 226.07,
+          "knowledge_method": null
+        },
+        {
+          "endpoint": "/api/summary",
+          "status": 503,
+          "ms": 226.45,
+          "knowledge_method": null
+        },
+        {
+          "endpoint": "/api/summary",
+          "status": 503,
+          "ms": 226.91,
+          "knowledge_method": null
+        },
+        {
+          "endpoint": "/api/summary",
+          "status": 503,
+          "ms": 227.93,
+          "knowledge_method": null
+        },
+        {
+          "endpoint": "/api/summary",
+          "status": 503,
+          "ms": 228.58,
+          "knowledge_method": null
+        },
+        {
+          "endpoint": "/api/summary",
+          "status": 503,
+          "ms": 228.77,
+          "knowledge_method": null
+        },
+        {
+          "endpoint": "/api/summary",
+          "status": 503,
+          "ms": 229.89,
+          "knowledge_method": null
+        },
+        {
+          "endpoint": "/api/summary",
+          "status": 503,
+          "ms": 231.56,
+          "knowledge_method": null
+        },
+        {
+          "endpoint": "/api/summary",
+          "status": 503,
+          "ms": 233.71,
+          "knowledge_method": null
+        },
+        {
+          "endpoint": "/api/summary",
+          "status": 503,
+          "ms": 236.37,
+          "knowledge_method": null
+        },
+        {
+          "endpoint": "/api/summary",
+          "status": 503,
+          "ms": 232.53,
+          "knowledge_method": null
+        },
+        {
+          "endpoint": "/api/summary",
+          "status": 503,
+          "ms": 236.38,
+          "knowledge_method": null
+        },
+        {
+          "endpoint": "/api/summary",
+          "status": 503,
+          "ms": 237.0,
+          "knowledge_method": null
+        },
+        {
+          "endpoint": "/api/summary",
+          "status": 503,
+          "ms": 237.27,
+          "knowledge_method": null
+        },
+        {
+          "endpoint": "/api/summary",
+          "status": 503,
+          "ms": 238.85,
+          "knowledge_method": null
+        },
+        {
+          "endpoint": "/api/summary",
+          "status": 503,
+          "ms": 207.99,
+          "knowledge_method": null
+        },
+        {
+          "endpoint": "/api/summary",
+          "status": 503,
+          "ms": 208.79,
+          "knowledge_method": null
+        },
+        {
+          "endpoint": "/api/summary",
+          "status": 503,
+          "ms": 207.12,
+          "knowledge_method": null
+        },
+        {
+          "endpoint": "/api/summary",
+          "status": 503,
+          "ms": 208.22,
+          "knowledge_method": null
+        },
+        {
+          "endpoint": "/api/summary",
+          "status": 503,
+          "ms": 245.28,
+          "knowledge_method": null
+        },
+        {
+          "endpoint": "/api/summary",
+          "status": 503,
+          "ms": 245.64,
+          "knowledge_method": null
+        },
+        {
+          "endpoint": "/api/summary",
+          "status": 503,
+          "ms": 206.18,
+          "knowledge_method": null
+        },
+        {
+          "endpoint": "/api/summary",
+          "status": 503,
+          "ms": 207.05,
+          "knowledge_method": null
+        },
+        {
+          "endpoint": "/api/summary",
+          "status": 503,
+          "ms": 206.54,
+          "knowledge_method": null
+        },
+        {
+          "endpoint": "/api/summary",
+          "status": 503,
+          "ms": 206.28,
+          "knowledge_method": null
+        },
+        {
+          "endpoint": "/api/summary",
+          "status": 503,
+          "ms": 202.26,
+          "knowledge_method": null
+        },
+        {
+          "endpoint": "/api/summary",
+          "status": 503,
+          "ms": 204.24,
+          "knowledge_method": null
+        },
+        {
+          "endpoint": "/api/summary",
+          "status": 503,
+          "ms": 203.33,
+          "knowledge_method": null
+        },
+        {
+          "endpoint": "/api/summary",
+          "status": 503,
+          "ms": 203.29,
+          "knowledge_method": null
+        },
+        {
+          "endpoint": "/api/summary",
+          "status": 503,
+          "ms": 201.87,
+          "knowledge_method": null
+        },
+        {
+          "endpoint": "/api/summary",
+          "status": 503,
+          "ms": 201.78,
+          "knowledge_method": null
+        }
+      ]
+    }
+  ],
+  "auth_pressure_statuses": {
+    "429": 6,
+    "401": 2
+  },
+  "slow_body": {
+    "status_line": "HTTP/1.1 408 Request Timeout",
+    "seconds": 10.02
+  },
+  "post_load_recovery": {
+    "status": 200,
+    "summary_ms": 16.44
+  },
+  "limitations": "Single local closed-loop run; synthetic fixtures; prewarmed embeddings; new TCP connection per request; no Internet/TLS/proxy, sustained soak, distributed traffic or capacity certification. 503 is reported as rejection, not success. Timings include client/network scheduling.",
+  "passed": false
+}

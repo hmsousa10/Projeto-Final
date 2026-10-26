@@ -1,0 +1,95 @@
+{
+  "checked_at": "2026-10-24T22:28:38.708941+00:00",
+  "target": "disposable loopback fixture",
+  "checks": [
+    {
+      "check": "anonymous /api/incidents",
+      "passed": true
+    },
+    {
+      "check": "anonymous /api/services",
+      "passed": true
+    },
+    {
+      "check": "anonymous /api/knowledge",
+      "passed": true
+    },
+    {
+      "check": "anonymous /api/slo",
+      "passed": true
+    },
+    {
+      "check": "anonymous /api/admin/users",
+      "passed": true
+    },
+    {
+      "check": "anonymous /api/audit",
+      "passed": true
+    },
+    {
+      "check": "no file/restore exposure /data/nexo.db",
+      "passed": true
+    },
+    {
+      "check": "no file/restore exposure /.env",
+      "passed": true
+    },
+    {
+      "check": "no file/restore exposure /.git/config",
+      "passed": true
+    },
+    {
+      "check": "no file/restore exposure /static/%2e%2e/data/nexo.db",
+      "passed": true
+    },
+    {
+      "check": "no file/restore exposure /static/%2e%2e/.env",
+      "passed": true
+    },
+    {
+      "check": "no file/restore exposure /api/recovery",
+      "passed": true
+    },
+    {
+      "check": "SQL injection does not authenticate",
+      "passed": true
+    },
+    {
+      "check": "login cookie flags",
+      "passed": true
+    },
+    {
+      "check": "password hashes not returned",
+      "passed": true
+    },
+    {
+      "check": "viewer forbidden /api/admin/users",
+      "passed": true
+    },
+    {
+      "check": "viewer forbidden /api/audit",
+      "passed": true
+    },
+    {
+      "check": "viewer cannot create services",
+      "passed": true
+    },
+    {
+      "check": "security response headers",
+      "passed": true
+    },
+    {
+      "check": "validation does not echo submitted secrets",
+      "passed": true
+    },
+    {
+      "check": "public restore upload absent",
+      "passed": true
+    },
+    {
+      "check": "session logout",
+      "passed": true
+    }
+  ],
+  "limitations": "Manual code review plus selected automated regressions. Not a penetration test, exhaustive ASVS certification, multi-tenant isolation claim or image/OS vulnerability scan."
+}

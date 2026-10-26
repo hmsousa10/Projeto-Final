@@ -1,0 +1,243 @@
+{
+  "checked_at": "2026-10-24T22:20:07.089139+00:00",
+  "service": "https://api.osv.dev/v1/querybatch",
+  "inventories": {
+    "docs/dependencias-app.json": [
+      {
+        "name": "annotated-doc",
+        "version": "0.0.5",
+        "advisory_ids": []
+      },
+      {
+        "name": "annotated-types",
+        "version": "0.8.0",
+        "advisory_ids": []
+      },
+      {
+        "name": "anyio",
+        "version": "4.15.1",
+        "advisory_ids": []
+      },
+      {
+        "name": "cffi",
+        "version": "2.1.1",
+        "advisory_ids": []
+      },
+      {
+        "name": "click",
+        "version": "8.5.0",
+        "advisory_ids": []
+      },
+      {
+        "name": "cryptography",
+        "version": "50.0.2",
+        "advisory_ids": []
+      },
+      {
+        "name": "fastapi",
+        "version": "0.162.0",
+        "advisory_ids": []
+      },
+      {
+        "name": "h11",
+        "version": "0.16.0",
+        "advisory_ids": []
+      },
+      {
+        "name": "idna",
+        "version": "3.20",
+        "advisory_ids": []
+      },
+      {
+        "name": "opentelemetry-api",
+        "version": "1.45.1",
+        "advisory_ids": []
+      },
+      {
+        "name": "pycparser",
+        "version": "3.12",
+        "advisory_ids": []
+      },
+      {
+        "name": "pydantic",
+        "version": "2.14.1",
+        "advisory_ids": []
+      },
+      {
+        "name": "pydantic_core",
+        "version": "2.50.1",
+        "advisory_ids": []
+      },
+      {
+        "name": "starlette",
+        "version": "1.10.0",
+        "advisory_ids": []
+      },
+      {
+        "name": "typing-inspection",
+        "version": "0.4.4",
+        "advisory_ids": []
+      },
+      {
+        "name": "typing_extensions",
+        "version": "4.16.0",
+        "advisory_ids": []
+      },
+      {
+        "name": "uvicorn",
+        "version": "0.54.0",
+        "advisory_ids": []
+      }
+    ],
+    "docs/dependencias-encoder.json": [
+      {
+        "name": "PyYAML",
+        "version": "6.0.3",
+        "advisory_ids": []
+      },
+      {
+        "name": "annotated-doc",
+        "version": "0.0.5",
+        "advisory_ids": []
+      },
+      {
+        "name": "annotated-types",
+        "version": "0.8.0",
+        "advisory_ids": []
+      },
+      {
+        "name": "anyio",
+        "version": "4.15.1",
+        "advisory_ids": []
+      },
+      {
+        "name": "click",
+        "version": "8.5.0",
+        "advisory_ids": []
+      },
+      {
+        "name": "fastapi",
+        "version": "0.162.0",
+        "advisory_ids": []
+      },
+      {
+        "name": "filelock",
+        "version": "4.2.4",
+        "advisory_ids": []
+      },
+      {
+        "name": "flatbuffers",
+        "version": "25.12.19",
+        "advisory_ids": []
+      },
+      {
+        "name": "fsspec",
+        "version": "2026.9.0",
+        "advisory_ids": []
+      },
+      {
+        "name": "h11",
+        "version": "0.16.0",
+        "advisory_ids": []
+      },
+      {
+        "name": "hf-xet",
+        "version": "1.7.0",
+        "advisory_ids": []
+      },
+      {
+        "name": "httpcore2",
+        "version": "2.16.0",
+        "advisory_ids": []
+      },
+      {
+        "name": "httpx2",
+        "version": "2.16.0",
+        "advisory_ids": []
+      },
+      {
+        "name": "huggingface_hub",
+        "version": "2.3.0",
+        "advisory_ids": []
+      },
+      {
+        "name": "idna",
+        "version": "3.20",
+        "advisory_ids": []
+      },
+      {
+        "name": "numpy",
+        "version": "2.5.4",
+        "advisory_ids": []
+      },
+      {
+        "name": "onnxruntime",
+        "version": "1.31.0",
+        "advisory_ids": []
+      },
+      {
+        "name": "opentelemetry-api",
+        "version": "1.45.1",
+        "advisory_ids": []
+      },
+      {
+        "name": "packaging",
+        "version": "26.3",
+        "advisory_ids": []
+      },
+      {
+        "name": "protobuf",
+        "version": "7.36.2",
+        "advisory_ids": []
+      },
+      {
+        "name": "pydantic",
+        "version": "2.14.1",
+        "advisory_ids": []
+      },
+      {
+        "name": "pydantic_core",
+        "version": "2.50.1",
+        "advisory_ids": []
+      },
+      {
+        "name": "starlette",
+        "version": "1.10.0",
+        "advisory_ids": []
+      },
+      {
+        "name": "tokenizers",
+        "version": "0.23.3",
+        "advisory_ids": []
+      },
+      {
+        "name": "tqdm",
+        "version": "4.70.1",
+        "advisory_ids": []
+      },
+      {
+        "name": "truststore",
+        "version": "0.10.5",
+        "advisory_ids": []
+      },
+      {
+        "name": "typing-inspection",
+        "version": "0.4.4",
+        "advisory_ids": []
+      },
+      {
+        "name": "typing_extensions",
+        "version": "4.16.0",
+        "advisory_ids": []
+      },
+      {
+        "name": "uvicorn",
+        "version": "0.54.0",
+        "advisory_ids": []
+      }
+    ]
+  },
+  "complete": true,
+  "limitations": "Known advisories only. No malware/provenance review, OS/base-image scan, exploitability proof or guarantee of safety. Only public package names and installed versions transmitted.",
+  "affected_packages": 0
+}

@@ -1,0 +1,23 @@
+# Fixed disposable rehearsal, no integrations or mount shared with nexo-lab.
+services:
+  nexo:
+    image: nexo:local
+    ports: ["127.0.0.1:8013:8000"]
+    environment:
+      DATABASE_PATH: /app/data/nexo.db
+      DEMO_MODE: "1"
+      ALLOWED_HOSTS: 127.0.0.1,localhost
+      MONITORING_ALLOWED_URLS: '["http://portal-lab:8080/health","http://api-lab:8080/health","http://portal-lab:8080/api/orders"]'
+    volumes: [maintenance-data:/app/data]
+    networks: [frontend]
+    read_only: true
+    tmpfs: [/tmp]
+    cap_drop: [ALL]
+    security_opt: [no-new-privileges:true]
+    mem_limit: 256m
+    cpus: 1
+    restart: "no"
+networks:
+  frontend: {}
+volumes:
+  maintenance-data:

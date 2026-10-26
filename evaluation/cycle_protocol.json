@@ -1,0 +1,39 @@
+{
+  "id": "nexo-cycle-outage-v1",
+  "repetitions": 3,
+  "scenario": "Deliberate HTTP 503 on the fictitious Aurora portal; all treatment steps scripted",
+  "poll_seconds": 1,
+  "phase_timeout_seconds": 65,
+  "dedup_hold_seconds": 12,
+  "knowledge_query": "Portal HTTP indisponível erro 503 recuperação sondagens",
+  "knowledge_method": "hybrid",
+  "knowledge_scope": "operational",
+  "criteria": [
+    "Fresh isolated database, no prior operational case for the target",
+    "Actual orders HTTP 503 after injection and HTTP 200 after explicit recovery",
+    "One new automatic P1 incident per repetition, no duplicate after 12 seconds",
+    "Assignment, acknowledgement and investigation recorded",
+    "Premature resolution rejected with HTTP 409",
+    "Current-run HTTP 503 log preserved in the incident",
+    "Previous closed trial found in top five before recovery on trials two and three",
+    "Hybrid search must actually use the local semantic model, no fallback",
+    "Recovery confirmed by fresh probes before resolution and post-mortem closure",
+    "Closed case immutable and retrievable, no active target incident left"
+  ],
+  "timing": {
+    "clock": "Client monotonic elapsed seconds; accompanying UTC wall timestamps",
+    "injection": "Before fault-control HTTP request; also store response end",
+    "detection": "First API poll observing the new automatic incident",
+    "recovery": "Before recovery-control HTTP request",
+    "confirmation": "First API poll observing fresh recovery in incident history",
+    "poll_uncertainty": "Up to one polling interval plus request and scheduling time; not exact internal transition time",
+    "scripted_treatment": "Assignment/acknowledgement/investigation/closure driven by script; not human MTTA or MTTR"
+  },
+  "limits": [
+    "Three identical laboratory failures, no production or independent human baseline",
+    "No inference of productivity gains or causal improvement from knowledge retrieval",
+    "Detection uses health endpoint; orders endpoint independently verifies visible impact",
+    "One host, shared host resources, warm containers and model; startup excluded",
+    "Polling and intentional deduplication hold contribute to total case time"
+  ]
+}

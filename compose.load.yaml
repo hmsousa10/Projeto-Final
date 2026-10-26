@@ -1,0 +1,50 @@
+# Disposable fixture and encoder, separate project/network; no production volume.
+services:
+  load-app:
+    image: nexo:local
+    build: .
+    command: ["python","-m","evaluation.load_server"]
+    ports: ["127.0.0.1:8010:8000"]
+    networks: [default, frontend]
+    environment:
+      LOAD_TEST_MODE: "1"
+      DATABASE_PATH: /app/data/load-test.db
+      DEMO_MODE: "1"
+      DEMO_PASSWORD: EstudoLocal2026!
+      ALLOWED_HOSTS: 127.0.0.1,localhost
+      SEMANTIC_URL: http://load-semantic:8080
+      SEMANTIC_TOKEN_FILE: /run/secrets/semantic_access
+    secrets: [semantic_access]
+    tmpfs: [/tmp, "/app/data:uid=10001,gid=10001,mode=0700,size=64m"]
+    read_only: true
+    cap_drop: [ALL]
+    security_opt: [no-new-privileges:true]
+    mem_limit: 256m
+    cpus: 1
+    depends_on:
+      load-semantic:
+        condition: service_healthy
+  load-semantic:
+    image: nexo-semantic:local
+    environment:
+      SEMANTIC_TOKEN_FILE: /run/secrets/semantic_access
+    secrets: [semantic_access]
+    read_only: true
+    tmpfs: [/tmp]
+    cap_drop: [ALL]
+    security_opt: [no-new-privileges:true]
+    mem_limit: 1g
+    cpus: 2
+    healthcheck:
+      test: ["CMD","python","-c","import urllib.request; urllib.request.urlopen('http://127.0.0.1:8080/health',timeout=3)"]
+      interval: 3s
+      timeout: 5s
+      retries: 15
+      start_period: 10s
+secrets:
+  semantic_access:
+    file: ./data/semantic-access.key
+networks:
+  default:
+    internal: true
+  frontend: {}

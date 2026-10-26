@@ -1,0 +1,29 @@
+# Merge only with compose.observability.yaml, under project nexo-cycle.
+# All data is disposable tmpfs. No live data volumes or host database mounts.
+services:
+  nexo:
+    command: ["python", "-m", "evaluation.cycle_server"]
+    ports: !override ["127.0.0.1:8011:8000"]
+    environment:
+      DATABASE_PATH: /app/data/cycle-test.db
+      CYCLE_TEST_MODE: "1"
+    volumes: !reset []
+    tmpfs: !override [/tmp, "/app/data:uid=10001,gid=10001,mode=0700,size=64m"]
+    restart: "no"
+  portal-lab:
+    ports: !override ["127.0.0.1:8012:8080"]
+    restart: "no"
+  api-lab:
+    restart: "no"
+  prometheus:
+    volumes: !override ["./observability/prometheus.yml:/etc/prometheus/prometheus.yml:ro"]
+    tmpfs: ["/prometheus:uid=65534,gid=65534,mode=0700,size=64m"]
+    restart: "no"
+  loki:
+    volumes: !override ["./observability/loki.yml:/etc/loki/nexo.yml:ro"]
+    tmpfs: !override [/tmp, "/loki:uid=10001,gid=10001,mode=0700,size=64m"]
+    restart: "no"
+  blackbox:
+    restart: "no"
+  semantic:
+    restart: "no"

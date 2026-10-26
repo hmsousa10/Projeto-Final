@@ -1,0 +1,43 @@
+{
+  "status": "passed",
+  "checked_at_utc": "2026-10-26T00:28:24.267355+00:00",
+  "version": "0.14.0",
+  "historical_incidents": 9,
+  "historical_timeline": 60,
+  "notifications_returned": 24,
+  "reader_unread": 24,
+  "deadline_event_present": true,
+  "synthetic_examples_excluded": true,
+  "asset_urls": [
+    "/static/style.css?v=0.14.0-ef9a0c42356e",
+    "/static/app.js?v=0.14.0-ef9a0c42356e"
+  ],
+  "index_cache_control": "no-store",
+  "full_suite": {
+    "passed": 169,
+    "seconds": 236.9,
+    "warnings": 1
+  },
+  "focused_notifications_after_changes": {
+    "passed": 11,
+    "seconds": 28.34
+  },
+  "source_sha256": {
+    "app/notifications.py": "d80052ca0381be09271f9107a3918a55482df4d8b5a3249e5b7775befd5483ac",
+    "app/main.py": "95799952bcab73816400fc8a60fd515ef48dcf6dcf7c47fc9f76c99076d6ded4",
+    "web/app.js": "beab22438b404199c541897b514dc2759d640653bb1ad7d8ee90abbef76f164c",
+    "web/style.css": "c60d99b022eb167ee66dea17271376b4503359f1bbf7169b1d8b47f124a80435",
+    "web/index.html": "dd3084f3f841e576249948e6ac8d43166ab066c6df917bcb281a6b15be133e5e"
+  },
+  "read_only_operational_data_check": true,
+  "portal_mode": "demonstration",
+  "visual_check": {
+    "title": "Nexo · Notificações",
+    "rows": 24,
+    "horizontal_overflow": false,
+    "notice_background": "rgb(23, 62, 53)",
+    "row_layout": "flex",
+    "screenshot": "notificacoes-v014.png",
+    "incident_link_opened": 9
+  }
+}

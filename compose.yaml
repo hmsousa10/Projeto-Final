@@ -1,0 +1,18 @@
+services:
+  nexo:
+    build: .
+    ports:
+      - "127.0.0.1:8000:8000"
+    environment:
+      DATABASE_PATH: /app/data/nexo.db
+      DEMO_MODE: "1"
+    volumes:
+      - nexo-data:/app/data
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/api/health', timeout=3)"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+    restart: unless-stopped
+volumes:
+  nexo-data:

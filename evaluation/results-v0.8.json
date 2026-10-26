@@ -1,0 +1,1071 @@
+{
+  "created_at": "2026-10-24T21:43:38.838197+00:00",
+  "dataset_sha256": "cb8ccc150e818acfebe1acdb89ca35949bd593270ed625081bea3843b60a8c4c",
+  "dataset_version": "1.0-frozen-before-first-run",
+  "model": "sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2@e8f8c211226b894fcb81acc59f3b34ba3efd5f42:quint8-avx2:mean128:v1",
+  "threshold": 0.35,
+  "rrf_constant": 60,
+  "documents": 10,
+  "chunks": 30,
+  "index_ms": 299.63,
+  "limitations": "Small hand-authored synthetic corpus. No statistical/generalization or MTTR claim. No tuning after test. Query timing excludes indexing and HTTP/UI overhead; semantic includes local inference. P@3 uses denominator 3; MRR is truncated at 3.",
+  "metrics": {
+    "dev": {
+      "tfidf": {
+        "positive_queries": 3,
+        "negative_queries": 1,
+        "precision_at_3": 0.3333,
+        "recall_at_3": 1.0,
+        "mrr_at_3": 0.8333,
+        "no_answer_accuracy": 1.0,
+        "mean_query_ms": 1.0325,
+        "max_query_ms": 2.57
+      },
+      "bm25": {
+        "positive_queries": 3,
+        "negative_queries": 1,
+        "precision_at_3": 0.3333,
+        "recall_at_3": 1.0,
+        "mrr_at_3": 0.8333,
+        "no_answer_accuracy": 1.0,
+        "mean_query_ms": 0.4825,
+        "max_query_ms": 0.51
+      },
+      "semantic": {
+        "positive_queries": 3,
+        "negative_queries": 1,
+        "precision_at_3": 0.3333,
+        "recall_at_3": 1.0,
+        "mrr_at_3": 1.0,
+        "no_answer_accuracy": 1.0,
+        "mean_query_ms": 8.12,
+        "max_query_ms": 9.25
+      },
+      "hybrid": {
+        "positive_queries": 3,
+        "negative_queries": 1,
+        "precision_at_3": 0.3333,
+        "recall_at_3": 1.0,
+        "mrr_at_3": 0.8333,
+        "no_answer_accuracy": 1.0,
+        "mean_query_ms": 8.1575,
+        "max_query_ms": 8.9
+      }
+    },
+    "test": {
+      "tfidf": {
+        "positive_queries": 12,
+        "negative_queries": 4,
+        "precision_at_3": 0.1667,
+        "recall_at_3": 0.5,
+        "mrr_at_3": 0.5,
+        "no_answer_accuracy": 0.5,
+        "mean_query_ms": 0.5813,
+        "max_query_ms": 0.94
+      },
+      "bm25": {
+        "positive_queries": 12,
+        "negative_queries": 4,
+        "precision_at_3": 0.2222,
+        "recall_at_3": 0.6667,
+        "mrr_at_3": 0.6667,
+        "no_answer_accuracy": 0.5,
+        "mean_query_ms": 0.61,
+        "max_query_ms": 1.0
+      },
+      "semantic": {
+        "positive_queries": 12,
+        "negative_queries": 4,
+        "precision_at_3": 0.3333,
+        "recall_at_3": 1.0,
+        "mrr_at_3": 0.9583,
+        "no_answer_accuracy": 0.75,
+        "mean_query_ms": 9.32,
+        "max_query_ms": 13.05
+      },
+      "hybrid": {
+        "positive_queries": 12,
+        "negative_queries": 4,
+        "precision_at_3": 0.3333,
+        "recall_at_3": 1.0,
+        "mrr_at_3": 0.9444,
+        "no_answer_accuracy": 0.5,
+        "mean_query_ms": 10.0038,
+        "max_query_ms": 12.88
+      }
+    }
+  },
+  "runs": {
+    "tfidf": [
+      {
+        "id": "dev-01",
+        "split": "dev",
+        "text": "conexões SQL esgotadas",
+        "relevant": [
+          101
+        ],
+        "ids": [
+          101,
+          108
+        ],
+        "ms": 2.57
+      },
+      {
+        "id": "dev-02",
+        "split": "dev",
+        "text": "certificate expired HTTPS",
+        "relevant": [
+          102
+        ],
+        "ids": [
+          102
+        ],
+        "ms": 0.54
+      },
+      {
+        "id": "dev-03",
+        "split": "dev",
+        "text": "mensagens em espera sem trabalhadores",
+        "relevant": [
+          105
+        ],
+        "ids": [
+          103,
+          105,
+          101
+        ],
+        "ms": 0.54
+      },
+      {
+        "id": "dev-04",
+        "split": "dev",
+        "text": "receita de bolo de chocolate",
+        "relevant": [],
+        "ids": [],
+        "ms": 0.48
+      },
+      {
+        "id": "test-01",
+        "split": "test",
+        "text": "Não há mais ligações disponíveis para falar com o banco de dados",
+        "relevant": [
+          101
+        ],
+        "ids": [
+          101,
+          108,
+          109
+        ],
+        "ms": 0.51
+      },
+      {
+        "id": "test-02",
+        "split": "test",
+        "text": "O navegador recusa a conexão segura porque a validade terminou",
+        "relevant": [
+          102
+        ],
+        "ids": [],
+        "ms": 0.87
+      },
+      {
+        "id": "test-03",
+        "split": "test",
+        "text": "Já não cabe mais nada no armazenamento e a aplicação não escreve",
+        "relevant": [
+          103
+        ],
+        "ids": [
+          101,
+          107,
+          109
+        ],
+        "ms": 0.72
+      },
+      {
+        "id": "test-04",
+        "split": "test",
+        "text": "Mudámos de máquina mas o nome do site continua a apontar para a antiga",
+        "relevant": [
+          104
+        ],
+        "ids": [
+          109,
+          105,
+          107
+        ],
+        "ms": 0.49
+      },
+      {
+        "id": "test-05",
+        "split": "test",
+        "text": "As tarefas assíncronas ficam pendentes porque ninguém as processa",
+        "relevant": [
+          105
+        ],
+        "ids": [
+          105
+        ],
+        "ms": 0.48
+      },
+      {
+        "id": "test-06",
+        "split": "test",
+        "text": "O contentor é morto por consumir demasiada RAM",
+        "relevant": [
+          106
+        ],
+        "ids": [],
+        "ms": 0.47
+      },
+      {
+        "id": "test-07",
+        "split": "test",
+        "text": "Trocaram a chave de acesso e a integração deixou de se autenticar",
+        "relevant": [
+          107
+        ],
+        "ids": [
+          107
+        ],
+        "ms": 0.94
+      },
+      {
+        "id": "test-08",
+        "split": "test",
+        "text": "A pesquisa de encomendas varre todos os registos e demora imenso",
+        "relevant": [
+          108
+        ],
+        "ids": [
+          108,
+          103,
+          110
+        ],
+        "ms": 0.49
+      },
+      {
+        "id": "test-09",
+        "split": "test",
+        "text": "Atualizei os valores do catálogo mas os clientes veem os montantes anteriores",
+        "relevant": [
+          109
+        ],
+        "ids": [
+          109,
+          102,
+          105
+        ],
+        "ms": 0.49
+      },
+      {
+        "id": "test-10",
+        "split": "test",
+        "text": "O portal passou a devolver 503 assim que fizemos deploy",
+        "relevant": [
+          110
+        ],
+        "ids": [
+          110
+        ],
+        "ms": 0.49
+      },
+      {
+        "id": "test-11",
+        "split": "test",
+        "text": "database connection pool exhausted",
+        "relevant": [
+          101
+        ],
+        "ids": [],
+        "ms": 0.77
+      },
+      {
+        "id": "test-12",
+        "split": "test",
+        "text": "background queue consumers stopped processing jobs",
+        "relevant": [
+          105
+        ],
+        "ids": [],
+        "ms": 0.5
+      },
+      {
+        "id": "test-13",
+        "split": "test",
+        "text": "como preparar uma tarte de maçã",
+        "relevant": [],
+        "ids": [],
+        "ms": 0.5
+      },
+      {
+        "id": "test-14",
+        "split": "test",
+        "text": "horário do comboio para Coimbra",
+        "relevant": [],
+        "ids": [],
+        "ms": 0.53
+      },
+      {
+        "id": "test-15",
+        "split": "test",
+        "text": "criar relatórios contabilísticos em formato PDF",
+        "relevant": [],
+        "ids": [
+          108
+        ],
+        "ms": 0.51
+      },
+      {
+        "id": "test-16",
+        "split": "test",
+        "text": "alterar a morada de faturação de um cliente",
+        "relevant": [],
+        "ids": [
+          108
+        ],
+        "ms": 0.54
+      }
+    ],
+    "bm25": [
+      {
+        "id": "dev-01",
+        "split": "dev",
+        "text": "conexões SQL esgotadas",
+        "relevant": [
+          101
+        ],
+        "ids": [
+          101,
+          108
+        ],
+        "ms": 0.49
+      },
+      {
+        "id": "dev-02",
+        "split": "dev",
+        "text": "certificate expired HTTPS",
+        "relevant": [
+          102
+        ],
+        "ids": [
+          102
+        ],
+        "ms": 0.47
+      },
+      {
+        "id": "dev-03",
+        "split": "dev",
+        "text": "mensagens em espera sem trabalhadores",
+        "relevant": [
+          105
+        ],
+        "ids": [
+          101,
+          105,
+          103
+        ],
+        "ms": 0.51
+      },
+      {
+        "id": "dev-04",
+        "split": "dev",
+        "text": "receita de bolo de chocolate",
+        "relevant": [],
+        "ids": [],
+        "ms": 0.46
+      },
+      {
+        "id": "test-01",
+        "split": "test",
+        "text": "Não há mais ligações disponíveis para falar com o banco de dados",
+        "relevant": [
+          101
+        ],
+        "ids": [
+          101,
+          105,
+          108
+        ],
+        "ms": 0.54
+      },
+      {
+        "id": "test-02",
+        "split": "test",
+        "text": "O navegador recusa a conexão segura porque a validade terminou",
+        "relevant": [
+          102
+        ],
+        "ids": [
+          102
+        ],
+        "ms": 0.88
+      },
+      {
+        "id": "test-03",
+        "split": "test",
+        "text": "Já não cabe mais nada no armazenamento e a aplicação não escreve",
+        "relevant": [
+          103
+        ],
+        "ids": [
+          101,
+          105,
+          107
+        ],
+        "ms": 0.61
+      },
+      {
+        "id": "test-04",
+        "split": "test",
+        "text": "Mudámos de máquina mas o nome do site continua a apontar para a antiga",
+        "relevant": [
+          104
+        ],
+        "ids": [
+          105,
+          109,
+          107
+        ],
+        "ms": 0.56
+      },
+      {
+        "id": "test-05",
+        "split": "test",
+        "text": "As tarefas assíncronas ficam pendentes porque ninguém as processa",
+        "relevant": [
+          105
+        ],
+        "ids": [
+          105
+        ],
+        "ms": 0.52
+      },
+      {
+        "id": "test-06",
+        "split": "test",
+        "text": "O contentor é morto por consumir demasiada RAM",
+        "relevant": [
+          106
+        ],
+        "ids": [
+          106
+        ],
+        "ms": 0.55
+      },
+      {
+        "id": "test-07",
+        "split": "test",
+        "text": "Trocaram a chave de acesso e a integração deixou de se autenticar",
+        "relevant": [
+          107
+        ],
+        "ids": [
+          107
+        ],
+        "ms": 1.0
+      },
+      {
+        "id": "test-08",
+        "split": "test",
+        "text": "A pesquisa de encomendas varre todos os registos e demora imenso",
+        "relevant": [
+          108
+        ],
+        "ids": [
+          108,
+          103,
+          110
+        ],
+        "ms": 0.52
+      },
+      {
+        "id": "test-09",
+        "split": "test",
+        "text": "Atualizei os valores do catálogo mas os clientes veem os montantes anteriores",
+        "relevant": [
+          109
+        ],
+        "ids": [
+          109,
+          102,
+          105
+        ],
+        "ms": 0.55
+      },
+      {
+        "id": "test-10",
+        "split": "test",
+        "text": "O portal passou a devolver 503 assim que fizemos deploy",
+        "relevant": [
+          110
+        ],
+        "ids": [
+          110
+        ],
+        "ms": 0.51
+      },
+      {
+        "id": "test-11",
+        "split": "test",
+        "text": "database connection pool exhausted",
+        "relevant": [
+          101
+        ],
+        "ids": [],
+        "ms": 0.82
+      },
+      {
+        "id": "test-12",
+        "split": "test",
+        "text": "background queue consumers stopped processing jobs",
+        "relevant": [
+          105
+        ],
+        "ids": [],
+        "ms": 0.48
+      },
+      {
+        "id": "test-13",
+        "split": "test",
+        "text": "como preparar uma tarte de maçã",
+        "relevant": [],
+        "ids": [],
+        "ms": 0.59
+      },
+      {
+        "id": "test-14",
+        "split": "test",
+        "text": "horário do comboio para Coimbra",
+        "relevant": [],
+        "ids": [],
+        "ms": 0.59
+      },
+      {
+        "id": "test-15",
+        "split": "test",
+        "text": "criar relatórios contabilísticos em formato PDF",
+        "relevant": [],
+        "ids": [
+          108
+        ],
+        "ms": 0.53
+      },
+      {
+        "id": "test-16",
+        "split": "test",
+        "text": "alterar a morada de faturação de um cliente",
+        "relevant": [],
+        "ids": [
+          108
+        ],
+        "ms": 0.51
+      }
+    ],
+    "semantic": [
+      {
+        "id": "dev-01",
+        "split": "dev",
+        "text": "conexões SQL esgotadas",
+        "relevant": [
+          101
+        ],
+        "ids": [
+          101,
+          108
+        ],
+        "ms": 7.72
+      },
+      {
+        "id": "dev-02",
+        "split": "dev",
+        "text": "certificate expired HTTPS",
+        "relevant": [
+          102
+        ],
+        "ids": [
+          102,
+          107,
+          104
+        ],
+        "ms": 7.43
+      },
+      {
+        "id": "dev-03",
+        "split": "dev",
+        "text": "mensagens em espera sem trabalhadores",
+        "relevant": [
+          105
+        ],
+        "ids": [
+          105,
+          101
+        ],
+        "ms": 8.08
+      },
+      {
+        "id": "dev-04",
+        "split": "dev",
+        "text": "receita de bolo de chocolate",
+        "relevant": [],
+        "ids": [],
+        "ms": 9.25
+      },
+      {
+        "id": "test-01",
+        "split": "test",
+        "text": "Não há mais ligações disponíveis para falar com o banco de dados",
+        "relevant": [
+          101
+        ],
+        "ids": [
+          101,
+          103,
+          104
+        ],
+        "ms": 9.08
+      },
+      {
+        "id": "test-02",
+        "split": "test",
+        "text": "O navegador recusa a conexão segura porque a validade terminou",
+        "relevant": [
+          102
+        ],
+        "ids": [
+          101,
+          102,
+          110
+        ],
+        "ms": 13.05
+      },
+      {
+        "id": "test-03",
+        "split": "test",
+        "text": "Já não cabe mais nada no armazenamento e a aplicação não escreve",
+        "relevant": [
+          103
+        ],
+        "ids": [
+          103,
+          109,
+          106
+        ],
+        "ms": 9.78
+      },
+      {
+        "id": "test-04",
+        "split": "test",
+        "text": "Mudámos de máquina mas o nome do site continua a apontar para a antiga",
+        "relevant": [
+          104
+        ],
+        "ids": [
+          104,
+          102,
+          110
+        ],
+        "ms": 10.76
+      },
+      {
+        "id": "test-05",
+        "split": "test",
+        "text": "As tarefas assíncronas ficam pendentes porque ninguém as processa",
+        "relevant": [
+          105
+        ],
+        "ids": [
+          105,
+          108,
+          101
+        ],
+        "ms": 9.62
+      },
+      {
+        "id": "test-06",
+        "split": "test",
+        "text": "O contentor é morto por consumir demasiada RAM",
+        "relevant": [
+          106
+        ],
+        "ids": [
+          106
+        ],
+        "ms": 9.76
+      },
+      {
+        "id": "test-07",
+        "split": "test",
+        "text": "Trocaram a chave de acesso e a integração deixou de se autenticar",
+        "relevant": [
+          107
+        ],
+        "ids": [
+          107,
+          102,
+          101
+        ],
+        "ms": 11.03
+      },
+      {
+        "id": "test-08",
+        "split": "test",
+        "text": "A pesquisa de encomendas varre todos os registos e demora imenso",
+        "relevant": [
+          108
+        ],
+        "ids": [
+          108,
+          106,
+          105
+        ],
+        "ms": 9.37
+      },
+      {
+        "id": "test-09",
+        "split": "test",
+        "text": "Atualizei os valores do catálogo mas os clientes veem os montantes anteriores",
+        "relevant": [
+          109
+        ],
+        "ids": [
+          109,
+          105,
+          108
+        ],
+        "ms": 10.03
+      },
+      {
+        "id": "test-10",
+        "split": "test",
+        "text": "O portal passou a devolver 503 assim que fizemos deploy",
+        "relevant": [
+          110
+        ],
+        "ids": [
+          110,
+          104
+        ],
+        "ms": 9.05
+      },
+      {
+        "id": "test-11",
+        "split": "test",
+        "text": "database connection pool exhausted",
+        "relevant": [
+          101
+        ],
+        "ids": [
+          101,
+          108,
+          103
+        ],
+        "ms": 7.15
+      },
+      {
+        "id": "test-12",
+        "split": "test",
+        "text": "background queue consumers stopped processing jobs",
+        "relevant": [
+          105
+        ],
+        "ids": [
+          105,
+          108,
+          101
+        ],
+        "ms": 8.02
+      },
+      {
+        "id": "test-13",
+        "split": "test",
+        "text": "como preparar uma tarte de maçã",
+        "relevant": [],
+        "ids": [],
+        "ms": 8.4
+      },
+      {
+        "id": "test-14",
+        "split": "test",
+        "text": "horário do comboio para Coimbra",
+        "relevant": [],
+        "ids": [],
+        "ms": 7.7
+      },
+      {
+        "id": "test-15",
+        "split": "test",
+        "text": "criar relatórios contabilísticos em formato PDF",
+        "relevant": [],
+        "ids": [],
+        "ms": 7.87
+      },
+      {
+        "id": "test-16",
+        "split": "test",
+        "text": "alterar a morada de faturação de um cliente",
+        "relevant": [],
+        "ids": [
+          105,
+          109,
+          110
+        ],
+        "ms": 8.45
+      }
+    ],
+    "hybrid": [
+      {
+        "id": "dev-01",
+        "split": "dev",
+        "text": "conexões SQL esgotadas",
+        "relevant": [
+          101
+        ],
+        "ids": [
+          101,
+          108
+        ],
+        "ms": 8.47
+      },
+      {
+        "id": "dev-02",
+        "split": "dev",
+        "text": "certificate expired HTTPS",
+        "relevant": [
+          102
+        ],
+        "ids": [
+          102,
+          107,
+          104
+        ],
+        "ms": 7.68
+      },
+      {
+        "id": "dev-03",
+        "split": "dev",
+        "text": "mensagens em espera sem trabalhadores",
+        "relevant": [
+          105
+        ],
+        "ids": [
+          101,
+          105,
+          103
+        ],
+        "ms": 8.9
+      },
+      {
+        "id": "dev-04",
+        "split": "dev",
+        "text": "receita de bolo de chocolate",
+        "relevant": [],
+        "ids": [],
+        "ms": 7.58
+      },
+      {
+        "id": "test-01",
+        "split": "test",
+        "text": "Não há mais ligações disponíveis para falar com o banco de dados",
+        "relevant": [
+          101
+        ],
+        "ids": [
+          101,
+          104,
+          102
+        ],
+        "ms": 10.85
+      },
+      {
+        "id": "test-02",
+        "split": "test",
+        "text": "O navegador recusa a conexão segura porque a validade terminou",
+        "relevant": [
+          102
+        ],
+        "ids": [
+          102,
+          101,
+          110
+        ],
+        "ms": 10.01
+      },
+      {
+        "id": "test-03",
+        "split": "test",
+        "text": "Já não cabe mais nada no armazenamento e a aplicação não escreve",
+        "relevant": [
+          103
+        ],
+        "ids": [
+          103,
+          109,
+          101
+        ],
+        "ms": 10.61
+      },
+      {
+        "id": "test-04",
+        "split": "test",
+        "text": "Mudámos de máquina mas o nome do site continua a apontar para a antiga",
+        "relevant": [
+          104
+        ],
+        "ids": [
+          105,
+          107,
+          104
+        ],
+        "ms": 12.88
+      },
+      {
+        "id": "test-05",
+        "split": "test",
+        "text": "As tarefas assíncronas ficam pendentes porque ninguém as processa",
+        "relevant": [
+          105
+        ],
+        "ids": [
+          105,
+          108,
+          101
+        ],
+        "ms": 9.63
+      },
+      {
+        "id": "test-06",
+        "split": "test",
+        "text": "O contentor é morto por consumir demasiada RAM",
+        "relevant": [
+          106
+        ],
+        "ids": [
+          106
+        ],
+        "ms": 11.95
+      },
+      {
+        "id": "test-07",
+        "split": "test",
+        "text": "Trocaram a chave de acesso e a integração deixou de se autenticar",
+        "relevant": [
+          107
+        ],
+        "ids": [
+          107,
+          102,
+          101
+        ],
+        "ms": 10.43
+      },
+      {
+        "id": "test-08",
+        "split": "test",
+        "text": "A pesquisa de encomendas varre todos os registos e demora imenso",
+        "relevant": [
+          108
+        ],
+        "ids": [
+          108,
+          103,
+          106
+        ],
+        "ms": 9.87
+      },
+      {
+        "id": "test-09",
+        "split": "test",
+        "text": "Atualizei os valores do catálogo mas os clientes veem os montantes anteriores",
+        "relevant": [
+          109
+        ],
+        "ids": [
+          109,
+          105,
+          102
+        ],
+        "ms": 10.11
+      },
+      {
+        "id": "test-10",
+        "split": "test",
+        "text": "O portal passou a devolver 503 assim que fizemos deploy",
+        "relevant": [
+          110
+        ],
+        "ids": [
+          110,
+          104
+        ],
+        "ms": 11.26
+      },
+      {
+        "id": "test-11",
+        "split": "test",
+        "text": "database connection pool exhausted",
+        "relevant": [
+          101
+        ],
+        "ids": [
+          101,
+          108,
+          103
+        ],
+        "ms": 7.46
+      },
+      {
+        "id": "test-12",
+        "split": "test",
+        "text": "background queue consumers stopped processing jobs",
+        "relevant": [
+          105
+        ],
+        "ids": [
+          105,
+          108,
+          101
+        ],
+        "ms": 9.67
+      },
+      {
+        "id": "test-13",
+        "split": "test",
+        "text": "como preparar uma tarte de maçã",
+        "relevant": [],
+        "ids": [],
+        "ms": 7.99
+      },
+      {
+        "id": "test-14",
+        "split": "test",
+        "text": "horário do comboio para Coimbra",
+        "relevant": [],
+        "ids": [],
+        "ms": 8.54
+      },
+      {
+        "id": "test-15",
+        "split": "test",
+        "text": "criar relatórios contabilísticos em formato PDF",
+        "relevant": [],
+        "ids": [
+          108
+        ],
+        "ms": 9.79
+      },
+      {
+        "id": "test-16",
+        "split": "test",
+        "text": "alterar a morada de faturação de um cliente",
+        "relevant": [],
+        "ids": [
+          105,
+          108,
+          109
+        ],
+        "ms": 9.01
+      }
+    ]
+  }
+}

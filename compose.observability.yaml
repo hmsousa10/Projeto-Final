@@ -1,0 +1,142 @@
+# Separate local laboratory: docker compose -p nexo-lab -f compose.observability.yaml up -d --build
+services:
+  nexo:
+    build: .
+    image: nexo:local
+    ports: ["127.0.0.1:8001:8000"]
+    networks: [default, frontend]
+    environment:
+      DATABASE_PATH: /app/data/nexo.db
+      DEMO_MODE: "1"
+      PROMETHEUS_URL: http://prometheus:9090
+      LOKI_URL: http://loki:3100
+      LAB_MODE: "1"
+      LAB_CONTROL_TOKEN_FILE: /run/secrets/lab_control
+      MONITORING_SD_TOKEN_FILE: /run/secrets/monitoring_discovery
+      MONITORING_ALLOWED_URLS: '["http://portal-lab:8080/health","http://api-lab:8080/health","http://portal-lab:8080/api/orders"]'
+      ALLOWED_HOSTS: 127.0.0.1,localhost,nexo
+      SEMANTIC_URL: http://semantic:8080
+      SEMANTIC_TOKEN_FILE: /run/secrets/semantic_access
+    secrets: [lab_control, monitoring_discovery, semantic_access]
+    volumes: [nexo-data:/app/data]
+    depends_on: [prometheus]
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/api/health', timeout=3)"]
+      interval: 15s
+      timeout: 5s
+      retries: 5
+    cap_drop: [ALL]
+    security_opt: [no-new-privileges:true]
+    read_only: true
+    tmpfs: [/tmp]
+    mem_limit: 256m
+    cpus: 1
+    restart: unless-stopped
+  prometheus:
+    image: prom/prometheus:v3.15.1
+    command: ["--config.file=/etc/prometheus/prometheus.yml", "--storage.tsdb.path=/prometheus", "--storage.tsdb.retention.time=7d", "--storage.tsdb.retention.size=512MB"]
+    volumes:
+      - ./observability/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - prometheus-data:/prometheus
+    secrets: [monitoring_discovery]
+    cap_drop: [ALL]
+    security_opt: [no-new-privileges:true]
+    read_only: true
+    mem_limit: 384m
+    cpus: 1
+    restart: unless-stopped
+  blackbox:
+    image: prom/blackbox-exporter:v0.29.1
+    user: "65534:65534"
+    command: ["--config.file=/etc/blackbox/blackbox.yml"]
+    volumes: [./observability/blackbox.yml:/etc/blackbox/blackbox.yml:ro]
+    cap_drop: [ALL]
+    security_opt: [no-new-privileges:true]
+    read_only: true
+    mem_limit: 96m
+    cpus: 0.5
+    restart: unless-stopped
+  portal-lab:
+    image: nexo:local
+    build: .
+    command: ["python", "-m", "app.lab_service"]
+    ports: ["127.0.0.1:8002:8080"]
+    networks: [default, frontend]
+    environment:
+      LAB_MODE: "1"
+      LAB_CONTROL_TOKEN_FILE: /run/secrets/lab_control
+      LAB_TARGET_KEY: portal-lab
+      LOKI_URL: http://loki:3100
+    secrets: [lab_control]
+    cap_drop: [ALL]
+    security_opt: [no-new-privileges:true]
+    read_only: true
+    mem_limit: 64m
+    cpus: 0.25
+    restart: unless-stopped
+  api-lab:
+    image: nexo:local
+    build: .
+    command: ["python", "-m", "app.lab_service"]
+    environment:
+      LAB_DELAY_SECONDS: "0.8"
+      LAB_MODE: "1"
+      LAB_CONTROL_TOKEN_FILE: /run/secrets/lab_control
+      LAB_TARGET_KEY: api-lab
+      LOKI_URL: http://loki:3100
+    secrets: [lab_control]
+    cap_drop: [ALL]
+    security_opt: [no-new-privileges:true]
+    read_only: true
+    mem_limit: 64m
+    cpus: 0.25
+    restart: unless-stopped
+  semantic:
+    build:
+      context: .
+      dockerfile: semantic/Dockerfile
+    image: nexo-semantic:local
+    environment:
+      SEMANTIC_TOKEN_FILE: /run/secrets/semantic_access
+    secrets: [semantic_access]
+    cap_drop: [ALL]
+    security_opt: [no-new-privileges:true]
+    read_only: true
+    tmpfs: [/tmp]
+    mem_limit: 1g
+    cpus: 2
+    healthcheck:
+      test: ["CMD","python","-c","import urllib.request; urllib.request.urlopen('http://127.0.0.1:8080/health',timeout=3)"]
+      interval: 15s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+    restart: unless-stopped
+  loki:
+    image: grafana/loki:3.7.9
+    command: ["-config.file=/etc/loki/nexo.yml"]
+    volumes:
+      - ./observability/loki.yml:/etc/loki/nexo.yml:ro
+      - loki-data:/loki
+    cap_drop: [ALL]
+    security_opt: [no-new-privileges:true]
+    read_only: true
+    tmpfs: [/tmp]
+    mem_limit: 384m
+    cpus: 1
+    restart: unless-stopped
+secrets:
+  semantic_access:
+    file: ./data/semantic-access.key
+  monitoring_discovery:
+    file: ./data/monitoring-discovery.key
+  lab_control:
+    file: ./data/lab-control.key
+networks:
+  frontend: {}
+  default:
+    internal: true
+volumes:
+  nexo-data:
+  prometheus-data:
+  loki-data:

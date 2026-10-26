@@ -1,0 +1,11 @@
+﻿{
+    "synthetic_keys_only":  true,
+    "destination_dpapi_file_required":  false,
+    "unicode_phrase_roundtrip":  true,
+    "existing_destination_preserved":  true,
+    "powershell_version":  "5.1.26100.9711",
+    "export_verify_restore":  "passed",
+    "fixture_path":  "C:\\Users\\hugom\\AppData\\Local\\Nexo\\Ensaios\\portatil-d871526c98f4424d9428b3e3f7dc592f",
+    "wrong_phrase_rejected":  true,
+    "dpapi_source_preserved":  true
+}

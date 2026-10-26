@@ -1,0 +1,25 @@
+{
+  "checked_at": "2026-10-26T00:36:24.671553+00:00",
+  "application_version": "0.15.0",
+  "read_only_operational_data_check": true,
+  "incidents": 9,
+  "timeline_entries": 60,
+  "all_json_exports_equal_detail": true,
+  "both_formats_checked_for_every_case": true,
+  "source_sha256": {
+    "app/dossier.py": "0125cfc1ce90547b333a622dfac3a33ea48fe1f9d5d5373e7d9a0bc6bae74b76",
+    "app/main.py": "915eb2f125a9de7462e406f2eefc8793b8353f9e4e75bfb94702789cc4232a08",
+    "web/app.js": "810d38a7533a8dd67759d6a818509998cf3012a7a69edadbb74296116977c2a1"
+  },
+  "tests": {
+    "passed": 174,
+    "duration_seconds": 244.71,
+    "warnings": 1,
+    "warning": "Starlette/httpx deprecation"
+  },
+  "visual_check": {
+    "incident_id": 9,
+    "both_download_links_visible": true,
+    "screenshot": "dossier-v015.png"
+  }
+}
