@@ -122,6 +122,8 @@ Para cópias consistentes e cifradas da stack Docker, usa `copia-seguranca.cmd` 
 
 ## Testes
 
+O [GitHub Actions](https://github.com/hmsousa10/Projeto-Final/actions) executa a suite Python, `pip check` e a verificação de sintaxe JavaScript. Consultar o [guia de desenvolvimento](CONTRIBUTING.md#testes-automáticos-no-github) para âmbito e limitações.
+
 ```powershell
 .\.venv\Scripts\python.exe -m pip install -r requirements-dev.txt
 .\.venv\Scripts\python.exe -m pytest -q

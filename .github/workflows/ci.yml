@@ -1,0 +1,54 @@
+name: Verificações do projeto
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  tests:
+    name: Python 3.14 e JavaScript · Linux
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    env:
+      DEMO_PASSWORD: EstudoLocal2026!
+      DEMO_MODE: '1'
+      LAB_MODE: '0'
+      APP_ENV: local
+      PYTHONUTF8: '1'
+    steps:
+      - name: Obter código
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - name: Preparar Python
+        uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0 # v7.1.0
+        with:
+          python-version: '3.14'
+          cache: pip
+          cache-dependency-path: requirements-lock.txt
+      - name: Preparar Node
+        uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: '24'
+      - name: Instalar dependências fixadas
+        run: python -m pip install -r requirements-lock.txt
+      - name: Verificar compatibilidade das dependências
+        run: python -m pip check
+      - name: Verificar sintaxe JavaScript
+        run: |
+          node --check web/app.js
+          node --check web/company/company.js
+      - name: Executar testes
+        env:
+          DATABASE_PATH: ${{ runner.temp }}/nexo-ci.db
+        run: python -m pytest -q --junitxml=test-results.xml

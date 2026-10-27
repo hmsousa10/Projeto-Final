@@ -37,12 +37,20 @@ Mantemos SQLite e transações explícitas para operações compostas. A stack p
 
 Valida permissões no servidor, não apenas na interface. Usa parâmetros SQL, limita entradas e escapa texto na apresentação. Não incluir bases de dados, ficheiros .env, chaves, palavras-passe reais nem cópias de segurança no controlo de versões. Os ficheiros ignorados ainda podem existir no disco e no OneDrive; o .gitignore não é uma cópia de segurança nem uma proteção do sistema de ficheiros.
 
-Antes de publicar código, revê os ficheiros a incluir, sobretudo relatórios e capturas que possam conter nomes internos. Os commits devem separar mudanças compreensíveis e indicar a validação realizada. O repositório privado do projeto é https://github.com/hmsousa10/Projeto-Final. O primeiro commit reúne o estado existente; as alterações seguintes devem usar commits focados. Não está configurado um pipeline CI nesta entrega; testes locais não equivalem a revisão independente.
+Antes de publicar código, revê os ficheiros a incluir, sobretudo relatórios e capturas que possam conter nomes internos. Os commits devem separar mudanças compreensíveis e indicar a validação realizada. O repositório privado do projeto é https://github.com/hmsousa10/Projeto-Final. O primeiro commit reúne o estado existente; as alterações seguintes devem usar commits focados. O GitHub Actions executa os testes Python e verifica a sintaxe JavaScript em Linux. Resultados automáticos não equivalem a revisão independente.
 
 ## Dívida técnica conhecida
 
-O ficheiro principal da API e o JavaScript da interface ainda concentram várias responsabilidades. A modularização será incremental, preservando contratos HTTP e comportamento. Falta uniformizar a formatação do código, configurar análise estática e automatizar verificações em CI. Não confundir organização académica funcional com prontidão para produção.
+O ficheiro principal da API e o JavaScript da interface ainda concentram várias responsabilidades. A modularização será incremental, preservando contratos HTTP e comportamento. Falta uniformizar a formatação do código e configurar análise estática. Não confundir organização académica funcional com prontidão para produção.
 
 ## Fluxo Git
 
 A branch principal é `main`. Para novas alterações, usa uma branch `codex/nome-da-alteracao`, executa os testes relevantes, revê `git diff` e cria um commit com uma mensagem concreta. Envia a branch e abre um pull request para revisão antes de integrar em main. A privacidade do repositório não dispensa a exclusão de segredos. As cópias cifradas dos dados são mantidas separadamente do código.
+
+## Testes automáticos no GitHub
+
+O workflow `.github/workflows/ci.yml` corre em pushes para `main`, em pull requests para `main` e por pedido manual no separador Actions. Usa Python 3.14, dependências fixadas em requirements-lock.txt e Node 24 para verificar a sintaxe dos dois ficheiros JavaScript. `pip check` valida compatibilidade das dependências e pytest executa a suite completa em bases temporárias.
+
+A execução usa um runner Linux temporário, com timeout de 15 minutos, token de leitura e ações fixadas por SHA. Não recebe segredos do laboratório. A palavra-passe de demonstração é pública e usada apenas nas bases descartáveis dos testes. Execuções anteriores do mesmo evento/branch são canceladas quando chega uma atualização. Branches de trabalho são verificadas através do respetivo pull request, evitando duplicar a execução no mesmo push.
+
+Consulta o separador Actions do GitHub ou os checks do pull request para ver o resultado e os logs. Este workflow não valida o arranque completo da stack Docker, o modelo semântico real nem os scripts Windows/DPAPI; esses ensaios mantêm os procedimentos isolados documentados. A criação deste check não ativa, por si só, uma regra de proteção de main.
