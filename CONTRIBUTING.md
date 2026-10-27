@@ -49,8 +49,8 @@ A branch principal é `main`. Para novas alterações, usa uma branch `codex/nom
 
 ## Testes automáticos no GitHub
 
-O workflow `.github/workflows/ci.yml` corre em pushes para `main` e `codex/**`, em pull requests para `main` e por pedido manual no separador Actions. Usa Python 3.14, dependências fixadas em requirements-lock.txt e Node 24 para verificar a sintaxe dos dois ficheiros JavaScript. `pip check` valida compatibilidade das dependências e pytest executa a suite completa em bases temporárias.
+O workflow `.github/workflows/ci.yml` corre em pushes para `main`, em pull requests para `main` e por pedido manual no separador Actions. Usa Python 3.14, dependências fixadas em requirements-lock.txt e Node 24 para verificar a sintaxe dos dois ficheiros JavaScript. `pip check` valida compatibilidade das dependências e pytest executa a suite completa em bases temporárias.
 
-A execução usa um runner Linux temporário, com timeout de 15 minutos, token de leitura e ações fixadas por SHA. Não recebe segredos do laboratório. A palavra-passe de demonstração é pública e usada apenas nas bases descartáveis dos testes. Execuções anteriores do mesmo evento/branch são canceladas quando chega uma atualização. Uma branch com pull request pode gerar uma execução de push e outra de pull request, com identificadores distintos.
+A execução usa um runner Linux temporário, com timeout de 15 minutos, token de leitura e ações fixadas por SHA. Não recebe segredos do laboratório. A palavra-passe de demonstração é pública e usada apenas nas bases descartáveis dos testes. Execuções anteriores do mesmo evento/branch são canceladas quando chega uma atualização. Branches de trabalho são verificadas através do respetivo pull request, evitando duplicar a execução no mesmo push.
 
 Consulta o separador Actions do GitHub ou os checks do pull request para ver o resultado e os logs. Este workflow não valida o arranque completo da stack Docker, o modelo semântico real nem os scripts Windows/DPAPI; esses ensaios mantêm os procedimentos isolados documentados. A criação deste check não ativa, por si só, uma regra de proteção de main.
