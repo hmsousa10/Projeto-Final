@@ -54,3 +54,5 @@ O workflow `.github/workflows/ci.yml` corre em pushes para `main`, em pull reque
 A execução usa um runner Linux temporário, com timeout de 15 minutos, token de leitura e ações fixadas por SHA. Não recebe segredos do laboratório. A palavra-passe de demonstração é pública e usada apenas nas bases descartáveis dos testes. Execuções anteriores do mesmo evento/branch são canceladas quando chega uma atualização. Branches de trabalho são verificadas através do respetivo pull request, evitando duplicar a execução no mesmo push.
 
 Consulta o separador Actions do GitHub ou os checks do pull request para ver o resultado e os logs. Este workflow não valida o arranque completo da stack Docker, o modelo semântico real nem os scripts Windows/DPAPI; esses ensaios mantêm os procedimentos isolados documentados. A criação deste check não ativa, por si só, uma regra de proteção de main.
+
+As instalações de runtime também usam requirements-lock.txt como ficheiro de constraints, através de requirements.txt. Isto fixa dependências indiretas sem instalar ferramentas de teste na imagem. Ao atualizar uma dependência, valida e atualiza o lock; o Dockerfile copia ambos os ficheiros.

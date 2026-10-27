@@ -69,3 +69,7 @@ Implementada a exportação autenticada de incidentes em Markdown e JSON, inclui
 ## Incremento v0.16 · conhecimento aplicado
 
 Associação explícita de casos resolvidos à investigação, com justificação e cópia do conhecimento usado preservadas na linha temporal e no dossier. Consultar conhecimento-aplicado.md. Avaliação com participantes continua pendente.
+
+## Incremento v0.17 · auditoria pesquisável
+
+Filtros por utilizador, ação, registo e texto, datas UTC e paginação estável para o administrador. A rota anterior permanece compatível. Consultar auditoria.md.

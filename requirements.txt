@@ -1,3 +1,4 @@
+-c requirements-lock.txt
 fastapi==0.162.0
 uvicorn==0.54.0
 cryptography==50.0.2
