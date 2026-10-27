@@ -11,6 +11,7 @@
 
 - [Laboratório](laboratorio.md) e [ciclo real](ciclo-real.md).
 - [Monitorização](monitorizacao.md), [regras de alerta](regras-alerta.md) e [SLIs/SLOs](slis-slos.md).
+- [Auditoria pesquisável](auditoria.md).
 - [Contas e inventário](contas-inventario.md) e [notificações](notificacoes.md).
 - [Pesquisa de conhecimento](conhecimento.md), [conhecimento aplicado](conhecimento-aplicado.md) e [dossier de incidentes](dossier-incidentes.md).
 

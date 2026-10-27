@@ -24,7 +24,7 @@ from .models import password_policy
 from .security import check_password, hash_password, token_hash, password_capacity
 from .seed import seed
 from .request_limits import BodyLimitMiddleware
-from . import telemetry, dossier, incident_knowledge
+from . import telemetry, dossier, incident_knowledge, audit_log
 from . import lab, logs, monitoring
 from . import accounts, alerts, slo
 from .knowledge import Knowledge, corpus as knowledge_corpus
@@ -624,8 +624,10 @@ def create_app(db_path=None, demo=None):
                     'mtta': mean_elapsed('acknowledged_at'), 'mttr': mean_elapsed('resolved_at'),
                     'demo': demo_mode, 'generated_at': now()}
 
+    audit_log.routes(app, path, admin)
+
     @app.get('/api/audit')
-    def audit_log(user=Depends(admin)):
+    def recent_audit_log(user=Depends(admin)):
         with database(path) as db:
             return [dict(r) for r in db.execute('SELECT * FROM audit ORDER BY id DESC LIMIT 200')]
 

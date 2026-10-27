@@ -4,7 +4,7 @@ Plataforma Web de Observabilidade e Operações Assistidas por IA para Sistemas 
 
 Projeto I de Engenharia Informática · Hugo Sousa · a22405716 · 2026/27.
 
-Esta é a **versão 0.16**: inventário, gestão de incidentes, pesquisa semântica local, cópias cifradas e restauro isolado, com um laboratório Docker que inclui um portal empresarial fictício, sondagens HTTP reais, logs Loki, incidentes automáticos e evidências preservadas. Os serviços de laboratório estão identificados; os exemplos anteriores continuam sintéticos. O portal completo ainda está em desenvolvimento.
+Esta é a **versão 0.17**: inventário, gestão de incidentes, pesquisa semântica local, cópias cifradas e restauro isolado, com um laboratório Docker que inclui um portal empresarial fictício, sondagens HTTP reais, logs Loki, incidentes automáticos e evidências preservadas. Os serviços de laboratório estão identificados; os exemplos anteriores continuam sintéticos. O portal completo ainda está em desenvolvimento.
 
 **Prioridade atual:** implementar e validar o portal por etapas, procurando chegar a uma versão completa em cerca de um mês, com prazo ajustável aos resultados. A documentação de Projeto I continua em paralelo; a entrega preliminar mantém-se em 9 de novembro de 2026.
 
@@ -170,3 +170,5 @@ As apresentações e o enunciado originais permanecem fora desta aplicação, se
 A v0.15 permite guardar o [dossier de cada incidente](docs/dossier-incidentes.md) em Markdown ou JSON, com linha temporal e evidências preservadas.
 
 A v0.16 regista [conhecimento aplicado](docs/conhecimento-aplicado.md): associa um caso resolvido à investigação, preservando a justificação e o conteúdo consultado no histórico e no dossier.
+
+A v0.17 acrescenta [auditoria pesquisável](docs/auditoria.md), com filtros, datas UTC e paginação estável para consultar eventos anteriores aos últimos 200.
