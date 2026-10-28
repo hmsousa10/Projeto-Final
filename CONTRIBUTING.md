@@ -56,3 +56,7 @@ A execução usa um runner Linux temporário, com timeout de 15 minutos, token d
 Consulta o separador Actions do GitHub ou os checks do pull request para ver o resultado e os logs. Este workflow não valida o arranque completo da stack Docker, o modelo semântico real nem os scripts Windows/DPAPI; esses ensaios mantêm os procedimentos isolados documentados. A criação deste check não ativa, por si só, uma regra de proteção de main.
 
 As instalações de runtime também usam requirements-lock.txt como ficheiro de constraints, através de requirements.txt. Isto fixa dependências indiretas sem instalar ferramentas de teste na imagem. Ao atualizar uma dependência, valida e atualiza o lock; o Dockerfile copia ambos os ficheiros.
+
+## Testes locais da interface
+
+Com Node instalado, executar `node --test tests/frontend/navigation.test.cjs`. Estes testes controlam atrasos e respostas fora de ordem sobre o código real da interface. Não usam dependências JavaScript adicionais. O workflow inclui estes testes nos pushes e pull requests destinados a main.

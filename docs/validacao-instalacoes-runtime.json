@@ -1,0 +1,51 @@
+{
+  "checked_at": "2026-10-28T19:34:57.840936+00:00",
+  "version": "0.27.0",
+  "checks": [
+    "same_image",
+    "distinct_company_and_accounts",
+    "session_replay_401_both_directions",
+    "private_api_no_published_port",
+    "independent_volumes_and_networks",
+    "readonly_secret_mounts",
+    "no_fault_controls",
+    "force_recreate_persistence",
+    "main_data_preserved"
+  ],
+  "main_before": {
+    "services": 9,
+    "incidents": 10,
+    "timeline": 73
+  },
+  "main_after": {
+    "services": 9,
+    "incidents": 10,
+    "timeline": 73
+  },
+  "atlas_service_marker_id": 2,
+  "atlas_company": "atlas",
+  "atlas_summary_status": "connected",
+  "volumes": [
+    [
+      "nexo-lab_nexo-data"
+    ],
+    [
+      "nexo-test-atlas_customer-data"
+    ]
+  ],
+  "networks": [
+    [
+      "nexo-lab_default",
+      "nexo-lab_frontend"
+    ],
+    [
+      "nexo-test-atlas_frontend",
+      "nexo-test-atlas_private"
+    ],
+    [
+      "nexo-test-atlas_private"
+    ]
+  ],
+  "image": "sha256:1df90b8a2abfabee504464392c558ddc69f7dc87ac0c110996e148f7bc93db02",
+  "scope": "Local rehearsal with fictional data; not a production security certification."
+}

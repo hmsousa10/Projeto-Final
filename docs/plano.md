@@ -73,3 +73,63 @@ Associação explícita de casos resolvidos à investigação, com justificaçã
 ## Incremento v0.17 · auditoria pesquisável
 
 Filtros por utilizador, ação, registo e texto, datas UTC e paginação estável para o administrador. A rota anterior permanece compatível. Consultar auditoria.md.
+
+## Incremento v0.18 local · logs e evidências no caso correto
+
+A ligação /api/orders da Aurora tem acesso direto ao stream portal-lab, filtrado por endpoint. A origem e o filtro são guardados com a evidência no próprio caso. Alteração preparada localmente, sem commit/push nesta etapa. Consultar logs-diretos.md.
+
+## Incremento v0.19 local · navegação estável
+
+Janelas com estado de carregamento, proteção contra respostas antigas, falha de pesquisa sem bloquear a consulta de incidentes e testes de concorrência da interface. Alterações locais a agrupar com v0.18 num próximo push decidido pelo autor. Consultar navegacao-assincrona.md.
+
+## Incremento v0.20 local · consulta de incidentes
+
+Pesquisa por número ou texto, filtros combinados e paginação por identificador, com permissões e limites na API. A vista mantém os critérios e não é substituída pela atualização periódica. Consultar consulta-incidentes.md. Mantém-se local, sem commit/push nesta etapa.
+
+## Incremento v0.21 local · contexto limitado
+
+Os painéis passam a receber resumos limitados, sem carregar todo o histórico de incidentes. As referências recentes ao conhecimento são limitadas a 100; casos anteriores continuam acessíveis por número e são validados no servidor. Consultar contexto-incidentes.md. Mantém-se local, sem commit/push.
+
+## Incremento v0.22 local · impacto potencial
+
+Serviços e incidentes apresentam dependentes diretos e indiretos com cadeia explicativa e estado observado no inventário consultado. Não é confirmação de impacto nem reconstituição histórica. Consultar impacto-potencial.md. Alteração local, sem commit/push.
+
+## Incremento v0.23 local · impacto preservado
+
+Recolha explícita de uma avaliação recalculada no servidor, guardada na linha temporal com autor e data e incluída no dossier. Separação entre inventário atual e avaliação guardada. Consultar impacto-preservado.md. Sem commit/push nesta etapa.
+
+## Incremento v0.24 local · integração empresarial por API
+
+Primeiro adaptador de resumo de pedidos da Aurora, com chave própria de leitura, validação de contrato/frescura, estados de erro e página Integração empresarial. Não equivale a uma integração já validada numa empresa real nem acrescenta alertas de negócio automáticos. Consultar integracao-empresarial.md. Sem commit/push.
+
+## Incremento v0.25 local · incidentes da API empresarial
+
+Recolha autenticada periódica, confirmações configuráveis, incidente de origem enterprise-alert, agrupamento, recuperação exigida para resolução e pausa após restauro. O escalonamento por prazo reutiliza o motor existente, se ativado na regra. Consultar alertas-api-empresarial.md. Sem commit/push.
+
+## Versão 0.26 local · integração reutilizável
+
+Transporte HTTP e contrato empresarial separados, seleção de conector por instalação e atualização compatível do vínculo da versão 0.25. A Aurora continua como referência fictícia. Próximo bloco: preparar provisionamento isolado por cliente e validar instalação e atualização numa segunda stack de ensaio, antes de qualquer piloto externo. Consultar [Conectores empresariais](conectores-empresariais.md).
+
+## Versão 0.27 local · ensaio de instalação por cliente
+
+Preparação e gestão de uma segunda instalação local, usando o mesmo código, com API fictícia própria, base e credenciais separadas e sem dados semeados. Validar separação de sessões, dados e redes, persistência após recriação e preservação do laboratório principal. Produção pública, provisionamento num servidor, HTTPS e operação comercial permanecem pendentes. Consultar [Instalações isoladas](instalacoes-isoladas.md).
+
+## Versão 0.28 local · cópias por instalação
+
+Cópia cifrada, chave DPAPI e destino de restauro separados por instalação, com identidade verificada no manifesto e na base. Ensaio real Windows da Atlas sem substituir os portais ativos. Kit portátil adaptado por empresa e testado com dados descartáveis. Próximo bloco: ensaio de promoção controlada da base recuperada por cliente, seguido de configuração HTTPS de pré-produção. Agendamento e armazenamento independente continuam pendentes. Consultar [Cópias por instalação](copias-por-instalacao.md).
+
+## Versão 0.29 local · manutenção por instalação
+
+Adaptação da promoção e reversão ao projeto e volume de cada cliente de ensaio, com identidade no diário, verificações históricas e pausa da monitorização após reversão. Validação com a Atlas; a Aurora fica fora da operação. Próximo bloco: configuração de HTTPS para pré-produção, sem publicação automática nem exposição do Compose de ensaio.
+
+## Versão 0.30 local · HTTPS de pré-produção
+
+Terceiro ambiente isolado em modo de produção, com Caddy, certificado de autoridade local, backend sem porta publicada e confiança limitada ao proxy. A adaptação pública foi validada apenas sintaticamente, sem rede. Não houve publicação externa nem instalação de certificados no Windows. Próximo bloco: completar a integração empresarial HTTPS e os procedimentos de implantação/revisão antes de escolher um piloto real. Consultar [Pré-produção HTTPS](preproducao-https.md).
+
+## Versão 0.31 local · API empresarial HTTPS
+
+Integração da API fictícia da Aurora por TLS na pré-produção, com certificado e nome validados, CA adicional por cliente e chave Bearer separada. Recolha automática ligada à API privada; nenhuma ligação a empresa real. Próximo bloco: ensaio operacional completo desta topologia e preparação da implantação, segredos e revisão para um piloto autorizado. Consultar [API empresarial HTTPS](api-empresarial-https.md).
+
+## Ensaio operacional da versão 0.31
+
+Concluídos dois ciclos reais de interrupção/recuperação da API privada de pré-produção, com tratamento, pesquisa do primeiro caso no segundo, referência preservada e exportação. O teste cria histórico identificado de ensaio e não mede desempenho humano. Consultar [Ciclo operacional HTTPS](ciclo-operacional-https.md).

@@ -1,0 +1,199 @@
+{
+  "checked_at": "2026-10-28T20:05:54.102796+00:00",
+  "version": "0.29.0",
+  "installation": "atlas",
+  "successful_promotion_observation": {
+    "phase": "promoted",
+    "verified": true,
+    "generation": "8b8d40ab5e6b4e9c85f7ee5d43a2fc8f",
+    "enterprise_enabled": false,
+    "sessions": 0
+  },
+  "reports": [
+    {
+      "action": "Estado",
+      "status": "passed",
+      "before_phase": "none",
+      "result_phase": "none",
+      "auto_rollback": null,
+      "rollback_health": null,
+      "rollback_history_checked": false,
+      "simulated_failure": false
+    },
+    {
+      "action": "Preparar",
+      "status": "passed",
+      "before_phase": "none",
+      "result_phase": "staged",
+      "auto_rollback": null,
+      "rollback_health": null,
+      "rollback_history_checked": false,
+      "simulated_failure": false
+    },
+    {
+      "action": "Promover",
+      "status": "passed",
+      "before_phase": "staged",
+      "result_phase": "promoted",
+      "auto_rollback": null,
+      "rollback_health": null,
+      "rollback_history_checked": false,
+      "simulated_failure": false
+    },
+    {
+      "action": "Concluir",
+      "status": "passed",
+      "before_phase": "promoted",
+      "result_phase": "committed",
+      "auto_rollback": null,
+      "rollback_health": null,
+      "rollback_history_checked": false,
+      "simulated_failure": false
+    },
+    {
+      "action": "Reverter",
+      "status": "passed",
+      "before_phase": "committed",
+      "result_phase": "rolled_back",
+      "auto_rollback": null,
+      "rollback_health": null,
+      "rollback_history_checked": false,
+      "simulated_failure": false
+    },
+    {
+      "action": "Preparar",
+      "status": "passed",
+      "before_phase": "rolled_back",
+      "result_phase": "staged",
+      "auto_rollback": null,
+      "rollback_health": null,
+      "rollback_history_checked": false,
+      "simulated_failure": false
+    },
+    {
+      "action": "Promover",
+      "status": "failed",
+      "before_phase": "staged",
+      "result_phase": "promoted",
+      "auto_rollback": "rolled_back",
+      "rollback_health": "ok",
+      "rollback_history_checked": true,
+      "simulated_failure": true
+    }
+  ],
+  "final_state_before_explicit_resume": {
+    "phase": "rolled_back",
+    "generation": "bc4103309fec4021b27ad00b966bee1b",
+    "company_id": "atlas",
+    "enterprise_enabled": false,
+    "checked": {
+      "phase": "rolled_back",
+      "historical_tables_match": [
+        "users",
+        "services",
+        "dependencies",
+        "incidents",
+        "timeline",
+        "incident_evidence",
+        "alert_rules",
+        "alert_rule_history",
+        "incident_alert_context",
+        "incident_escalations",
+        "service_slo_policies"
+      ],
+      "tables": {
+        "alert_rule_history": 0,
+        "alert_rules": 0,
+        "alert_states": 0,
+        "audit": 9,
+        "dependencies": 0,
+        "incident_alert_context": 0,
+        "incident_escalations": 0,
+        "incident_evidence": 0,
+        "incidents": 0,
+        "knowledge_vectors": 0,
+        "login_attempts": 3,
+        "observations": 195,
+        "password_change_attempts": 0,
+        "service_slo_policies": 2,
+        "services": 2,
+        "sessions": 0,
+        "settings": 3,
+        "telemetry_targets": 0,
+        "timeline": 0,
+        "users": 1
+      },
+      "enabled_targets": 0,
+      "generation_audit_verified": true
+    },
+    "retained_generations": 2,
+    "rollback_images": 2,
+    "preserved_before_rollback": 2
+  },
+  "history_hashes_match_before_after": true,
+  "historical_hashes_before": {
+    "nexo-lab-nexo-1": {
+      "users": "dbe629ccb22e1b9c40f7aff02e56a830a1e2f85609278d330100b55ff61c4e4e",
+      "services": "dad004015220f4b8d1c9fb716d5cb54cd14d469203e38af06d88f715f92e45f0",
+      "dependencies": "4e442f6ec0d521ca19086b93000e7bc73b50b8074d889722b1e1efe1182ace8c",
+      "incidents": "1331655928bab956ba48fac91e608f68814db82d16695e7606d2e5462f78231a",
+      "timeline": "b4952b09f62ed14120071ea6663f1a0929a270aa3bd2cb794a639c1033afc1d3",
+      "incident_evidence": "260da90cc0f82270774fc88ff60ccd6a2c9f68b896e03908a38bba03370ff6ba",
+      "alert_rules": "6851e287bbe0336dd5d3717bd323a532d4dc313de05085d4ef31ec0fc0b055b4",
+      "alert_rule_history": "8bc0bb6c8fcd66af10d87614553958bbe9c5c73270372f70394528dc63c9253e",
+      "incident_alert_context": "dcf38f566967c66cc1d20180547f4d62ef928f7e1eca8dc86380f4480f1b5652",
+      "incident_escalations": "273275d121ac44433d2dbcbedc3770ebec8ebe6d7721e79856760c7d323a9988",
+      "service_slo_policies": "122d4500e9efdd92d4aae5d68da8940ecd66eab4d2deadf4fad994b0faf0f212"
+    },
+    "nexo-test-atlas-nexo-1": {
+      "users": "fc08d17510591a8a099a3c06b4867cd067731d112e1ba3b045fde0a1b9102891",
+      "services": "1f6d09b1fbb7c66bc226b8106bf3674623ee481ad165e70e8fb7689c2068ff7d",
+      "dependencies": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "incidents": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "timeline": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "incident_evidence": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "alert_rules": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "alert_rule_history": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "incident_alert_context": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "incident_escalations": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "service_slo_policies": "7958fcdaeff83fd6ec3933b9d0595e976d50ed5c7adbec71177cb82743cdbcc5"
+    }
+  },
+  "source_counts_before": {
+    "nexo-lab-nexo-1": {
+      "services": 9,
+      "incidents": 10,
+      "timeline": 73,
+      "sessions": 8
+    },
+    "nexo-test-atlas-nexo-1": {
+      "services": 2,
+      "incidents": 0,
+      "timeline": 0,
+      "sessions": 3
+    }
+  },
+  "source_counts_after_rollback": {
+    "nexo-lab-nexo-1": {
+      "services": 9,
+      "incidents": 10,
+      "timeline": 73,
+      "sessions": 8
+    },
+    "nexo-test-atlas-nexo-1": {
+      "services": 2,
+      "incidents": 0,
+      "timeline": 0,
+      "sessions": 0
+    }
+  },
+  "note": "One deliberate verification failure returned exit 1 and the failed status was retained; automatic rollback and health/history checks passed.",
+  "explicit_resume": {
+    "admin_api": true,
+    "collection_state": "running",
+    "last_sample": "2026-10-28T20:06:13.090555+00:00",
+    "api_status": "connected",
+    "services": 2,
+    "incidents": 0
+  }
+}

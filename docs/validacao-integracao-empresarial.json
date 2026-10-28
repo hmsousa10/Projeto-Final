@@ -1,0 +1,77 @@
+{
+  "checked_at": "2026-10-28T15:09:32.417490+00:00",
+  "version": "0.24.0",
+  "delivery": "local; no commit or push",
+  "source_commit": "d6bb6800a7c3d3f4a41c479cc69b379117116d1e",
+  "tests": {
+    "python": {
+      "passed": 249,
+      "failures": 0,
+      "errors": 0,
+      "seconds": 373.476,
+      "full_suite": true,
+      "warning": "Starlette/httpx deprecation"
+    },
+    "frontend": {
+      "passed": 34,
+      "command": "node --test tests/frontend/navigation.test.cjs",
+      "scope": "Real app.js with minimal DOM; not a full browser suite"
+    },
+    "javascript_syntax": "passed",
+    "compose_configuration": "passed"
+  },
+  "lab": {
+    "health": {
+      "status": "ok",
+      "version": "0.24.0"
+    },
+    "company_id": "aurora",
+    "environment": "laboratory",
+    "orders": {
+      "total": 3,
+      "preparing": 1,
+      "shipped": 1,
+      "delivered": 1
+    },
+    "status": "connected",
+    "latency_ms": 10.48,
+    "reader_can_read": true,
+    "public_api_without_token_status": 401,
+    "counts_before": {
+      "incidents": 10,
+      "timeline": 73,
+      "services": 8
+    },
+    "counts_after": {
+      "incidents": 10,
+      "timeline": 73,
+      "services": 8
+    },
+    "no_incident_writes": true
+  },
+  "visual_check": {
+    "company": "Aurora",
+    "fictional_data_label_visible": true,
+    "valid_response_visible": true,
+    "orders_total": 3,
+    "no_console_errors_observed": true,
+    "screenshot": "integracao-empresarial-v024.png"
+  },
+  "limitations": [
+    "Aurora is a fictional company; business records are fixed demonstration data",
+    "HTTP transport and authentication are real, but no external company is connected",
+    "Business API integration failures do not automatically open incidents in this version",
+    "Real company API mapping, permissions and representative evaluation remain pending"
+  ],
+  "source_sha256": {
+    "app/enterprise.py": "1a91bc291b5e60e59e2776d181aabdb9375c4b6ec64b491742d83e4c48f0c6e0",
+    "app/main.py": "948e7f6c4d0a254e0d4735c3a8c4805b1c586a027c3e9517457f0b89779acd41",
+    "app/lab_service.py": "3dfa41597d44194789a8eceaae562aea476c976f2bd6dffd531f00bf5373096a",
+    "app/logs.py": "170db6ae2922de6e1b9132d28d7441ce0e47b269ee81d43be24802138333f5aa",
+    "compose.observability.yaml": "9ef27931caa409cad26da82605d987125971101dd0af952fec3d91f2925335d7",
+    "web/app.js": "f74e8b023405811450d6c0506120938ddeed4f643f0afca1c20861a90d7b0bc2",
+    "web/style.css": "029e9dd907ebd97cde5eec8ce094b002cdda3290a6720e2cc902e0805f494813",
+    "tests/test_enterprise.py": "288987c653f06b131ded5e0869eeb6fec6481b00ae9dee7834ad095d9a315c35",
+    "tests/frontend/navigation.test.cjs": "b07d2d984374c3aab02e2d46a78ccdd00799d4c4a492af8c5eb66367dacc01d2"
+  }
+}

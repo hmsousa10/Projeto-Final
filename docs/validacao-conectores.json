@@ -1,0 +1,75 @@
+{
+  "checked_at": "2026-10-28T19:22:20.949745+00:00",
+  "version": "0.26.0",
+  "delivery": "local; no commit or push",
+  "source_commit": "d6bb6800a7c3d3f4a41c479cc69b379117116d1e",
+  "tests": {
+    "full_suite_before_alert_correction": {
+      "passed": 266,
+      "failures": 1,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": 414.545,
+      "note": "Detected the closed-episode regression. The loaded code predates the correction; not a full green run of the final tree."
+    },
+    "final_affected_regression": {
+      "passed": 54,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": 60.484,
+      "command": "pytest tests/test_alerts.py tests/test_alert_rules.py tests/test_enterprise.py tests/test_enterprise_connectors.py tests/test_enterprise_monitoring.py -q",
+      "note": "Includes the previously failing test and both HTTP enterprise recurrence scenarios; all passed after correction."
+    },
+    "frontend": {
+      "passed": 37,
+      "scope": "Node VM and minimal DOM, not full browser E2E"
+    },
+    "warning": "Starlette/httpx deprecation"
+  },
+  "lab": {
+    "health": {
+      "status": "ok",
+      "version": "0.26.0"
+    },
+    "status": "connected",
+    "connector": {
+      "id": "orders-summary-v1",
+      "label": "Resumo de encomendas · v1",
+      "summary_kind": "orders"
+    },
+    "company_id": "aurora",
+    "collection_state": "running",
+    "service_id": 9,
+    "pause_as_reader": 403,
+    "before": {
+      "services": 9,
+      "incidents": 10,
+      "timeline": 73
+    },
+    "after": {
+      "services": 9,
+      "incidents": 10,
+      "timeline": 73
+    },
+    "browser": "Verified Aurora summary, connector label, active collection and version 0.26; no warning/error console entries."
+  },
+  "limits": [
+    "One company and one enterprise binding per installation.",
+    "Only orders-summary-v1 and fixed Bearer authentication supported.",
+    "No public deployment or real company access.",
+    "Customer provisioning automation remains pending."
+  ],
+  "sha256": {
+    "app/connectors/__init__.py": "6315a15474c47c124bc6bb917783ba6c0ed7f16f1960a9b90c37c6f404f33963",
+    "app/connectors/base.py": "602b2cb73d1387a2907e0a98730a215e2bd57f49843a99655376a2ee08970f5f",
+    "app/connectors/orders.py": "08855c90b0c4c7f9a52ff5f6797bc362f9d2fe1dbc473a4ed22d829d7f6f8356",
+    "app/enterprise.py": "42215d23376b7f75602a8a662bed1e7a033c6668604e564164bf8c57cedf169b",
+    "app/enterprise_monitoring.py": "0578bd434c4a4b83b6e034aaf5bbbbabe313a53fbb549442b44e11491b849f92",
+    "app/alerts.py": "1b0eb4f41c851c2750c90d1d6468530291ffb118af8fe33a522ba54eab4332f0",
+    "app/version.py": "7880047fb2ae637ea3d119bf0a448969803df7c2d3e2f76da89e2099ccb1aa82",
+    "web/app.js": "5b97c6552566dd055ddab1f8441f68f2546cfab979d810214b3386e06971462f",
+    "compose.observability.yaml": "390b58fa561371b72eafae3f2617fc2339299d795029cd6c821885ad33f2cafa",
+    "tests/test_enterprise_connectors.py": "11a43aa42e8747a9b1ca3e669a8a1b6e2ec31b86231b5382a046f7855f9002c6"
+  }
+}

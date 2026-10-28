@@ -1,0 +1,56 @@
+{
+  "checked_at": "2026-10-28T14:41:50.922302+00:00",
+  "version": "0.22.0",
+  "delivery": "local; no commit or push",
+  "source_commit": "d6bb6800a7c3d3f4a41c479cc69b379117116d1e",
+  "tests": {
+    "frontend": {
+      "passed": 27,
+      "command": "node --test tests/frontend/navigation.test.cjs",
+      "scope": "Real app.js in a Node VM with minimal DOM; not a full browser suite"
+    },
+    "javascript_syntax": "passed",
+    "python_suite_rerun": false,
+    "reason": "UI feature and version string only; API contracts and schema unchanged"
+  },
+  "lab": {
+    "health": {
+      "status": "ok",
+      "version": "0.22.0"
+    },
+    "read_only_counts": {
+      "incidents": 10,
+      "timeline": 73,
+      "services": 8,
+      "dependencies": 5
+    },
+    "no_incident_or_inventory_writes": true
+  },
+  "visual_check": {
+    "service_id": 4,
+    "dependent_service_ids": [
+      1,
+      2,
+      3
+    ],
+    "path_expanded": "Base de dados -> Portal de vendas",
+    "source": "Existing synthetic inventory examples",
+    "screenshot": "impacto-potencial-v022.png",
+    "incident_id": 1,
+    "incident_dependent_service_ids": [
+      1
+    ],
+    "historical_context_warning_visible": true,
+    "no_console_errors_observed": true
+  },
+  "limitations": [
+    "Current inventory context, not historical incident topology",
+    "Potential propagation is not proof of observed impact or cause",
+    "At most 50 dependents displayed with truncation warning; whole inventory remains loaded"
+  ],
+  "source_sha256": {
+    "web/app.js": "3c2223820748a61c4112cd636811101ce65a5a8d9ef912981cc697af4828b479",
+    "web/style.css": "f6163aecec37d98751717121b89124dce519e748497995d051d32b45c9ae5a0c",
+    "tests/frontend/navigation.test.cjs": "4c0affdf27ddba081f4fb52d45254bda374e880c5251578393cec6a71ba859cd"
+  }
+}

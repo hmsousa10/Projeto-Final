@@ -1,0 +1,74 @@
+{
+  "checked_at": "2026-10-28T14:28:25.565099+00:00",
+  "version": "0.20.0",
+  "delivery": "local; no commit or push",
+  "source_commit": "d6bb6800a7c3d3f4a41c479cc69b379117116d1e",
+  "tests": {
+    "python": {
+      "passed": 216,
+      "failures": 0,
+      "errors": 0,
+      "seconds": 333.025,
+      "warning": "Starlette/httpx deprecation"
+    },
+    "frontend": {
+      "passed": 17,
+      "command": "node --test tests/frontend/navigation.test.cjs",
+      "scope": "Real app.js in a Node VM with minimal DOM; not a full browser suite"
+    }
+  },
+  "lab": {
+    "health": {
+      "status": "ok",
+      "version": "0.20.0"
+    },
+    "reader_exact_case": 10,
+    "reader_paginated_ids": [
+      10,
+      9,
+      8,
+      7,
+      6,
+      5,
+      4,
+      3,
+      2,
+      1
+    ],
+    "invalid_limit_status": 422,
+    "counts_before": {
+      "incidents": 10,
+      "timeline": 73,
+      "services": 8
+    },
+    "counts_after": {
+      "incidents": 10,
+      "timeline": 73,
+      "services": 8
+    },
+    "no_incident_writes": true
+  },
+  "visual_check": {
+    "query": "INC-010",
+    "status": "closed",
+    "result_ids": [
+      10
+    ],
+    "case_opened_and_closed": true,
+    "filters_preserved": true,
+    "no_console_errors_observed": true,
+    "screenshot": "consulta-incidentes-v020.png"
+  },
+  "limitations": [
+    "Cursor freezes upper incident ID, not mutable status or assignee",
+    "Original /api/incidents remains unbounded for common application context; paginated browsing does not solve overall large-history loading"
+  ],
+  "source_sha256": {
+    "app/incident_browse.py": "f0e58a07a6abf786092327ff0306f46cfe853da93afafa7223df8f3fd2cce8b9",
+    "app/main.py": "ebc41a348cc80eeae304c605fb8eeae870e95284b10e9c4bcc78faaf4a30d341",
+    "web/app.js": "abb1e17f35d3efa7f3c8c450f55e82dd8a6fed94216f66c0bbc035eb3ccd7cc9",
+    "web/style.css": "966c3ff57feec16f7829171fcc44c3ae5fc8cfd7ee11a6024224a0738a2933ca",
+    "tests/test_incident_browse.py": "5292624d83f9bf871dd3dea718074d93cf16bf5a167b1784e47a37f79f3cc25e",
+    "tests/frontend/navigation.test.cjs": "afde97d757228916ad067fa16e0150b2d55b430b755a25967cb3c58abc8ad419"
+  }
+}

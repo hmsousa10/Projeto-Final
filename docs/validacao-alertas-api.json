@@ -1,0 +1,85 @@
+{
+  "checked_at": "2026-10-28T15:39:10.600468+00:00",
+  "version": "0.25.0",
+  "delivery": "local; no commit or push",
+  "source_commit": "d6bb6800a7c3d3f4a41c479cc69b379117116d1e",
+  "tests": {
+    "python_full_suite": {
+      "passed": 258,
+      "errors": 0,
+      "failures": 0,
+      "seconds": 396.729,
+      "note": "Full run started before final closed-reference guard; final change validated in the regression run below."
+    },
+    "python_final_regression": {
+      "passed": 13,
+      "errors": 0,
+      "failures": 0,
+      "seconds": 8.872,
+      "command": "pytest tests/test_enterprise_monitoring.py::test_real_adapter_failure_is_collected_without_secret_material tests/test_alert_rules.py -q"
+    },
+    "frontend": {
+      "passed": 37,
+      "command": "node --test tests/frontend/navigation.test.cjs",
+      "scope": "Real app.js in Node VM with minimal DOM; not a full browser suite"
+    },
+    "warning": "Starlette/httpx deprecation"
+  },
+  "isolated_http_scenario": {
+    "real_http_503_confirmation": true,
+    "real_json_recovery_confirmation": true,
+    "premature_resolution_blocked": true,
+    "case_closed_and_exported": true,
+    "new_failure_after_alert_reenable_creates_new_case": true
+  },
+  "lab": {
+    "health": {
+      "status": "ok",
+      "version": "0.25.0"
+    },
+    "service_id": 9,
+    "service_name": "Aurora · API de operações",
+    "service_source": "enterprise",
+    "service_status": "healthy",
+    "collection_state": "running",
+    "last_sample": "2026-10-28T15:36:08.564336+00:00",
+    "active_enterprise_incident": null,
+    "reader_pause_status": 403,
+    "counts_before": {
+      "incidents": 10,
+      "timeline": 73,
+      "services": 8
+    },
+    "counts_after": {
+      "incidents": 10,
+      "timeline": 73,
+      "services": 9
+    },
+    "no_faults_or_incident_writes_in_main_lab": true
+  },
+  "visual_check": {
+    "collection_active_visible": true,
+    "service_id": 9,
+    "service_source": "enterprise-api",
+    "no_console_errors_observed": true,
+    "no_fault_or_toggle_submitted": true,
+    "screenshot": "alertas-api-v025.png"
+  },
+  "limitations": [
+    "Fictional company and business data; no validation in a real organization",
+    "Single enterprise API binding per installation",
+    "External notifications and representative participant evaluation remain pending",
+    "Prometheus SLO reporting is separate from these authenticated API observations"
+  ],
+  "source_sha256": {
+    "app/enterprise_monitoring.py": "0f9f26cee116054298e090473bd8d4ae898f066a40f85922846ec9c55c9d909a",
+    "app/enterprise.py": "5cacb8113f767f2ec007a632fda4a01dcdde8e27b6a42a65f15a3abedd6b21fe",
+    "app/alerts.py": "b59f64886aa1faec5ce72d8c19c18501ccbd1e6edaf666c2e96b9f8af7fe25e7",
+    "app/main.py": "844bb083045a977f9a85967f1dccdf31e22f69cd4abe189cc1af796d489b43d7",
+    "app/recovery.py": "1e476232d1793933ab13bd88a54f517f61d8fb3d493d2fc500b63ead7b4339a8",
+    "app/knowledge.py": "9b9e93229b18b524c856929ab07e27599016b24f7b4748a4be6fd1839eae40f9",
+    "web/app.js": "272abbb92ff9873d32017c1f4bee6c687a547daafa3a67c8a7c400ea83891418",
+    "tests/test_enterprise_monitoring.py": "0ea6d50cb42c2dd8b6cace80634b99d4bea226d95fa9fc9ef9273d0de690ba08",
+    "tests/frontend/navigation.test.cjs": "4cac4657f15498ac6f18a7da3eb197d94b364fe2f60ad48a8fa1b7978190579a"
+  }
+}

@@ -4,7 +4,7 @@ Plataforma Web de Observabilidade e Operações Assistidas por IA para Sistemas 
 
 Projeto I de Engenharia Informática · Hugo Sousa · a22405716 · 2026/27.
 
-Esta é a **versão 0.17**: inventário, gestão de incidentes, pesquisa semântica local, cópias cifradas e restauro isolado, com um laboratório Docker que inclui um portal empresarial fictício, sondagens HTTP reais, logs Loki, incidentes automáticos e evidências preservadas. Os serviços de laboratório estão identificados; os exemplos anteriores continuam sintéticos. O portal completo ainda está em desenvolvimento.
+Esta é a **versão 0.31 local**: inventário, gestão de incidentes, pesquisa semântica local, cópias cifradas e restauro isolado, com um laboratório Docker que inclui um portal empresarial fictício, sondagens HTTP reais, logs Loki, incidentes automáticos e evidências preservadas. Os serviços de laboratório estão identificados; os exemplos anteriores continuam sintéticos. O portal completo ainda está em desenvolvimento.
 
 **Prioridade atual:** implementar e validar o portal por etapas, procurando chegar a uma versão completa em cerca de um mês, com prazo ajustável aos resultados. A documentação de Projeto I continua em paralelo; a entrega preliminar mantém-se em 9 de novembro de 2026.
 
@@ -84,7 +84,7 @@ As palavras-passe são guardadas com PBKDF2-HMAC-SHA256 e salt. A sessão usa um
 
 ## O que ainda falta para o MVP
 
-Ligações empresariais autenticadas, integração geral de logs, notificações externas e escalas operacionais, avaliação dos objetivos com dados de uma organização real, normalização de equipas e permissões por equipa e validação experimental documentada. ChatOps e deteção de anomalias ficam para fases posteriores. Os embeddings locais já estão implementados. Consulta [o estado dos requisitos e o plano](docs/plano.md).
+Adaptação a APIs de empresas reais, integração geral de logs, notificações externas e escalas operacionais, avaliação dos objetivos com dados de uma organização real, normalização de equipas e permissões por equipa e validação experimental documentada. ChatOps e deteção de anomalias ficam para fases posteriores. Os embeddings locais já estão implementados. Consulta [o estado dos requisitos e o plano](docs/plano.md).
 
 ## Interpretar os indicadores
 
@@ -172,3 +172,51 @@ A v0.15 permite guardar o [dossier de cada incidente](docs/dossier-incidentes.md
 A v0.16 regista [conhecimento aplicado](docs/conhecimento-aplicado.md): associa um caso resolvido à investigação, preservando a justificação e o conteúdo consultado no histórico e no dossier.
 
 A v0.17 acrescenta [auditoria pesquisável](docs/auditoria.md), com filtros, datas UTC e paginação estável para consultar eventos anteriores aos últimos 200.
+
+A v0.18 local acrescenta [logs diretamente ligados ao serviço](docs/logs-diretos.md), incluindo o endpoint de pedidos da Aurora, com origem e filtro preservados nas evidências.
+
+A v0.19 local melhora a [navegação assíncrona](docs/navegacao-assincrona.md): carregamento explícito e proteção contra respostas antigas ao mudar de página ou incidente.
+
+A v0.20 local acrescenta [pesquisa e filtros do histórico de incidentes](docs/consulta-incidentes.md), com paginação e consulta por número.
+
+A v0.21 local limita o [contexto de incidentes enviado aos painéis](docs/contexto-incidentes.md), preservando consulta e associação de casos antigos.
+
+A v0.22 local apresenta [impacto potencial pelas dependências do inventário](docs/impacto-potencial.md) nos serviços e incidentes, distinguindo relações potenciais de estados observados.
+
+A v0.23 local permite [preservar avaliações de impacto no incidente](docs/impacto-preservado.md), com cálculo no servidor, autor, data e inclusão no dossier.
+
+A v0.24 local acrescenta a [integração empresarial por API](docs/integracao-empresarial.md): a Aurora serve um resumo autenticado dos seus pedidos e o Nexo apresenta-o numa área própria. Os dados empresariais continuam fictícios; a integração HTTP é real.
+
+A v0.25 local liga a [API empresarial à deteção automática de incidentes](docs/alertas-api-empresarial.md), com regras versionadas, pausa/retoma e recuperação confirmada.
+
+## Conectores empresariais · 0.26 local
+
+A validação do contrato empresarial foi separada do transporte HTTP, com seleção por `ENTERPRISE_CONNECTOR` e proteção do histórico contra trocas de empresa, API ou conector. A Aurora mantém o contrato `orders-summary-v1`. Consultar [Conectores empresariais](docs/conectores-empresariais.md) para configuração, compatibilidade e limites.
+
+## Instalações por cliente · 0.27 local
+
+Existe um ensaio local independente, com base, redes e segredos próprios, sem contas predefinidas de demonstração. Executa `iniciar-cliente-ensaio.cmd` para preparar e iniciar a Atlas em `http://localhost:8003`. A palavra-passe inicial é gerada num ficheiro privado em `data/installations/atlas/initial-admin.key`; não é mostrada pelo script. Consultar [Instalações isoladas](docs/instalacoes-isoladas.md) para arranque, paragem, limites e validação.
+
+## Cópias por instalação · 0.28 local
+
+O atalho `copia-cliente-ensaio.cmd` cria uma cópia cifrada e verificada da Atlas. Cada instalação tem pastas e chave DPAPI próprias; o arquivo valida a identidade empresarial e o restauro cria uma base separada, sem sessões e com monitorização pausada. O kit portátil aceita também `-Instancia atlas`. Consultar [Cópias por instalação](docs/copias-por-instalacao.md).
+
+## Manutenção por instalação · 0.29 local
+
+`manutencao.ps1 -Instancia atlas` prepara, promove, verifica e reverte uma base da instalação selecionada, com diário e ponto de retorno próprios. A identidade é verificada na base, na cópia e no diário. Consultar [Manutenção por instalação](docs/manutencao-por-instalacao.md) para efeitos nas sessões, monitorização e recuperação de falhas.
+
+## Pré-produção HTTPS · 0.30 local
+
+`iniciar-preproducao.cmd` cria um terceiro ambiente isolado, em modo de produção e com entrada HTTPS apenas em loopback. O ensaio verifica o certificado com a CA local exportada, sem alterar a confiança do Windows. Consultar [Pré-produção HTTPS](docs/preproducao-https.md) para validação, limitações do navegador e futura adaptação a um domínio público.
+
+## API empresarial HTTPS · 0.31 local
+
+A pré-produção liga agora a uma API fictícia da Aurora também por HTTPS, com CA própria configurada apenas no cliente empresarial, validação do nome e chave de leitura. O serviço é acompanhado pelo coletor automático. Executa `scripts/validar-api-https.py` para repetir a verificação e consulta [API empresarial HTTPS](docs/api-empresarial-https.md).
+
+## Ensaio operacional HTTPS
+
+`scripts/https_cycle.py` executa dois ciclos de falha e recuperação apenas na API fictícia da pré-produção. Confirma deteção automática, recusa de resolução prematura, fecho, pesquisa de conhecimento anterior e dossiers exportados. Cada execução conserva os incidentes identificados de ensaio. Consultar [Ciclo operacional HTTPS](docs/ciclo-operacional-https.md).
+
+## Entrega consolidada
+
+Consultar [Entrega consolidada 0.31](docs/entrega-consolidada-031.md) para o âmbito publicado, validação disponível e separação entre código e dados locais.

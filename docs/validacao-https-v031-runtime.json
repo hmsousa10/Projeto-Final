@@ -1,0 +1,35 @@
+{
+  "checked_at": "2026-10-28T20:48:50.862746+00:00",
+  "version": "0.31.0",
+  "origin": "https://preprod.localhost:8443",
+  "tls_protocol": "TLSv1.3",
+  "leaf_certificate_sha256": "b42cdac46032a64c9f1c388485dc1bae8e1042e7030880ff54f6b1108698fbf3",
+  "public_ca_sha256": "dffd997b8a3b67aeef9f8315f2b0fc046d9b73c5da92ac5beee0f4b4b73cbf5a",
+  "untrusted_ca_refused": true,
+  "hostname_and_chain_verified": true,
+  "cookie_flags": [
+    "Secure",
+    "HttpOnly",
+    "SameSite=Strict"
+  ],
+  "checks": [
+    "https_health",
+    "fixed_https_redirect",
+    "production_without_demo",
+    "no_development_docs",
+    "authenticated_catalog",
+    "cross_origin_and_cross_site_denied",
+    "host_mismatch_denied",
+    "forwarding_headers_replaced",
+    "untrusted_backend_peer_denied",
+    "forged_ip_not_recorded",
+    "session_revoked",
+    "nonroot_readonly_capdrop",
+    "loopback_only",
+    "no_backend_public_port"
+  ],
+  "marker_service_id": 1,
+  "backend_image": "sha256:091486ec547fb6241ed25f29fba948c3a622e7e9347f455dcd9d73c962f70a89",
+  "proxy_image": "sha256:8fe1479017571551ce842701c3992d27cc144727eedb26eaabf3e2cd0392c50f",
+  "scope": "Isolated local production-mode transport rehearsal, with a fictional HTTPS business API and no globally trusted public certificate."
+}

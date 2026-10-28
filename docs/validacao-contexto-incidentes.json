@@ -1,0 +1,67 @@
+{
+  "checked_at": "2026-10-28T14:35:37.721497+00:00",
+  "version": "0.21.0",
+  "delivery": "local; no commit or push",
+  "source_commit": "d6bb6800a7c3d3f4a41c479cc69b379117116d1e",
+  "tests": {
+    "python": {
+      "passed": 32,
+      "seconds": 75.88,
+      "command": "pytest tests/test_incident_context.py tests/test_incident_browse.py tests/test_knowledge_use.py -q",
+      "full_suite_rerun": false,
+      "warning": "Starlette/httpx deprecation"
+    },
+    "frontend": {
+      "passed": 20,
+      "command": "node --test tests/frontend/navigation.test.cjs",
+      "scope": "Real app.js in a Node VM with minimal DOM; not a full browser suite"
+    }
+  },
+  "lab": {
+    "health": {
+      "status": "ok",
+      "version": "0.21.0"
+    },
+    "attention_ids": [
+      7,
+      4
+    ],
+    "lab_ids": [
+      7,
+      4
+    ],
+    "reference_count": 8,
+    "context_response_bytes": 1755,
+    "legacy_response_bytes": 10690,
+    "closed_case_10_preserved": true,
+    "counts_before": {
+      "incidents": 10,
+      "timeline": 73,
+      "services": 8
+    },
+    "counts_after": {
+      "incidents": 10,
+      "timeline": 73,
+      "services": 8
+    },
+    "no_incident_writes": true
+  },
+  "visual_check": {
+    "overview_attention_visible": true,
+    "laboratory_case_7_and_4_visible": true,
+    "reference_input_visible": true,
+    "no_form_submitted": true,
+    "no_console_errors_observed": true,
+    "screenshot": "contexto-incidentes-v021.png"
+  },
+  "limitations": [
+    "Bounds transferred incident summaries, not all application queries or database scan cost",
+    "Old unbounded endpoint retained for compatibility but no longer used by the interface"
+  ],
+  "source_sha256": {
+    "app/incident_browse.py": "79a769fd6dd7bd0d4fbb14ad50fb3940833ed7da27d8f6921297020652be35fa",
+    "web/app.js": "8bc339273d13050d7a5dbe2e285ca026489738740f3921bfdf81a751c5d7301a",
+    "tests/test_incident_context.py": "fb3f7a273f80c34f64861141d5ca0081d7af5a98cc19ebd05c3f3fc6a2e7819d",
+    "tests/frontend/navigation.test.cjs": "0825ed010288b44c5d38a625477d46a1d17da07b2f76a201b874b54533c2a0f9"
+  }
+}

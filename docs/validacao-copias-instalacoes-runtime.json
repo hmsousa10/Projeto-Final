@@ -1,0 +1,68 @@
+{
+  "checked_at": "2026-10-28T19:45:01.217061+00:00",
+  "version": "0.28.0",
+  "installation_id": "atlas",
+  "windows_create_and_verify": true,
+  "isolated_restore": true,
+  "restored_tables": {
+    "services": 2,
+    "incidents": 0,
+    "timeline": 0,
+    "sessions": 0
+  },
+  "restored_monitoring_enabled": false,
+  "restored_marker_present": true,
+  "source_baseline_phase": "Recorded after archive creation, before verification, restore and main application restart.",
+  "sources_before": {
+    "nexo-lab-nexo-1": {
+      "services": 9,
+      "incidents": 10,
+      "timeline": 73,
+      "sessions": 8
+    },
+    "nexo-test-atlas-nexo-1": {
+      "services": 2,
+      "incidents": 0,
+      "timeline": 0,
+      "sessions": 3
+    }
+  },
+  "sources_after": {
+    "nexo-lab-nexo-1": {
+      "services": 9,
+      "incidents": 10,
+      "timeline": 73,
+      "sessions": 8
+    },
+    "nexo-test-atlas-nexo-1": {
+      "services": 2,
+      "incidents": 0,
+      "timeline": 0,
+      "sessions": 3
+    }
+  },
+  "archive_bytes": 168730,
+  "archive_sha256": "bd975340e9f19de5292da3c744134bed9751721c1ace508e777f763003a3676c",
+  "archive_format": "NEXOBAK1",
+  "key_protection": "Windows DPAPI CurrentUser; separate installation key directory",
+  "note": "Portable phrase-protected customer export tested with disposable fixtures; no real customer kit or phrase generated.",
+  "restored_application_validation": "ASGI TestClient startup with original installation identity, current administrator login, two services, collection paused, logout and zero final sessions.",
+  "restored_application_started": true,
+  "windows_directory_acl": [
+    {
+      "folder": "Keys",
+      "protected": true,
+      "unexpected_allow_rules": 0
+    },
+    {
+      "folder": "Backups",
+      "protected": true,
+      "unexpected_allow_rules": 0
+    },
+    {
+      "folder": "Restauros",
+      "protected": true,
+      "unexpected_allow_rules": 0
+    }
+  ]
+}

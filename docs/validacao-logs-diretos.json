@@ -1,0 +1,47 @@
+{
+  "checked_at": "2026-10-27T12:57:10.193434+00:00",
+  "version": "0.18.0",
+  "delivery": "local; no commit or push",
+  "source_commit": "d6bb6800a7c3d3f4a41c479cc69b379117116d1e",
+  "tests": {
+    "passed": 32,
+    "seconds": 56.71,
+    "warning": "Starlette/httpx deprecation",
+    "command": "pytest tests/test_log_bindings.py tests/test_lab.py tests/test_monitoring.py tests/test_dossier.py -q",
+    "full_suite_rerun": false
+  },
+  "lab": {
+    "read_only_incident_check": true,
+    "incidents": 10,
+    "timeline_entries": 73,
+    "orders_logs": 50,
+    "orders_paths": [
+      "/api/orders"
+    ],
+    "scope": {
+      "version": 1,
+      "target_url": "http://portal-lab:8080/api/orders",
+      "service_key": "portal-lab",
+      "path": "/api/orders",
+      "kind": "endpoint"
+    },
+    "reference_service_paths": [
+      "/api/orders",
+      "/health"
+    ],
+    "closed_case_10_preserved": true,
+    "reader_cannot_collect": true
+  },
+  "source_sha256": {
+    "app/logs.py": "d4b72fcca31c066420a9dfbbfbe911953825606a122e2feaef4042c34a1202d8",
+    "app/main.py": "982ea1ae84d8ece52897b29d5e8740ab9e99579150cec31e17c7361b12a96171",
+    "web/app.js": "13e0da776bb45aac84c4a975a72ef648b9f411cc1ae2d64347e02531a5c71bbf",
+    "tests/test_log_bindings.py": "86309c60078f410eda04c48f742a67ef572f77e7ef4a79b5ff702ae8558a2888"
+  },
+  "visual_check": {
+    "service_id": 7,
+    "endpoint": "/api/orders",
+    "source_and_filter_visible": true,
+    "screenshot": "logs-diretos-v018.png"
+  }
+}

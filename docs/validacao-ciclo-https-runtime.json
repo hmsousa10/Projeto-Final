@@ -1,0 +1,38 @@
+{
+  "run_id": "1f4806695519",
+  "started_at": "2026-10-28T20:54:36.294895+00:00",
+  "scope": "controlled preproduction fixture only",
+  "timing_scope": "automated test timings, not human MTTA/MTTR",
+  "cycles": [
+    {
+      "number": 1,
+      "incident_id": 1,
+      "detected_seconds": 19.538,
+      "premature_resolution_denied": true,
+      "recovery_seconds": 20.568,
+      "closed_and_exported": true
+    },
+    {
+      "number": 2,
+      "incident_id": 2,
+      "detected_seconds": 19.485,
+      "premature_resolution_denied": true,
+      "knowledge_source": 1,
+      "retrieval_method": "BM25 · palavras",
+      "recovery_seconds": 20.523,
+      "closed_and_exported": true
+    }
+  ],
+  "passed": true,
+  "other_portals_historical_hashes_match": true,
+  "finished_at": "2026-10-28T20:55:58.101939+00:00",
+  "final_health": {
+    "api_status": "connected",
+    "collection_state": "running",
+    "last_sample": "2026-10-28T20:58:26.241915+00:00",
+    "closed_incidents": [
+      1,
+      2
+    ]
+  }
+}

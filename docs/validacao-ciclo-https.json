@@ -1,0 +1,31 @@
+{
+  "checked_at": "2026-10-28T21:00:14.673753+00:00",
+  "application_version": "0.31.0",
+  "application_code_changed": false,
+  "delivery": "local; no commit or push",
+  "tests": {
+    "initial_targeted_run": 15,
+    "final_target_guard": 7,
+    "live_cycles_passed": 2,
+    "full_application_suite_repeated": false
+  },
+  "live_report": "validacao-ciclo-https-runtime.json",
+  "final_guard_checked_against_live_fixture": true,
+  "live_run_note": "Successful live cycles preceded the final command guard and emergency restart error-report refinements; the final guard passed unit tests and live read-only inspection.",
+  "exported_dossiers": {
+    "incident-1.json": {
+      "bytes": 4996,
+      "sha256": "a932b27dbac617439a80cce0a7aae9464abab840af03199f405d5176a1d770f4"
+    },
+    "incident-2.json": {
+      "bytes": 6093,
+      "sha256": "de473394e5ff824c8cc12303b39d6dce5fc7f518ecb2f18e11707685f2caba14"
+    }
+  },
+  "scope": "Automated controlled outages, not a human or real-company evaluation.",
+  "sha256": {
+    "scripts/https_cycle.py": "3269c4764fbd2f5fbc7ccf1802d3db8e3101732b62f8dc079da0940c4a89852f",
+    "scripts/validar-api-https.py": "6b8377ff2cc579ff1688fe6faacb1dcac9fb1498a635ad32ff65c717fb73bd2c",
+    "tests/test_https_cycle.py": "01a0b36ce333f87105f0ad85303ad6d482d7ad9360a45cebfccfa95aef61f342"
+  }
+}

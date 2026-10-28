@@ -1,0 +1,47 @@
+{
+  "checked_at": "2026-10-28T14:15:52.230364+00:00",
+  "version": "0.19.0",
+  "delivery": "local; no commit or push",
+  "source_commit": "d6bb6800a7c3d3f4a41c479cc69b379117116d1e",
+  "tests": {
+    "python": {
+      "passed": 197,
+      "failures": 0,
+      "errors": 0,
+      "seconds": 296.321,
+      "warning": "Starlette/httpx deprecation"
+    },
+    "frontend": {
+      "passed": 14,
+      "command": "node --test tests/frontend/navigation.test.cjs",
+      "scope": "Real app.js in a Node VM with minimal DOM and controlled delayed responses; not a full browser suite"
+    }
+  },
+  "lab": {
+    "health": {
+      "status": "ok",
+      "version": "0.19.0"
+    },
+    "read_only_counts": {
+      "incidents": 10,
+      "timeline": 73,
+      "services": 8
+    },
+    "no_incident_writes_during_validation": true
+  },
+  "visual_check": {
+    "rapid_navigation": "knowledge to services; services page displayed",
+    "closed_incident": 10,
+    "service_logs": 7,
+    "endpoint": "/api/orders",
+    "no_console_errors_observed": true,
+    "screenshot": "navegacao-v019.png"
+  },
+  "source_sha256": {
+    "web/app.js": "1c177661d2c8eba1d5e4729ed37ee68ccad6020f3ec9b7c06dcae9999491e27c",
+    "web/style.css": "11fe88788b50f9ad45e4c379f8823d805617c6f00142a635e1929f4ed9d21c22",
+    "app/logs.py": "d4b72fcca31c066420a9dfbbfbe911953825606a122e2feaef4042c34a1202d8",
+    "app/main.py": "982ea1ae84d8ece52897b29d5e8740ab9e99579150cec31e17c7361b12a96171",
+    "tests/frontend/navigation.test.cjs": "d605c4bf6bb7c6a2b9624c0640d0a739d7e2b32aa801ee7497cbcfcf4975eb19"
+  }
+}
