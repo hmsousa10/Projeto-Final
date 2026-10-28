@@ -24,11 +24,12 @@ from .models import password_policy
 from .security import check_password, hash_password, token_hash, password_capacity
 from .seed import seed
 from .request_limits import BodyLimitMiddleware
-from . import telemetry, dossier, incident_knowledge, audit_log
+from . import telemetry, dossier, incident_knowledge, audit_log, incident_browse, incident_impact, enterprise, enterprise_monitoring
 from . import lab, logs, monitoring
 from . import accounts, alerts, slo
 from .knowledge import Knowledge, corpus as knowledge_corpus
 from .version import VERSION
+from .bootstrap import initial_password
 from .accesslog import install as install_access_filter
 from .inventory import validate_dependencies
 
@@ -60,6 +61,7 @@ def create_app(db_path=None, demo=None):
     # Igualar o trabalho criptográfico para contas existentes e inexistentes.
     dummy_password_hash = hash_password(secrets.token_urlsafe(32))
     knowledge_engine = Knowledge.configured(path)
+    enterprise_client = enterprise.EnterpriseClient.configured()
     slo_cache = slo.ReportCache(path)
 
     @asynccontextmanager
@@ -86,7 +88,7 @@ def create_app(db_path=None, demo=None):
                 if marked or legacy or demo_users:
                     raise RuntimeError('Esta base contém dados/contas de demonstração. Usa uma base vazia para o ambiente sem demonstração; os dados existentes foram preservados.')
                 if not db.execute('SELECT id FROM users LIMIT 1').fetchone():
-                    password = os.getenv('INITIAL_ADMIN_PASSWORD', '')
+                    password = initial_password()
                     minimum = 15 if production else 12
                     if not minimum <= len(password) <= 200:
                         raise RuntimeError(f'Defina INITIAL_ADMIN_PASSWORD com {minimum} a 200 caracteres.')
@@ -98,17 +100,23 @@ def create_app(db_path=None, demo=None):
                     db.execute('INSERT INTO users(name,email,password_hash,role) VALUES(?,?,?,?)',
                                ('Administrador', os.getenv('INITIAL_ADMIN_EMAIL', 'admin@local.test'),
                                 hash_password(password), 'admin'))
+        enterprise_monitoring.configure(path, enterprise_client)
         worker = None
         if prometheus_url:
             if demo_mode:
                 telemetry.initialize_targets(path)
             worker = asyncio.create_task(telemetry.run_collector(path, prometheus_url))
         slo.initialize_policies(path)
+        enterprise_worker = asyncio.create_task(enterprise_monitoring.run(path, enterprise_client)) if enterprise_client.url else None
         escalation_worker = asyncio.create_task(alerts.run_engine(path))
         knowledge_worker = asyncio.create_task(knowledge_engine.run_indexer()) if knowledge_engine.encoder else None
         try:
             yield
         finally:
+            if enterprise_worker:
+                enterprise_worker.cancel()
+                with suppress(asyncio.CancelledError):
+                    await enterprise_worker
             if knowledge_worker:
                 knowledge_worker.cancel()
                 with suppress(asyncio.CancelledError):
@@ -191,6 +199,8 @@ def create_app(db_path=None, demo=None):
     accounts.routes(app,path,current_user,admin,secure_cookie)
     from .notifications import routes as notification_routes
     notification_routes(app, path, current_user)
+    enterprise.routes(app, enterprise_client, current_user, lambda: enterprise_monitoring.status(path))
+    enterprise_monitoring.routes(app, path, enterprise_client, admin)
 
     def require(db, table, identifier):
         # table is selected by application code only, never from request input.
@@ -207,7 +217,7 @@ def create_app(db_path=None, demo=None):
 
     @app.get('/api/config')
     def config():
-        return {'demo': demo_mode, 'version': VERSION, 'monitoring': bool(prometheus_url and sd_token), 'laboratory': lab_mode, 'logs': bool(loki_url), 'telemetry': 'prometheus' if prometheus_url else 'synthetic' if demo_mode else 'not_connected'}
+        return {'demo': demo_mode, 'version': VERSION, 'environment': 'production' if production else 'local', 'enterprise': bool(enterprise_client.url), 'monitoring': bool(prometheus_url and sd_token), 'laboratory': lab_mode, 'logs': bool(loki_url), 'telemetry': 'prometheus' if prometheus_url else 'synthetic' if demo_mode else 'not_connected'}
 
     @app.get('/internal/targets', include_in_schema=False)
     def discover_targets(request: Request):
@@ -234,6 +244,9 @@ def create_app(db_path=None, demo=None):
             db.execute('BEGIN IMMEDIATE')
             require(db, 'services', sid)
             target = db.execute('SELECT * FROM telemetry_targets WHERE service_id=?', (sid,)).fetchone()
+            enterprise_binding=enterprise_monitoring.binding(db)
+            if enterprise_binding and enterprise_binding['service_id']==sid:
+                raise HTTPException(409, 'Este serviço é gerido pela integração empresarial autenticada.')
             if (data.enabled or not target) and data.url not in monitoring.allowed_urls():
                 raise HTTPException(403, 'Este endereço não consta da lista autorizada da instalação.')
             if target and target['kind'] == 'laboratory':
@@ -254,7 +267,7 @@ def create_app(db_path=None, demo=None):
             else:
                 db.execute('UPDATE telemetry_targets SET enabled=?,updated_at=? WHERE service_id=?', (int(data.enabled), stamp, sid))
                 action = 'monitoring.resumed' if data.enabled else 'monitoring.paused'
-                for incident in db.execute("SELECT id FROM incidents WHERE service_id=? AND source='prometheus-alert' AND status NOT IN ('resolved','closed')", (sid,)):
+                for incident in db.execute("SELECT id FROM incidents WHERE service_id=? AND source IN ('prometheus-alert','enterprise-alert') AND status NOT IN ('resolved','closed')", (sid,)):
                     event(db, incident['id'], user['name'], 'Monitorização retomada' if data.enabled else 'Monitorização pausada', 'O estado do incidente mantém-se; são necessárias novas sondagens para confirmar recuperação.')
             audit(db, user['name'], action, f'service:{sid}', data.url)
             return dict(db.execute('SELECT * FROM telemetry_targets WHERE service_id=?', (sid,)).fetchone())
@@ -300,7 +313,7 @@ def create_app(db_path=None, demo=None):
             db.execute('INSERT INTO alert_rule_history VALUES(?,?,?,?,?)',(sid,version,payload,stamp,user['name']))
             changed=[key for key,value in config.items() if old['config'][key]!=value]
             audit(db,user['name'],'alert_rule.updated',f'service:{sid}',f'Versão {version}. Campos: '+', '.join(changed))
-            for incident in db.execute("SELECT id FROM incidents WHERE service_id=? AND source='prometheus-alert' AND status NOT IN ('resolved','closed')",(sid,)):
+            for incident in db.execute("SELECT id FROM incidents WHERE service_id=? AND source IN ('prometheus-alert','enterprise-alert') AND status NOT IN ('resolved','closed')",(sid,)):
                 event(db,incident['id'],user['name'],'Regra de alerta alterada',f'Versão {version}. Exige novas sondagens e reinicia a contagem do prazo de reconhecimento.')
             return alerts.rule_for(db,sid)
 
@@ -330,15 +343,17 @@ def create_app(db_path=None, demo=None):
     @app.get('/api/services/{sid}/logs')
     def service_logs(sid: int, user=Depends(current_user)):
         with database(path) as db:
-            require(db, 'services', sid)
-            target = db.execute('SELECT target_key FROM telemetry_targets WHERE service_id=?', (sid,)).fetchone()
-        if not loki_url or not target or target['target_key'] not in telemetry.TARGETS:
+            service = require(db, 'services', sid)
+            target = db.execute('SELECT * FROM telemetry_targets WHERE service_id=?', (sid,)).fetchone()
+            scope = logs.binding(target)
+        if not loki_url or scope is None:
             raise HTTPException(404, 'Este serviço não tem logs ligados.')
         try:
-            entries = logs.read_logs(loki_url, target['target_key'])
+            entries = logs.read_logs(loki_url, scope['service_key'], scope['path'])
         except Exception:
             raise HTTPException(503, 'Não foi possível consultar o Loki. Não significa ausência de erros no serviço.')
-        return {'source': 'loki', 'window_minutes': 15, 'limit': 50, 'entries': entries}
+        return {'source': 'loki', 'service_id': sid, 'service_name': service['name'],
+                'queried_at': now(), 'scope': scope, 'window_minutes': 15, 'limit': 50, 'entries': entries}
 
     @app.post('/api/login')
     @password_capacity
@@ -408,14 +423,19 @@ def create_app(db_path=None, demo=None):
 
     def service_list(db):
         services = []
+        enterprise_binding = enterprise_monitoring.binding(db)
         since = (datetime.now(timezone.utc)-timedelta(hours=24)).isoformat()
         stale = (datetime.now(timezone.utc)-timedelta(minutes=15)).isoformat()
         for row in db.execute('SELECT * FROM services ORDER BY id'):
             service = dict(row)
             target = db.execute('SELECT * FROM telemetry_targets WHERE service_id=?', (row['id'],)).fetchone()
-            service['telemetry_source'] = 'prometheus' if target else 'manual'
+            is_enterprise = bool(enterprise_binding and enterprise_binding['service_id']==row['id'])
+            enterprise_enabled = is_enterprise and enterprise_binding['enabled'] and enterprise_binding['configured'] and bool(enterprise_client.url)
+            service['enterprise_monitoring'] = {'enabled':bool(enterprise_enabled)} if is_enterprise else None
+            service['telemetry_source'] = 'enterprise' if is_enterprise else 'prometheus' if target else 'manual'
             service['monitoring'] = {**dict(target), 'approved': target['target_url'] in monitoring.allowed_urls()} if target else None
-            service['logs_available'] = bool(loki_url and target and target['target_key'] in telemetry.TARGETS)
+            service['log_scope'] = logs.binding(target) if loki_url else None
+            service['logs_available'] = service['log_scope'] is not None
             counts = db.execute('SELECT COUNT(*),SUM(available) FROM observations WHERE service_id=? AND observed_at>=?',(row['id'],since)).fetchone()
             recent = [dict(r) for r in db.execute('''SELECT * FROM observations WHERE service_id=? AND observed_at>=?
                 ORDER BY observed_at DESC,id DESC LIMIT 48''', (row['id'], since))]
@@ -425,8 +445,8 @@ def create_app(db_path=None, demo=None):
             service['availability'] = round(counts[1]/counts[0]*100, 3) if counts[0] else None
             service['latest'] = latest
             cutoff = ((datetime.now(timezone.utc)-timedelta(seconds=telemetry.FRESH_SECONDS)).isoformat()
-                      if latest and latest['source'] == 'prometheus' else stale)
-            service['status'] = ('unknown' if (target and (not target['enabled'] or target['target_url'] not in monitoring.allowed_urls() or not latest or latest['observed_at'] < target['updated_at'])) or not latest or latest['observed_at'] < cutoff else
+                      if latest and latest['source'] in ('prometheus','enterprise-api') else stale)
+            service['status'] = ('unknown' if (is_enterprise and (not enterprise_enabled or not latest or latest['observed_at']<enterprise_binding['updated_at'])) or (target and (not target['enabled'] or target['target_url'] not in monitoring.allowed_urls() or not latest or latest['observed_at'] < target['updated_at'])) or not latest or latest['observed_at'] < cutoff else
                                  'down' if not latest['available'] else
                                  'degraded' if latest['latency_ms'] > row['slo_latency_ms'] else 'healthy')
             service['history'] = list(reversed(recent))
@@ -477,6 +497,7 @@ def create_app(db_path=None, demo=None):
                 for incident in db.execute("SELECT id FROM incidents WHERE service_id=? AND status NOT IN ('resolved','closed')",(sid,)):
                     event(db,incident['id'],user['name'],'Inventário atualizado','Campos alterados: '+', '.join(changed))
             if old['slo_latency_ms'] != data.slo_latency_ms:
+                enterprise_monitoring.touch(db,sid)
                 # A changed threshold requires fresh samples; old observations remain intact.
                 db.execute('UPDATE telemetry_targets SET updated_at=? WHERE service_id=?',(now(),sid))
             if any(key in changed for key in ('slo_availability','slo_latency_ms','slo_latency_percent')):
@@ -501,6 +522,8 @@ def create_app(db_path=None, demo=None):
             event(db, iid, user['name'], 'Incidente criado', data.description)
             audit(db, user['name'], 'incident.created', f'incident:{iid}', data.title)
             return require(db, 'incidents', iid)
+
+    incident_browse.routes(app, path, current_user)
 
     @app.get('/api/incidents/{iid}')
     def incident(iid: int, user=Depends(current_user)):
@@ -553,7 +576,7 @@ def create_app(db_path=None, demo=None):
                 raise HTTPException(422, 'Atribui um responsável antes de reconhecer o incidente.')
             if data.status == 'resolved' and len(data.note) < 10:
                 raise HTTPException(422, 'Descreve a resolução com pelo menos 10 caracteres.')
-            if data.status == 'resolved' and row['source'] == 'prometheus-alert':
+            if data.status == 'resolved' and row['source'] in ('prometheus-alert','enterprise-alert'):
                 if not alerts.recovered(db,row['service_id'],datetime.now(timezone.utc).timestamp()):
                     raise HTTPException(409, 'Aguarda as sondagens recentes de recuperação exigidas pela regra antes de resolver o incidente.')
             if data.status == 'closed' and (len(data.root_cause) < 10 or len(data.prevention) < 10):
@@ -600,6 +623,7 @@ def create_app(db_path=None, demo=None):
         return {'ok': True}
 
     incident_knowledge.routes(app, path, writer, require)
+    incident_impact.routes(app, path, writer, require, service_list)
 
     @app.get('/api/knowledge')
     def knowledge(q: str = Query(default='', max_length=2000),
@@ -638,7 +662,8 @@ def create_app(db_path=None, demo=None):
         with database(path) as db:
             db.execute('BEGIN IMMEDIATE')
             service = require(db, 'services', data.service_id)
-            if db.execute('SELECT 1 FROM telemetry_targets WHERE service_id=?', (data.service_id,)).fetchone():
+            enterprise_binding=enterprise_monitoring.binding(db)
+            if (enterprise_binding and enterprise_binding['service_id']==data.service_id) or db.execute('SELECT 1 FROM telemetry_targets WHERE service_id=?', (data.service_id,)).fetchone():
                 raise HTTPException(409, 'Este serviço usa sondagens reais. O simulador só altera os exemplos sintéticos.')
             available = int(data.kind != 'outage')
             latency = service['slo_latency_ms']*3 if data.kind == 'latency' else 0 if data.kind == 'outage' else min(50, service['slo_latency_ms'])

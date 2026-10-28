@@ -48,6 +48,8 @@ jobs:
         run: |
           node --check web/app.js
           node --check web/company/company.js
+      - name: Testar navegação assíncrona
+        run: node --test tests/frontend/navigation.test.cjs
       - name: Executar testes
         env:
           DATABASE_PATH: ${{ runner.temp }}/nexo-ci.db

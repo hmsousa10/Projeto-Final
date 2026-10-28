@@ -1,0 +1,69 @@
+# Local installation rehearsal only. Use scripts/customer_installation.py.
+services:
+  nexo:
+    image: nexo:local
+    build: .
+    ports: ["127.0.0.1:${NEXO_TEST_PORT:?Run the installation script}:8000"]
+    networks: [private, frontend]
+    environment:
+      DATABASE_PATH: /app/data/nexo.db
+      APP_ENV: local
+      DEMO_MODE: "0"
+      LAB_MODE: "0"
+      ALLOWED_HOSTS: localhost,127.0.0.1
+      INITIAL_ADMIN_EMAIL: ${NEXO_TEST_EMAIL:?Run the installation script}
+      INITIAL_ADMIN_PASSWORD_FILE: /run/secrets/initial_admin
+      ENTERPRISE_CONNECTOR: orders-summary-v1
+      ENTERPRISE_COMPANY_ID: ${NEXO_TEST_COMPANY:?Run the installation script}
+      ENTERPRISE_API_URL: http://portal-lab:8080/api/operations/summary
+      ENTERPRISE_API_TOKEN_FILE: /run/secrets/enterprise_read
+    secrets: [initial_admin, enterprise_read]
+    volumes: [customer-data:/app/data]
+    depends_on:
+      portal-lab:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/api/health', timeout=3)"]
+      interval: 10s
+      timeout: 4s
+      retries: 6
+      start_period: 10s
+    cap_drop: [ALL]
+    security_opt: [no-new-privileges:true]
+    read_only: true
+    tmpfs: [/tmp]
+    mem_limit: 256m
+    cpus: 1
+    pids_limit: 128
+    restart: unless-stopped
+  portal-lab:
+    image: nexo:local
+    command: ["python", "-m", "app.customer_fixture"]
+    networks: [private]
+    environment:
+      ENTERPRISE_COMPANY_ID: ${NEXO_TEST_COMPANY:?Run the installation script}
+      ENTERPRISE_API_TOKEN_FILE: /run/secrets/enterprise_read
+    secrets: [enterprise_read]
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8080/health', timeout=3)"]
+      interval: 5s
+      timeout: 4s
+      retries: 6
+    cap_drop: [ALL]
+    security_opt: [no-new-privileges:true]
+    read_only: true
+    mem_limit: 64m
+    cpus: 0.25
+    pids_limit: 64
+    restart: unless-stopped
+networks:
+  private:
+    internal: true
+  frontend:
+volumes:
+  customer-data:
+secrets:
+  initial_admin:
+    file: ${NEXO_TEST_SECRET_DIR:?Run the installation script}/initial-admin.key
+  enterprise_read:
+    file: ${NEXO_TEST_SECRET_DIR:?Run the installation script}/enterprise-read.key

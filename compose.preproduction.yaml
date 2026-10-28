@@ -1,0 +1,124 @@
+# Isolated, loopback-only HTTPS rehearsal. Not an Internet deployment template.
+services:
+  nexo:
+    image: nexo:local
+    build: .
+    command: ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000", "--proxy-headers", "--forwarded-allow-ips", "172.30.250.2", "--no-server-header", "--limit-concurrency", "32", "--backlog", "64", "--timeout-keep-alive", "5"]
+    environment:
+      DATABASE_PATH: /app/data/nexo.db
+      APP_ENV: production
+      DEMO_MODE: "0"
+      LAB_MODE: "0"
+      ALLOWED_HOSTS: ${NEXO_HTTPS_HOST:?Use the preproduction script}
+      NEXO_HTTPS_HOST: ${NEXO_HTTPS_HOST:?Use the preproduction script}
+      APP_ORIGIN: ${NEXO_HTTPS_ORIGIN:?Use the preproduction script}
+      INITIAL_ADMIN_EMAIL: admin@preprod.test
+      INITIAL_ADMIN_PASSWORD_FILE: /run/secrets/initial_admin
+      ENTERPRISE_CONNECTOR: orders-summary-v1
+      ENTERPRISE_COMPANY_ID: aurora
+      ENTERPRISE_API_URL: https://enterprise-api:8080/api/operations/summary
+      ENTERPRISE_API_TOKEN_FILE: /run/secrets/enterprise_read
+      ENTERPRISE_API_CA_FILE: /run/secrets/enterprise_ca
+    secrets: [initial_admin, enterprise_read, enterprise_ca]
+    depends_on:
+      enterprise-api:
+        condition: service_healthy
+    volumes: [preproduction-data:/app/data]
+    networks:
+      backend:
+        ipv4_address: 172.30.250.3
+      enterprise: {}
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request,os; urllib.request.urlopen(urllib.request.Request('http://127.0.0.1:8000/api/health',headers={'Host':os.environ['NEXO_HTTPS_HOST']}),timeout=3)"]
+      interval: 5s
+      timeout: 4s
+      retries: 6
+      start_period: 10s
+    cap_drop: [ALL]
+    security_opt: [no-new-privileges:true]
+    read_only: true
+    tmpfs: [/tmp]
+    mem_limit: 256m
+    cpus: 1
+    pids_limit: 128
+    restart: unless-stopped
+  enterprise-api:
+    image: nexo:local
+    command: ["python", "-m", "app.customer_fixture"]
+    environment:
+      ENTERPRISE_COMPANY_ID: aurora
+      ENTERPRISE_API_TOKEN_FILE: /run/secrets/enterprise_read
+      FIXTURE_TLS_CERT_FILE: /run/secrets/enterprise_cert
+      FIXTURE_TLS_KEY_FILE: /run/secrets/enterprise_private
+    secrets: [enterprise_read, enterprise_ca, enterprise_cert, enterprise_private]
+    networks: [enterprise]
+    healthcheck:
+      test: ["CMD", "python", "-c", "import ssl,urllib.request; urllib.request.urlopen('https://enterprise-api:8080/health',context=ssl.create_default_context(cafile='/run/secrets/enterprise_ca'),timeout=3)"]
+      interval: 5s
+      timeout: 4s
+      retries: 6
+      start_period: 5s
+    cap_drop: [ALL]
+    security_opt: [no-new-privileges:true]
+    read_only: true
+    mem_limit: 64m
+    cpus: 0.25
+    pids_limit: 64
+    restart: unless-stopped
+  proxy:
+    build: deployment/https
+    image: nexo-https:local
+    command: ["caddy", "run", "--config", "/etc/caddy/Caddyfile", "--adapter", "caddyfile"]
+    environment:
+      NEXO_HTTPS_HOST: ${NEXO_HTTPS_HOST:?Use the preproduction script}
+      NEXO_HTTPS_ORIGIN: ${NEXO_HTTPS_ORIGIN:?Use the preproduction script}
+    ports: ["127.0.0.1:8443:8443", "127.0.0.1:8084:8080"]
+    volumes:
+      - ./deployment/https/Caddyfile:/etc/caddy/Caddyfile:ro
+      - tls-data:/data
+      - tls-config:/config
+    networks:
+      backend:
+        ipv4_address: 172.30.250.2
+      edge: {}
+    depends_on:
+      nexo:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "wget", "-q", "-O", "/dev/null", "-T", "3", "http://127.0.0.1:8081/health"]
+      interval: 5s
+      timeout: 4s
+      retries: 6
+      start_period: 10s
+    cap_drop: [ALL]
+    security_opt: [no-new-privileges:true]
+    read_only: true
+    tmpfs: [/tmp]
+    mem_limit: 128m
+    cpus: 0.5
+    pids_limit: 128
+    restart: unless-stopped
+networks:
+  enterprise:
+    internal: true
+  backend:
+    internal: true
+    ipam:
+      config:
+        - subnet: 172.30.250.0/29
+  edge: {}
+volumes:
+  preproduction-data:
+  tls-data:
+  tls-config:
+secrets:
+  enterprise_read:
+    file: ${NEXO_HTTPS_API_TLS_DIR:?Use the preproduction script}/read.key
+  enterprise_ca:
+    file: ${NEXO_HTTPS_API_TLS_DIR:?Use the preproduction script}/ca.crt
+  enterprise_cert:
+    file: ${NEXO_HTTPS_API_TLS_DIR:?Use the preproduction script}/server.crt
+  enterprise_private:
+    file: ${NEXO_HTTPS_API_TLS_DIR:?Use the preproduction script}/server.key
+  initial_admin:
+    file: ${NEXO_HTTPS_SECRET_DIR:?Use the preproduction script}/initial-admin.key

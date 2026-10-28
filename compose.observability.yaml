@@ -17,7 +17,11 @@ services:
       ALLOWED_HOSTS: 127.0.0.1,localhost,nexo
       SEMANTIC_URL: http://semantic:8080
       SEMANTIC_TOKEN_FILE: /run/secrets/semantic_access
-    secrets: [lab_control, monitoring_discovery, semantic_access]
+      ENTERPRISE_API_URL: http://portal-lab:8080/api/operations/summary
+      ENTERPRISE_API_TOKEN_FILE: /run/secrets/enterprise_read
+      ENTERPRISE_COMPANY_ID: aurora
+      ENTERPRISE_CONNECTOR: orders-summary-v1
+    secrets: [lab_control, monitoring_discovery, semantic_access, enterprise_read]
     volumes: [nexo-data:/app/data]
     depends_on: [prometheus]
     healthcheck:
@@ -67,7 +71,8 @@ services:
       LAB_CONTROL_TOKEN_FILE: /run/secrets/lab_control
       LAB_TARGET_KEY: portal-lab
       LOKI_URL: http://loki:3100
-    secrets: [lab_control]
+      ENTERPRISE_API_TOKEN_FILE: /run/secrets/enterprise_read
+    secrets: [lab_control, enterprise_read]
     cap_drop: [ALL]
     security_opt: [no-new-privileges:true]
     read_only: true
@@ -126,6 +131,8 @@ services:
     cpus: 1
     restart: unless-stopped
 secrets:
+  enterprise_read:
+    file: ./data/enterprise-read.key
   semantic_access:
     file: ./data/semantic-access.key
   monitoring_discovery:

@@ -53,12 +53,12 @@ def unwrap(blob,phrase):
     return key
 
 
-def export(archive,key,phrase):
+def export(archive,key,phrase,company_id=None):
     phrase_bytes(phrase)
-    report=recovery.verify(archive,key)
+    report=recovery.verify(archive,key,company_id)
     blob=wrap(key,phrase)
     # A matching archive and a decryptable key are required before publication.
-    recovery.verify(archive,unwrap(blob,phrase))
+    recovery.verify(archive,unwrap(blob,phrase),company_id)
     return blob,report
 
 
@@ -89,6 +89,7 @@ def main():
     parser=argparse.ArgumentParser(description=__doc__)
     parser.add_argument('action',choices=['export','verify','restore'])
     parser.add_argument('--destination')
+    parser.add_argument('--company',help='Expected installation identity for customer recovery.')
     parser.add_argument('--kit',help='Pasta com copia.nexobak e chave.nexokey; pede a frase em entrada oculta.')
     args=parser.parse_args()
     try:
@@ -106,7 +107,7 @@ def main():
             archive=base64.b64decode(payload['archive'],validate=True)
         if args.action=='export':
             key=base64.b64decode(payload['key'],validate=True)
-            blob,report=export(archive,key,phrase)
+            blob,report=export(archive,key,phrase,args.company)
             result={'wrapped_key':base64.b64encode(blob).decode(),'report':report}
         else:
             if not args.kit:
@@ -115,9 +116,9 @@ def main():
             if args.action=='restore':
                 if not args.destination:
                     raise recovery.RecoveryError('Falta o destino novo.')
-                result=recovery.restore(archive,key,args.destination)
+                result=recovery.restore(archive,key,args.destination,args.company)
             else:
-                result=recovery.verify(archive,key)
+                result=recovery.verify(archive,key,args.company)
         print(json.dumps(result,ensure_ascii=True))
     except (recovery.RecoveryError,OSError,sqlite3.Error,ValueError,KeyError,TypeError,UnsupportedAlgorithm):
         print('Operação recusada. Confirma a frase-passe, o par de ficheiros, os limites e um destino novo compatível.',file=sys.stderr)

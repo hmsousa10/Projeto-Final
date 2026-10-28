@@ -2,13 +2,15 @@ param(
   [ValidateSet('Exportar','Verificar','Restaurar')][string]$Acao='Exportar',
   [string]$Arquivo,
   [string]$Kit,
-  [string]$Destino
+  [string]$Destino,
+  [ValidatePattern('^[a-z][a-z0-9-]{0,23}$')][string]$Instancia
 )
 $ErrorActionPreference='Stop'
 Set-StrictMode -Version Latest
 Add-Type -AssemblyName System.Security
 . (Join-Path $PSScriptRoot 'scripts\backup-common.ps1')
 $taskRoot=Join-Path $env:LOCALAPPDATA 'Nexo'
+if ($Instancia) { $taskRoot=Join-Path $taskRoot ('Installations\'+$Instancia) }
 $taskPython=Join-Path $PSScriptRoot '.venv\Scripts\python.exe'
 
 function Read-Phrase([switch]$Confirm) {
@@ -31,6 +33,7 @@ function Read-Phrase([switch]$Confirm) {
 
 function Invoke-Portable([string]$Operation,[hashtable]$Payload,[string]$NewDestination='') {
   $taskArguments=@('-m','app.portable',$Operation)
+  if ($Instancia) { $taskArguments+=@('--company',$Instancia) }
   if ($NewDestination) { $taskArguments+=@('--destination',$NewDestination) }
   # ASCII JSON envelope preserves UTF-8 accents on Windows PowerShell 5 too.
   $taskJson=$Payload | ConvertTo-Json -Compress
@@ -110,6 +113,11 @@ O destino Windows deve estar em %LOCALAPPDATA%\Nexo\Restauros.
 Nunca e substituida automaticamente uma base ativa.
 Consulta docs/recuperacao-portatil.md no projeto.
 '@
+    if ($Instancia) {
+      $taskReadme=$taskReadme.Replace('-Acao Verificar',('-Instancia '+$Instancia+' -Acao Verificar')).Replace('-Acao Restaurar',('-Instancia '+$Instancia+' -Acao Restaurar'))
+      $taskReadme=$taskReadme.Replace('%LOCALAPPDATA%\Nexo\Restauros',('%LOCALAPPDATA%\Nexo\Installations\'+$Instancia+'\Restauros'))
+      $taskReadme+="`r`nInstalacao: $Instancia`r`nConsulta docs/copias-por-instalacao.md."
+    }
     Write-NewFile (Join-Path $taskPartial 'LE-ME.txt') ([System.Text.Encoding]::UTF8.GetBytes($taskReadme))
     [System.IO.Directory]::Move($taskPartial,$taskFinal)
     Write-Output ('Kit cifrado, gravado e verificado: '+$taskFinal)
@@ -128,7 +136,7 @@ Consulta docs/recuperacao-portatil.md no projeto.
       Protect-Directory $taskRestoreRoot
       $Destino=[System.IO.Path]::GetFullPath($Destino)
       Assert-PlainPath $Destino
-      if (-not $Destino.StartsWith($taskRestoreRoot+[System.IO.Path]::DirectorySeparatorChar,[StringComparison]::OrdinalIgnoreCase)) { throw 'O destino deve ficar dentro de %LOCALAPPDATA%\Nexo\Restauros.' }
+      if (-not $Destino.StartsWith($taskRestoreRoot+[System.IO.Path]::DirectorySeparatorChar,[StringComparison]::OrdinalIgnoreCase)) { throw ('O destino deve ficar dentro de '+$taskRestoreRoot+'.') }
       $taskResult=Invoke-Portable 'restore' $taskPayload $Destino
       Write-Output ('Base recuperada numa pasta nova: '+$taskResult.path)
       Write-Output 'Monitorizacao pausada e sessoes revogadas. A instalacao ativa foi preservada.'

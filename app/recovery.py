@@ -88,7 +88,22 @@ def check_key(key):
         raise RecoveryError('É necessária uma chave aleatória de 32 bytes.')
 
 
-def create(database,key):
+def check_company(db, company_id):
+    if company_id is None:
+        return
+    import re
+    if not isinstance(company_id,str) or not re.fullmatch(r'[a-z][a-z0-9-]{0,23}',company_id):
+        raise RecoveryError('Identidade de instalação inválida.')
+    row = db.execute("SELECT value FROM settings WHERE key='enterprise_monitoring_binding'").fetchone()
+    try:
+        actual = json.loads(row[0])['company_id'] if row else None
+    except (ValueError,KeyError,TypeError):
+        raise RecoveryError('A base não identifica a instalação esperada.') from None
+    if actual != company_id:
+        raise RecoveryError('A base pertence a outra instalação ou não tem identidade empresarial.')
+
+
+def create(database,key,company_id=None):
     check_key(key)
     source = plain_path(database)
     if not source.is_file():
@@ -109,6 +124,7 @@ def create(database,key):
             live.backup(snapshot,pages=128,progress=progress,sleep=.05)
             snapshot.execute('PRAGMA journal_mode=DELETE')
             inspect_db(snapshot)
+            check_company(snapshot,company_id)
             snapshot.execute('PRAGMA secure_delete=ON')
             snapshot.execute('DELETE FROM sessions')
             snapshot.commit()
@@ -120,6 +136,8 @@ def create(database,key):
     manifest = {'format':1,'app_version':VERSION,'started_at':started,'completed_at':now(),
                 'database_sha256':hashlib.sha256(raw).hexdigest(),'database_bytes':len(raw),
                 'sessions_removed':True,**report}
+    if company_id is not None:
+        manifest['installation_id'] = company_id
     metadata = json.dumps(manifest,separators=(',',':')).encode()
     nonce = secrets.token_bytes(12)
     encrypted = AESGCM(key).encrypt(nonce,struct.pack('!I',len(metadata))+metadata+raw,MAGIC)
@@ -149,34 +167,39 @@ def decode(archive,key):
     return raw,manifest
 
 
-def checked_snapshot(archive,key,folder):
+def checked_snapshot(archive,key,folder,company_id=None):
     raw,manifest = decode(archive,key)
+    if company_id is not None and manifest.get('installation_id') != company_id:
+        raise RecoveryError('A cópia não identifica a instalação esperada.')
     path = Path(folder)/'snapshot.db'
     with path.open('xb') as output:
         output.write(raw)
     with closing(sqlite3.connect(path)) as db:
         report = inspect_db(db)
+        check_company(db,company_id)
     if any(report[k]!=manifest.get(k) for k in ('schema_sha256','tables')):
         raise RecoveryError('Contagens ou esquema não coincidem com o manifesto.')
     return path,manifest
 
 
-def verify(archive,key):
+def verify(archive,key,company_id=None):
     with tempfile.TemporaryDirectory(prefix='nexo-check-') as folder:
-        _,manifest = checked_snapshot(archive,key,folder)
+        _,manifest = checked_snapshot(archive,key,folder,company_id)
     return {**manifest,'archive_sha256':hashlib.sha256(archive).hexdigest(),'verified':True}
 
 
-def restore(archive,key,destination):
+def restore(archive,key,destination,company_id=None):
     target = plain_path(destination)
     if target.exists() or not target.parent.is_dir():
         raise RecoveryError('O restauro exige uma pasta nova, num diretório existente.')
     with tempfile.TemporaryDirectory(prefix='nexo-restore-') as folder:
-        snapshot,manifest = checked_snapshot(archive,key,folder)
+        snapshot,manifest = checked_snapshot(archive,key,folder,company_id)
         with closing(sqlite3.connect(snapshot)) as db:
             db.execute('PRAGMA secure_delete=ON')
             db.execute('DELETE FROM sessions')
             db.execute('UPDATE telemetry_targets SET enabled=0,updated_at=?',(now(),))
+            from .enterprise_monitoring import pause_for_restore
+            pause_for_restore(db)
             db.execute('DELETE FROM alert_states')
             audit(db,'Recuperação local','recovery.restored','database',hashlib.sha256(archive).hexdigest())
             db.commit()
@@ -210,6 +233,7 @@ def main():
     parser.add_argument('action',choices=['create','verify','restore'])
     parser.add_argument('--database')
     parser.add_argument('--destination')
+    parser.add_argument('--company',help='Expected installation identity, for dedicated customer backups.')
     args = parser.parse_args()
     try:
         raw_input = sys.stdin.buffer.read(MAX_INPUT+1)
@@ -220,13 +244,13 @@ def main():
         if args.action=='create':
             if not args.database:
                 raise RecoveryError('Falta a base de origem.')
-            archive,report = create(args.database,key)
+            archive,report = create(args.database,key,args.company)
             result = {'archive':base64.b64encode(archive).decode(),'report':report}
         else:
             archive = base64.b64decode(payload['archive'],validate=True)
             if args.action=='restore' and not args.destination:
                 raise RecoveryError('Falta o destino novo.')
-            result = verify(archive,key) if args.action=='verify' else restore(archive,key,args.destination)
+            result = verify(archive,key,args.company) if args.action=='verify' else restore(archive,key,args.destination,args.company)
         print(json.dumps(result,ensure_ascii=True))
     except (RecoveryError,OSError,sqlite3.Error,ValueError,KeyError,TypeError):
         # Never echo stdin, decrypted bytes, keys, SQL rows or upstream exceptions.

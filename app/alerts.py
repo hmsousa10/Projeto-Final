@@ -23,8 +23,17 @@ def confirmed(rows, count, clock):
     return clock-stamps[0] <= 45 and all(0 < a-b <= 25 for a,b in zip(stamps,stamps[1:]))
 
 
+def alert_targets(db):
+    targets = dict(active_targets(db))
+    from .enterprise_monitoring import target as enterprise_target
+    enterprise = enterprise_target(db)
+    if enterprise:
+        targets[enterprise['target_key']] = enterprise
+    return targets
+
+
 def recovered(db, service_id, clock):
-    target = next((t for t in active_targets(db).values() if t['service_id']==service_id),None)
+    target = next((t for t in alert_targets(db).values() if t['service_id']==service_id),None)
     state = db.execute('SELECT * FROM alert_states WHERE service_id=?',(service_id,)).fetchone()
     rule = rule_for(db,service_id)
     if not target or not state or state['condition']!='healthy' or not state['last_sample']:
@@ -34,20 +43,22 @@ def recovered(db, service_id, clock):
     if threshold is None:
         threshold=db.execute('SELECT slo_latency_ms FROM services WHERE id=?',(service_id,)).fetchone()[0]
     cutoff=max(target['updated_at'],rule['updated_at'])
-    rows=db.execute("SELECT * FROM observations WHERE service_id=? AND source='prometheus' AND observed_at>=? ORDER BY observed_at DESC LIMIT ?",
-                    (service_id,cutoff,config['recovery_samples'])).fetchall()
+    rows=db.execute("SELECT * FROM observations WHERE service_id=? AND source=? AND observed_at>=? ORDER BY observed_at DESC LIMIT ?",
+                    (service_id,target.get('observation_source','prometheus'),cutoff,config['recovery_samples'])).fetchall()
     return state['last_sample']>=cutoff and confirmed(rows,config['recovery_samples'],clock) and all(r['available'] and r['latency_ms']<=threshold for r in rows)
 
 
 def evaluate(db, clock):
-    for target in active_targets(db).values():
+    for target in alert_targets(db).values():
         service = db.execute('SELECT * FROM services WHERE id=?', (target['service_id'],)).fetchone()
+        incident_source=target.get('incident_source','prometheus-alert')
+        origin_label=target.get('origin_label','Prometheus')
         rule = rule_for(db,service['id'])
         config = rule['config']
         threshold = config['latency_ms'] if config['latency_ms'] is not None else service['slo_latency_ms']
         count = max(config['failure_samples'],config['recovery_samples'])
-        rows = db.execute("SELECT * FROM observations WHERE service_id=? AND source='prometheus' AND observed_at>=? ORDER BY observed_at DESC LIMIT ?",
-                          (service['id'],max(target['updated_at'],rule['updated_at']),count)).fetchall()
+        rows = db.execute("SELECT * FROM observations WHERE service_id=? AND source=? AND observed_at>=? ORDER BY observed_at DESC LIMIT ?",
+                          (service['id'],target.get('observation_source','prometheus'),max(target['updated_at'],rule['updated_at']),count)).fetchall()
         if not rows:
             continue
         previous = db.execute('SELECT * FROM alert_states WHERE service_id=?', (service['id'],)).fetchone()
@@ -66,25 +77,38 @@ def evaluate(db, clock):
         iid = previous['incident_id'] if previous else None
         can_alert = config['enabled'] and (config['outage_enabled'] if condition=='down' else config['latency_enabled'])
         severity = config['outage_severity'] if condition=='down' else config['latency_severity']
+        active_reference = iid and db.execute("SELECT 1 FROM incidents WHERE id=? AND service_id=? AND source=? AND status NOT IN ('resolved','closed')",
+                                             (iid,service['id'],incident_source)).fetchone()
+        # Drop closed references after recovery or while alerts are muted. A closed
+        # case in an uninterrupted episode still suppresses duplicate incidents.
+        if not active_reference and (prior=='healthy' or not can_alert):
+            iid = None
         if condition == 'healthy':
             if prior != 'healthy' and iid and db.execute("SELECT 1 FROM incidents WHERE id=? AND status NOT IN ('resolved','closed')",(iid,)).fetchone():
                 event(db,iid,'Monitorização','Serviço recuperado',
                       f'{config["recovery_samples"]} sondagens HTTP recentes confirmam recuperação dentro do limite de {threshold} ms. O incidente aguarda resolução e fecho pela equipa.')
                 audit(db,'Monitorização','alert.recovered',f'incident:{iid}')
-        elif can_alert and (prior=='healthy' or not previous or iid is None):
-            existing = db.execute("SELECT id FROM incidents WHERE service_id=? AND source='prometheus-alert' AND status NOT IN ('resolved','closed')", (service['id'],)).fetchone()
+        elif can_alert and (prior=='healthy' or not previous or not iid):
+            existing = db.execute("SELECT id FROM incidents WHERE service_id=? AND source=? AND status NOT IN ('resolved','closed')", (service['id'],incident_source)).fetchone()
             description = (f'{config["failure_samples"]} sondagens HTTP reais consecutivas confirmam {"indisponibilidade" if condition=="down" else "latência elevada"}. '
-                           f'Origem: Prometheus. Última sondagem: {rows[0]["observed_at"]}. Sucesso: {rows[0]["available"]}; '
+                           f'Origem: {origin_label}. Última sondagem: {rows[0]["observed_at"]}. Sucesso: {rows[0]["available"]}; '
                            f'duração: {rows[0]["latency_ms"]:.2f} ms; limite de alerta: {threshold} ms; versão da regra: {rule["version"]}.')
+            if incident_source=='enterprise-alert':
+                reason={'unauthorized':'Autenticação recusada pela API.', 'invalid_payload':'Resposta fora do contrato esperado.',
+                        'stale':'Dados fora da janela de frescura.', 'unavailable':'A API não devolveu uma resposta utilizável.',
+                        'connected':'Resposta validada; condição de latência.'}.get(target['api_status'],'Consulta sem classificação disponível.')
+                description += ' '+reason
             if existing:
                 iid = existing['id']
                 event(db,iid,'Monitorização','Falha recorrente agrupada',description)
             else:
-                title = ('Serviço indisponível' if condition=='down' else 'Latência acima do limite de alerta')+' · '+service['name']
+                title = (('API empresarial sem resposta válida' if incident_source=='enterprise-alert' else 'Serviço indisponível') if condition=='down' else 'Latência acima do limite de alerta')+' · '+service['name']
                 cursor = db.execute("""INSERT INTO incidents(service_id,title,description,severity,status,created_at,source)
-                    VALUES(?,?,?,?,'open',?,'prometheus-alert')""", (service['id'],title,description,severity,now()))
+                    VALUES(?,?,?,?,'open',?,?)""", (service['id'],title,description,severity,now(),incident_source))
                 iid = cursor.lastrowid
                 context = {**config,'effective_latency_ms':threshold,'target_key':target['target_key']}
+                if incident_source=='enterprise-alert':
+                    context.update(measurement_source='enterprise-api',api_status=target['api_status'])
                 db.execute('INSERT INTO incident_alert_context VALUES(?,?,?,?)',(iid,json.dumps(context),rule['version'],now()))
                 event(db,iid,'Monitorização','Alerta confirmado por sondagens',description)
                 audit(db,'Monitorização','incident.created',f'incident:{iid}',title)
@@ -98,8 +122,8 @@ def evaluate(db, clock):
 
 
 def escalate(db, clock):
-    targets = {t['service_id']:t for t in active_targets(db).values()}
-    rows = db.execute("""SELECT i.* FROM incidents i WHERE i.source='prometheus-alert' AND i.status='open'
+    targets = {t['service_id']:t for t in alert_targets(db).values()}
+    rows = db.execute("""SELECT i.* FROM incidents i WHERE i.source IN ('prometheus-alert','enterprise-alert') AND i.status='open'
         AND i.acknowledged_at IS NULL AND NOT EXISTS (SELECT 1 FROM incident_escalations e WHERE e.incident_id=i.id)""").fetchall()
     for incident in rows:
         target = targets.get(incident['service_id'])

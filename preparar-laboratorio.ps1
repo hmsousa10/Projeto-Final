@@ -1,5 +1,5 @@
 $ErrorActionPreference = 'Stop'
-foreach ($taskKeyName in @('lab-control.key', 'monitoring-discovery.key', 'semantic-access.key')) {
+foreach ($taskKeyName in @('lab-control.key', 'monitoring-discovery.key', 'semantic-access.key', 'enterprise-read.key')) {
   $taskKeyPath = Join-Path $PSScriptRoot "data\$taskKeyName"
   New-Item -ItemType Directory -Path (Split-Path $taskKeyPath) -Force | Out-Null
   if (-not (Test-Path -LiteralPath $taskKeyPath)) {

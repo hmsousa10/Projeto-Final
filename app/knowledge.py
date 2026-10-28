@@ -224,7 +224,7 @@ class Knowledge:
                 actual, result = 'bm25', bm25(query,documents,limit)
         query_terms = set(terms(query))
         for row in result:
-            row['provenance'] = 'Exemplo sintético' if str(row.get('source','')).startswith('demo') else 'Sondagens de laboratório' if row.get('source')=='prometheus-alert' else 'Registo manual'
+            row['provenance'] = 'Exemplo sintético' if str(row.get('source','')).startswith('demo') else 'Sondagens de laboratório' if row.get('source')=='prometheus-alert' else 'API empresarial autenticada' if row.get('source')=='enterprise-alert' else 'Registo manual'
             row['matched_terms'] = sorted(query_terms & set(terms(' '.join(str(row.get(f) or '') for f in FIELDS))))[:12]
             row['score_kind'] = actual
         return {'results':result,'method':LABELS[actual], 'requested_method':method,'actual_method':actual,

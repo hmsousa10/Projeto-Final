@@ -2,11 +2,14 @@ param(
     [ValidateSet('Estado','Preparar','Promover','Reverter','Retomar','Concluir')][string]$Acao = 'Estado',
     [string]$Arquivo,
     [switch]$Ensaio,
-    [switch]$SimularFalha
+    [switch]$SimularFalha,
+    [ValidatePattern('^[a-z][a-z0-9-]{0,23}$')][string]$Instancia
 )
 $ErrorActionPreference = 'Stop'
 Set-StrictMode -Version Latest
-if ($SimularFalha -and (-not $Ensaio -or $Acao -ne 'Promover')) { throw 'A simulacao so existe no ensaio de promocao.' }
+if ($Ensaio -and $Instancia) { throw 'Escolhe o ensaio fixo ou uma instalacao de ensaio, sem combinar os dois.' }
+if ($SimularFalha -and ((-not $Ensaio -and -not $Instancia) -or $Acao -ne 'Promover')) { throw 'A simulacao so existe numa instalacao de ensaio durante a promocao.' }
+if ($Instancia -and $Acao -eq 'Retomar') { throw 'A recolha empresarial e retomada explicitamente na pagina Integracao empresarial, depois da verificacao.' }
 . (Join-Path $PSScriptRoot 'scripts\backup-common.ps1')
 $taskPython = Join-Path $PSScriptRoot '.venv\Scripts\python.exe'
 $env:PATH = (Join-Path $env:LOCALAPPDATA 'Programs\DockerDesktop\resources\bin') + ';' + $env:PATH
@@ -20,8 +23,24 @@ if ($Ensaio) {
     $taskVolume = 'nexo-maintenance-test_maintenance-data'
     $taskPort = 8013
 }
+$taskBackupRoot = Join-Path $env:LOCALAPPDATA 'Nexo'
+if ($Instancia) {
+    $taskProfileJson = & $taskPython -c 'import json,sys; from pathlib import Path; sys.path.insert(0,sys.argv[1]); from scripts.customer_installation import prepare; print(json.dumps(prepare(Path(sys.argv[1]),sys.argv[2])[0]))' $PSScriptRoot $Instancia 2>$null
+    if ($LASTEXITCODE -ne 0) { throw 'Perfil de instalacao inexistente ou invalido.' }
+    $taskProfile = $taskProfileJson | ConvertFrom-Json
+    if ($taskProfile.company_id -ne $Instancia) { throw 'A identidade do perfil nao corresponde a instalacao.' }
+    $taskProject = 'nexo-test-'+$Instancia
+    $taskComposeFile = 'compose.customer-test.yaml'
+    $taskVolume = $taskProject+'_customer-data'
+    $taskPort = $taskProfile.port
+    $env:NEXO_TEST_PORT = [string]$taskProfile.port
+    $env:NEXO_TEST_COMPANY = $taskProfile.company_id
+    $env:NEXO_TEST_EMAIL = $taskProfile.email
+    $env:NEXO_TEST_SECRET_DIR = (Join-Path $PSScriptRoot ('data\installations\'+$Instancia)).Replace('\','/')
+    $taskBackupRoot = Join-Path $taskBackupRoot ('Installations\'+$Instancia)
+}
 $taskCompose = @('compose','-p',$taskProject,'-f',$taskComposeFile)
-$taskReports = Join-Path $env:LOCALAPPDATA 'Nexo\Manutencao'
+$taskReports = Join-Path $taskBackupRoot 'Manutencao'
 Protect-Directory $taskReports
 $taskReportPath = Join-Path $taskReports ((Get-Date -Format 'yyyyMMdd-HHmmss')+'-'+[Guid]::NewGuid().ToString('N')+'.json')
 $taskReport = [ordered]@{ action=$Acao; project=$taskProject; started_at_utc=[DateTime]::UtcNow.ToString('o'); status='failed' }
@@ -33,6 +52,7 @@ function Invoke-Maintenance([string]$Operation,[string]$Payload='') {
         '--mount',"type=volume,source=$taskVolume,target=/app/data",'-e','NEXO_MAINTENANCE=1',
         '-e','DATABASE_PATH=/app/data/nexo.db','-e',"NEXO_MAINTENANCE_POLICY_B64=$taskPolicy64",$taskImage,
         'python','-m','app.maintenance',$Operation)
+    if ($Instancia) { $taskRunArgs += @('--company',$Instancia) }
     $taskResult = $Payload | & docker @taskRunArgs
     if ($LASTEXITCODE -ne 0) { throw "A operacao local $Operation foi recusada. Consulta o estado antes de repetir." }
     return ($taskResult | ConvertFrom-Json)
@@ -64,10 +84,16 @@ try {
         throw 'O volume nao corresponde a instalacao escolhida.'
     }
     if ('DATABASE_PATH=/app/data/nexo.db' -notin $taskContainer.Config.Env) { throw 'Caminho ativo inesperado.' }
+    if ($Instancia -and ('DEMO_MODE=0' -notin $taskContainer.Config.Env -or 'LAB_MODE=0' -notin $taskContainer.Config.Env -or ('ENTERPRISE_COMPANY_ID='+$Instancia) -notin $taskContainer.Config.Env)) {
+        throw 'A identidade do contentor nao corresponde a instalacao de ensaio.'
+    }
     $taskImage = $taskContainer.Image
     $taskAllowed = @($taskContainer.Config.Env | Where-Object { $_.StartsWith('MONITORING_ALLOWED_URLS=') })
-    if ($taskAllowed.Count -ne 1) { throw 'Politica de destinos em falta.' }
-    $taskAllowed = $taskAllowed[0].Substring('MONITORING_ALLOWED_URLS='.Length)
+    if ($Instancia -and $taskAllowed.Count -eq 0) { $taskAllowed = '[]' }
+    else {
+        if ($taskAllowed.Count -ne 1) { throw 'Politica de destinos em falta.' }
+        $taskAllowed = $taskAllowed[0].Substring('MONITORING_ALLOWED_URLS='.Length)
+    }
     $taskPolicy64 = [Convert]::ToBase64String([Text.Encoding]::UTF8.GetBytes($taskAllowed))
     $taskReport.image_id = $taskImage
     $taskReport.before = Invoke-Maintenance 'status'
@@ -76,15 +102,16 @@ try {
         'Preparar' {
             if (-not $Arquivo) {
                 if ($Ensaio) { throw 'Indica uma copia cifrada para o ensaio.' }
-                & .\copia-seguranca.ps1 -Acao Criar
-                $Arquivo = (Get-ChildItem -LiteralPath (Join-Path $env:LOCALAPPDATA 'Nexo\Backups') -Filter '*.nexobak' |
+                if ($Instancia) { & .\copia-seguranca.ps1 -Acao Criar -Instancia $Instancia }
+                else { & .\copia-seguranca.ps1 -Acao Criar }
+                $Arquivo = (Get-ChildItem -LiteralPath (Join-Path $taskBackupRoot 'Backups') -Filter '*.nexobak' |
                     Sort-Object LastWriteTime -Descending | Select-Object -First 1).FullName
             }
             Assert-PlainPath $Arquivo
             $taskInfo = Get-Item -LiteralPath $Arquivo
             if ($taskInfo.Length -gt 33620032) { throw 'Copia acima do limite.' }
             Add-Type -AssemblyName System.Security
-            $taskKeyFile = Join-Path $env:LOCALAPPDATA 'Nexo\Keys\backup.dpapi'
+            $taskKeyFile = Join-Path $taskBackupRoot 'Keys\backup.dpapi'
             Assert-PlainPath $taskKeyFile
             $taskKeyInfo = Get-Item -LiteralPath $taskKeyFile
             if ($taskKeyInfo.Length -gt 4096) { throw 'Ficheiro DPAPI invalido.' }
@@ -105,7 +132,7 @@ try {
             if ($Acao -eq 'Promover') { $taskReport.result = Invoke-Maintenance 'promote' }
             else { $taskReport.result = Invoke-Maintenance 'rollback' }
             $taskReport.health = Start-MaintainedPortal
-            if ($SimularFalha) { throw 'Falha de verificacao provocada exclusivamente no ensaio.' }
+            if ($SimularFalha) { throw 'Falha de verificacao provocada exclusivamente na instalacao de ensaio.' }
             if ($taskReport.result.phase -notin @('cancelled','rolled_back')) {
                 $taskReport.verification = Invoke-Maintenance 'verify'
             } elseif ($taskReport.result.phase -eq 'rolled_back') {

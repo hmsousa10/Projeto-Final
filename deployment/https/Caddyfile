@@ -1,0 +1,40 @@
+{
+    admin off
+    persist_config off
+    skip_install_trust
+    auto_https disable_redirects
+    servers {
+        strict_sni_host on
+        timeouts {
+            read_header 10s
+            read_body 20s
+            idle 60s
+        }
+    }
+}
+
+https://{$NEXO_HTTPS_HOST}:8443 {
+    tls internal
+    header -Server
+    reverse_proxy nexo:8000 {
+        # Always replace client-supplied forwarding claims at the only ingress.
+        header_up X-Forwarded-Proto https
+        header_up X-Forwarded-For {remote_host}
+        header_up -Forwarded
+        transport http {
+            dial_timeout 3s
+            response_header_timeout 15s
+        }
+    }
+}
+
+http://{$NEXO_HTTPS_HOST}:8080 {
+    header -Server
+    redir {$NEXO_HTTPS_ORIGIN}{uri} 308
+}
+
+# Container-local liveness endpoint, never published or proxied to Nexo.
+http://127.0.0.1:8081 {
+    bind 127.0.0.1
+    respond /health "ok" 200
+}

@@ -1,0 +1,35 @@
+# Adaptation reference only. Not loaded by compose.preproduction.yaml.
+# Requires a real domain, DNS and external 80->8080 / 443->8443 mappings.
+{
+    admin off
+    persist_config off
+    http_port 8080
+    https_port 8443
+    auto_https disable_redirects
+    servers {
+        strict_sni_host on
+        timeouts {
+            read_header 10s
+            read_body 20s
+            idle 60s
+        }
+    }
+}
+
+https://{$NEXO_PUBLIC_DOMAIN} {
+    header -Server
+    reverse_proxy nexo:8000 {
+        header_up X-Forwarded-Proto https
+        header_up X-Forwarded-For {remote_host}
+        header_up -Forwarded
+        transport http {
+            dial_timeout 3s
+            response_header_timeout 15s
+        }
+    }
+}
+
+http://{$NEXO_PUBLIC_DOMAIN}:8080 {
+    header -Server
+    redir https://{$NEXO_PUBLIC_DOMAIN}{uri} 308
+}

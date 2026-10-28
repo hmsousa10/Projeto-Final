@@ -6,6 +6,7 @@ import queue
 import secrets
 import threading
 import time
+from datetime import datetime, timezone
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from urllib.request import Request, build_opener, ProxyHandler
 
@@ -15,6 +16,9 @@ WEB = Path(__file__).resolve().parent.parent / 'web' / 'company'
 LOGS = queue.Queue(maxsize=500)
 LOCK = threading.Lock()
 STATE = {'kind': 'recovery', 'expires_at': 0}
+ORDERS = [{'id': 'PED-1042', 'item': 'Kit de escritório', 'state': 'Em preparação'},
+          {'id': 'PED-1041', 'item': 'Monitor profissional', 'state': 'Expedido'},
+          {'id': 'PED-1040', 'item': 'Cadeira ergonómica', 'state': 'Entregue'}]
 
 
 def condition():
@@ -72,7 +76,15 @@ class Handler(BaseHTTPRequestHandler):
         if path in routes:
             filename, content_type = routes[path]
             self.respond(200, (WEB / filename).read_bytes(), content_type)
-        elif path in ('/health', '/api/orders'):
+        elif path in ('/health', '/api/orders', '/api/operations/summary'):
+            if path == '/api/operations/summary':
+                token = getattr(self.server, 'enterprise_token', '')
+                if not token:
+                    self.respond(404, {'message': 'Não encontrado.'})
+                    return
+                if not secrets.compare_digest(self.headers.get('Authorization', '').encode(), ('Bearer ' + token).encode()):
+                    self.respond(401, {'message': 'Consulta não autorizada.'})
+                    return
             fault = condition()
             delay = 1.2 if fault == 'latency' else float(os.getenv('LAB_DELAY_SECONDS', '0'))
             time.sleep(delay)
@@ -81,15 +93,21 @@ class Handler(BaseHTTPRequestHandler):
                 body = {'status': 'unavailable', 'message': 'O serviço de pedidos está temporariamente indisponível.'}
             elif path == '/health':
                 body = {'status': 'ok', 'environment': 'laboratory'}
+            elif path == '/api/operations/summary':
+                body = {'schema_version': 1, 'company_id': getattr(self.server, 'company_id', 'aurora'),
+                        'company_name': getattr(self.server, 'company_name', 'Aurora'),
+                        'environment': 'laboratory', 'generated_at': datetime.now(timezone.utc).isoformat(),
+                        'orders': {'total': len(ORDERS),
+                                   'preparing': sum(o['state'] == 'Em preparação' for o in ORDERS),
+                                   'shipped': sum(o['state'] == 'Expedido' for o in ORDERS),
+                                   'delivered': sum(o['state'] == 'Entregue' for o in ORDERS)}}
             else:
-                body = {'orders': [{'id': 'PED-1042', 'item': 'Kit de escritório', 'state': 'Em preparação'},
-                                   {'id': 'PED-1041', 'item': 'Monitor profissional', 'state': 'Expedido'},
-                                   {'id': 'PED-1040', 'item': 'Cadeira ergonómica', 'state': 'Entregue'}]}
+                body = {'orders': ORDERS}
             self.respond(status, body)
         else:
             status = 404
             self.respond(status, {'message': 'Página não encontrada.'})
-        if path in (*routes, '/health', '/api/orders'):
+        if path in (*routes, '/health', '/api/orders', '/api/operations/summary'):
             line = json.dumps({'method': 'GET', 'path': path, 'status': status,
                                'duration_ms': round((time.monotonic() - started) * 1000, 2)}, ensure_ascii=False)
             try:
@@ -124,6 +142,9 @@ class Handler(BaseHTTPRequestHandler):
 
 if __name__ == '__main__':
     server = ThreadingHTTPServer(('0.0.0.0', 8080), Handler)
+    if os.getenv('ENTERPRISE_API_TOKEN_FILE'):
+        from .enterprise import read_token
+        server.enterprise_token = read_token(os.environ['ENTERPRISE_API_TOKEN_FILE'])
     if os.getenv('LAB_MODE') == '1':
         from .lab import control_token
         server.control_token = control_token()

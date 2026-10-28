@@ -92,14 +92,21 @@ def blocks_writes(path):
 
 
 class Maintenance:
-    def __init__(self, root):
+    def __init__(self, root, company_id=None):
         self.root = recovery.plain_path(root)
         if not self.root.is_dir():
             raise recovery.RecoveryError('Diretório de dados inexistente.')
         self.live = self.root / 'nexo.db'
+        self.company_id = company_id
+        self.check_company(self.live)
         self.folder = recovery.plain_path(self.root / 'maintenance')
         self.folder.mkdir(mode=0o700, exist_ok=True)
         self.state_path = self.folder / 'state.json'
+
+    def check_company(self, path):
+        if self.company_id is not None:
+            with closing(sqlite3.connect(recovery.plain_path(path).as_uri() + '?mode=ro', uri=True)) as db:
+                recovery.check_company(db, self.company_id)
 
     @contextmanager
     def lock(self):
@@ -130,6 +137,8 @@ class Maintenance:
         if not self.state_path.exists():
             return {'phase': 'none'}
         state = read_json(self.state_path)
+        if state.get('company_id') != self.company_id:
+            raise recovery.RecoveryError('O diário não corresponde à instalação selecionada.')
         if not re.fullmatch(r'[a-f0-9]{32}', state.get('generation', '')):
             raise recovery.RecoveryError('Identificador de manutenção inválido.')
         if state.get('phase') not in {'staged', 'promoted', 'committed', 'rolled_back', 'cancelled', *PENDING}:
@@ -147,19 +156,20 @@ class Maintenance:
 
     def stage(self, archive, key):
         with self.lock():
+            self.check_company(self.live)
             if self.state()['phase'] not in {'none', 'committed', 'rolled_back', 'cancelled'}:
                 raise recovery.RecoveryError('Conclui ou reverte a manutenção anterior antes de preparar outra.')
             generation = uuid.uuid4().hex
             folder = self.folder / generation
             folder.mkdir(mode=0o700)
             with tempfile.TemporaryDirectory(prefix='nexo-approved-targets-') as temp:
-                snapshot, _ = recovery.checked_snapshot(archive, key, temp)
+                snapshot, _ = recovery.checked_snapshot(archive, key, temp, self.company_id)
                 with closing(sqlite3.connect(snapshot)) as db:
                     resume_targets = [{'service_id': sid, 'target_url': url} for sid, url in
                         db.execute('SELECT service_id,target_url FROM telemetry_targets WHERE enabled=1')]
-            result = recovery.restore(archive, key, folder / 'candidate')
+            result = recovery.restore(archive, key, folder / 'candidate', self.company_id)
             candidate = folder / 'candidate' / 'nexo.db'
-            state = {'generation': generation, 'created_at': now(),
+            state = {'generation': generation, 'created_at': now(), 'company_id': self.company_id,
                      'archive_sha256': result['archive_sha256'],
                      'resume_targets': resume_targets,
                      'candidate_sha256': hashlib.sha256(candidate.read_bytes()).hexdigest(),
@@ -192,6 +202,11 @@ class Maintenance:
             if action:
                 dst.execute('PRAGMA secure_delete=ON')
                 dst.execute('DELETE FROM sessions')
+                if self.company_id is not None and action == 'maintenance.rolled_back':
+                    from .enterprise_monitoring import pause_for_restore
+                    pause_for_restore(dst)
+                    dst.execute('UPDATE telemetry_targets SET enabled=0,updated_at=?', (now(),))
+                    dst.execute('DELETE FROM alert_states')
                 audit(dst, 'Manutenção local', action, 'database', str(source.relative_to(self.root)))
                 dst.commit()
                 dst.execute('VACUUM')
@@ -217,6 +232,8 @@ class Maintenance:
             if hashlib.sha256(candidate.read_bytes()).hexdigest() != state['candidate_sha256']:
                 raise recovery.RecoveryError('A cópia preparada foi alterada; promoção recusada.')
             fingerprint(candidate)
+            self.check_company(candidate)
+            self.check_company(self.live)
             self.offline()
             # The state remains staged if the checkpoint fails; the live database is intact.
             self.copy(self.live, folder / 'rollback.db', 'maintenance.rollback.checkpoint')
@@ -239,6 +256,7 @@ class Maintenance:
                 raise recovery.RecoveryError('Não existe uma promoção para reverter.')
             folder = self.generation(state)
             rollback = folder / 'rollback.db'
+            self.check_company(rollback)
             if hashlib.sha256(recovery.plain_path(rollback).read_bytes()).hexdigest() != state['rollback_sha256']:
                 raise recovery.RecoveryError('O ponto de retorno foi alterado.')
             if fingerprint(rollback)['history_sha256'] != state['rollback']['history_sha256']:
@@ -253,6 +271,7 @@ class Maintenance:
 
     def check(self):
         state = self.state()
+        self.check_company(self.live)
         if state['phase'] not in {'promoted', 'committed', 'rolled_back'}:
             raise recovery.RecoveryError('A troca ainda não está concluída.')
         expected = state['candidate'] if state['phase'] in {'promoted', 'committed'} else state['rollback']
@@ -316,6 +335,7 @@ class Maintenance:
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('action', choices=['stage', 'promote', 'rollback', 'status', 'check', 'verify', 'resume', 'commit'])
+    parser.add_argument('--company',help='Expected customer installation identity.')
     args = parser.parse_args()
     try:
         if os.getenv('NEXO_MAINTENANCE') != '1' or os.getenv('DATABASE_PATH') != '/app/data/nexo.db':
@@ -325,7 +345,7 @@ def main():
             raise recovery.RecoveryError('Política acima do limite.')
         os.environ['MONITORING_ALLOWED_URLS'] = base64.b64decode(policy, validate=True).decode('utf-8')
         monitoring.allowed_urls()
-        manager = Maintenance('/app/data')
+        manager = Maintenance('/app/data', args.company)
         if args.action == 'stage':
             raw = sys.stdin.buffer.read(recovery.MAX_INPUT + 1)
             if len(raw) > recovery.MAX_INPUT:
