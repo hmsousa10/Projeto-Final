@@ -1,7 +1,7 @@
 FROM python:3.14-slim
 WORKDIR /app
 COPY requirements.txt requirements-lock.txt ./
-RUN pip install --no-cache-dir -r requirements.txt
+RUN pip install --no-cache-dir -r requirements.txt -c requirements-lock.txt
 RUN python -m pip uninstall -y pip
 RUN useradd --create-home --uid 10001 nexo && mkdir /app/data && chown nexo:nexo /app/data
 COPY --chown=nexo:nexo app ./app

@@ -10,6 +10,12 @@ const icons = {
   incidents:'<path d="m12 3 10 18H2L12 3Z"/><path d="M12 9v5M12 17h.01"/>',
   knowledge:'<path d="M4 4h6a3 3 0 0 1 3 3v14a4 4 0 0 0-4-2H4V4Zm16 0h-4a3 3 0 0 0-3 3m7-3v15h-3a4 4 0 0 0-4 2"/>',
   notifications:'<path d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9M10 21h4"/>',
+  enterprise:'<rect x="3" y="3" width="7" height="7" rx="2"/><rect x="14" y="14" width="7" height="7" rx="2"/><path d="M14 6h4a3 3 0 0 1 3 3v1M10 18H6a3 3 0 0 1-3-3v-1M17 3l-3 3 3 3M7 15l3 3-3 3"/>',
+  slo:'<circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1"/>',
+  monitoring:'<rect x="2" y="3" width="20" height="14" rx="2"/><path d="M2 10h5l2-4 4 8 2-4h7M8 21h8M12 17v4"/>',
+  'alert-rules':'<path d="M4 6h2m4 0h10M4 12h10m4 0h2M4 18h4m4 0h8"/><circle cx="8" cy="6" r="2"/><circle cx="16" cy="12" r="2"/><circle cx="10" cy="18" r="2"/>',
+  laboratory:'<path d="M9 3h6M10 3v6L4 19a1.3 1.3 0 0 0 1 2h14a1.3 1.3 0 0 0 1-2L14 9V3M7 15h10M10 18h.01M14 17h.01"/>',
+  users:'<circle cx="9" cy="7" r="4"/><path d="M2 21v-2a7 7 0 0 1 14 0v2M16 3a4 4 0 0 1 0 8M22 21v-2a7 7 0 0 0-4-6"/>',
   audit:'<path d="m12 3 8 3v6c0 5-8 9-8 9s-8-4-8-9V6l8-3Z"/><path d="m8 12 3 3 5-6"/>',
   guide:'<path d="M5 3h10l4 4v14H5V3Zm9 0v5h5M8 12h8M8 16h6"/>',
   arrow:'<path d="M5 12h14m-5-5 5 5-5 5"/>',
@@ -40,7 +46,10 @@ async function api(path, options = {}) {
       clearInterval(refreshTimer); clearInterval(notificationTimer); user = null; closeModal(); loginScreen();
     }
     const detail = Array.isArray(body.detail) ? body.detail.map(x => `${x.loc.at(-1)}: ${x.msg}`).join(' · ') : body.detail;
-    throw new Error(detail || `Pedido falhou (${response.status}).`);
+    const error=new Error(detail || `Pedido falhou (${response.status}).`);
+    error.status=response.status;
+    error.conflict=response.headers?.get('X-Nexo-Conflict');
+    throw error;
   }
   return body;
 }
@@ -51,6 +60,38 @@ function incidentRevision(form) {
   if(!/^[0-9]+$/.test(raw||'') || !Number.isSafeInteger(revision))
     throw new Error('Reabre o incidente para obter a versão atual antes de guardar.');
   return revision;
+}
+function conflictComparison(current, form) {
+  const sameState=current.status===form.dataset.status;
+  const assignee=data.users.find(u=>u.id===current.assignee_id)?.name || (current.assignee_id?'Conta indisponível':'Por atribuir');
+  return `<h4>Versão atual · revisão ${e(current.revision)}</h4><dl><dt>Estado</dt><dd>${e(states[current.status]||current.status)}</dd><dt>Prioridade</dt><dd>${e(current.severity)}</dd><dt>Responsável</dt><dd>${e(assignee)}</dd></dl>${['resolution','root_cause','prevention','runbook'].filter(key=>current[key]).map(key=>`<details><summary>${{resolution:'Resolução guardada',root_cause:'Causa raiz guardada',prevention:'Prevenção guardada',runbook:'Runbook guardado'}[key]}</summary><p>${e(current[key])}</p></details>`).join('')}<p>${sameState?'Compara a decisão atual com o teu formulário. Usar esta versão permite preparar uma nova tentativa; não grava alterações.':'O ciclo do incidente avançou. Copia o texto que pretendes conservar e reabre o caso para tratar o estado atual.'}</p><div class="conflict-actions"><button type="button" class="button secondary small" data-action="review-conflict">Consultar novamente</button>${sameState?'<button type="button" class="button secondary small" data-action="accept-conflict">Usar versão consultada</button>':''}</div>`;
+}
+async function inspectIncidentConflict(form, current) {
+  const panel=form.querySelector('.incident-conflict');
+  if(!panel || !current())return;
+  const request=(form.conflictRequest||0)+1;
+  form.conflictRequest=request;
+  form.conflictSnapshot=null;
+  panel.hidden=false;
+  panel.textContent='A consultar a versão atual…';
+  try {
+    const latest=await api(`/incidents/${Number(form.dataset.id)}`);
+    if(!current() || request!==form.conflictRequest)return;
+    if(!Number.isSafeInteger(latest.revision) || latest.revision<0)throw new Error('Versão recebida inválida. Reabre o caso.');
+    form.conflictSnapshot=latest;
+    panel.innerHTML=conflictComparison(latest,form);
+  } catch(error) {
+    if(!current() || request!==form.conflictRequest)return;
+    panel.textContent='Não foi possível consultar o caso. O texto mantém-se no formulário. '+error.message;
+  }
+}
+function acceptIncidentConflict(form) {
+  const latest=form.conflictSnapshot;
+  if(!latest || latest.status!==form.dataset.status)return;
+  form.dataset.revision=String(latest.revision);
+  form.conflictSnapshot=null;
+  form.querySelector('.form-error').textContent='';
+  form.querySelector('.incident-conflict').textContent='Versão revista. Confirma os campos e usa o botão de guardar para enviar a tua decisão. Uma nova alteração entretanto voltará a ser verificada.';
 }
 function toast(message) {
   $('#toast').textContent = message; $('#toast').classList.add('visible');
@@ -140,7 +181,7 @@ function shell() {
     <div class="sidebar-bottom"><a href="#guide" data-page="guide">${icon('guide')}Guia do projeto</a><div class="profile"><span class="avatar">${e(user.name.slice(0,2).toUpperCase())}</span><div><strong>${e(user.name)}</strong><small>${roles[user.role]}</small></div><button class="icon-button" data-action="logout" title="Terminar sessão" aria-label="Terminar sessão">${icon('logout')}</button></div></div></aside>
     <div class="workspace-body"><header class="topbar"><div><span class="topbar-label">NEXO /</span> <span id="breadcrumb">Visão geral</span></div><div class="topbar-right"><span class="tag">${config.demo?'DEMONSTRAÇÃO':config.environment==='production'?'MODO PRODUÇÃO':'AMBIENTE LOCAL'}</span><span id="updated"></span><a href="#notifications" class="notification-bell" id="notification-bell" aria-label="Notificações">${icon('notifications')}<span id="notification-count" aria-hidden="true">0</span></a><button class="text-button" data-action="account">Minha conta</button></div></header>
     ${config.demo ? `<div class="environment-note"><span class="dot"></span>Ambiente de demonstração <span class="note-detail">${config.telemetry==='prometheus'?'Sondagens reais no laboratório; exemplos sintéticos nos restantes serviços.':'Os serviços e as observações são sintéticos. Ainda sem ligação a sistemas reais.'}</span></div>` : '<div class="environment-note">'+(config.enterprise?'Integração empresarial configurada. Consulta o estado da ligação e dos serviços.':config.monitoring?'Monitorização configurada. Consulta o estado dos serviços.':'Ainda sem integração externa. Regista os teus serviços para começar.')+'</div>'}
-    <main id="main" tabindex="-1"></main><footer class="workspace-footer"><span>Nexo <b>0.31</b> · Projeto I</span><span>Observabilidade e operações assistidas por IA</span></footer></div></div>`;
+    <main id="main" tabindex="-1"></main><footer class="workspace-footer"><span>Nexo <b>${e(config.version)}</b> · Projeto I</span><span>Observabilidade e operações assistidas por IA</span></footer></div></div>`;
 }
 
 async function load() {
@@ -302,6 +343,26 @@ async function ruleHistory(id) {
   },false);
 }
 
+const accessProfiles = {
+  admin:{purpose:'Configurar o portal e gerir o acesso da equipa.',can:['Consultar serviços, incidentes, conhecimento e dossiers.','Criar, atribuir, investigar, resolver e fechar incidentes.','Gerir utilizadores, inventário, regras de alerta e ligações de monitorização.','Consultar a auditoria da instalação.'],limit:'As alterações de acesso e configuração ficam sujeitas às regras de proteção do portal.'},
+  operator:{purpose:'Acompanhar os sistemas e tratar as falhas.',can:['Consultar serviços, incidentes, conhecimento e dossiers.','Criar incidentes e atribuir responsáveis autorizados.','Registar notas, preservar evidências e aplicar conhecimento anterior.','Investigar, resolver e fechar incidentes, cumprindo as etapas do caso.'],limit:'Não pode gerir utilizadores, editar o inventário, configurar regras ou ligações de monitorização, nem consultar a auditoria.'},
+  viewer:{purpose:'Acompanhar a operação e consultar os resultados.',can:['Consultar serviços, incidentes e a base de conhecimento.','Consultar e exportar dossiers dos incidentes.','Consultar notificações e marcar a sua própria leitura.'],limit:'Não pode criar ou tratar incidentes, ser responsável por um caso, gerir contas ou alterar configurações.'}
+};
+function profileHint(role) {
+  const profile=accessProfiles[role];
+  return profile?profile.purpose+' '+profile.limit:'Perfil desconhecido. Confirma o acesso com o administrador.';
+}
+function accessCard(role, current=false) {
+  const profile=accessProfiles[role];
+  if(!profile)return '<p class="info-note">Perfil desconhecido. Contacta o administrador.</p>';
+  return `<article class="access-card${current?' current-access':''}"><div class="access-title">${icon(role==='admin'?'audit':role==='operator'?'monitoring':'knowledge')}<h3>${e(roles[role])}</h3>${current?'<span class="tag">O TEU PERFIL</span>':''}</div><p>${e(profile.purpose)}</p><ul>${profile.can.map(item=>`<li>${e(item)}</li>`).join('')}</ul><p class="access-limit">${e(profile.limit)}</p></article>`;
+}
+function accessGuide() {
+  return `<details class="access-guide"><summary>Compreender os três perfis de acesso</summary><div class="access-grid">${Object.keys(accessProfiles).map(role=>accessCard(role)).join('')}</div><p class="access-scope">Escolhe o perfil necessário ao trabalho de cada pessoa. Cada pessoa deve usar uma conta individual para que as decisões fiquem identificadas no histórico.</p></details>`;
+}
+function accountModal() {
+  modal(`<span class="eyebrow teal">MINHA CONTA</span><h2 id="modal-title">O teu acesso ao Nexo.</h2><div class="account-layout"><section><p class="account-identity"><strong>${e(user.name)}</strong><span>${e(user.email||'')}</span></p>${accessCard(user.role,true)}<p class="access-scope">O perfil define as ações permitidas. Nesta instalação, os três perfis consultam o mesmo inventário e os mesmos incidentes; o acesso não está separado por equipa.</p><details class="access-guide"><summary>O que fazem os outros perfis?</summary>${Object.keys(accessProfiles).filter(role=>role!==user.role).map(role=>accessCard(role)).join('')}</details></section><section class="account-password"><h3>Alterar palavra-passe</h3>${passwordForm()}</section></div>`,true);
+}
 function passwordForm() {
   return `<form id="password-form"><p class="muted">Usa uma frase-passe com 15 a 200 caracteres. A alteração termina as sessões anteriores e mantém esta sessão com um novo identificador.</p><label>Palavra-passe atual<input type="password" name="current_password" autocomplete="current-password" maxlength="200" required></label><label>Nova palavra-passe<input type="password" name="new_password" autocomplete="new-password" minlength="15" maxlength="200" required></label><label>Confirmar nova palavra-passe<input type="password" name="confirm_password" autocomplete="new-password" minlength="15" maxlength="200" required></label><p class="form-error" role="alert"></p><button class="button primary full" type="submit">Guardar palavra-passe ${icon('check')}</button></form>`;
 }
@@ -312,11 +373,11 @@ function passwordScreen() {
 async function usersPage() {
   data.accounts=await api('/admin/users');
   return heading('ADMINISTRAÇÃO / ACESSOS','A equipa por trás da operação.','Gere contas e perfis. O histórico permanece associado a cada pessoa, mesmo quando o acesso é desativado.', '<button class="button primary" data-action="new-user">'+icon('plus')+' Novo utilizador</button>')+
-    `<section class="metrics account-metrics"><article><span>Contas ativas</span><strong>${data.accounts.filter(u=>u.active).length}</strong><p>Com acesso autorizado</p></article><article><span>Administradores ativos</span><strong>${data.accounts.filter(u=>u.active&&u.role==='admin').length}</strong><p>Pelo menos um é necessário</p></article><article><span>Primeiro acesso pendente</span><strong>${data.accounts.filter(u=>u.active&&u.must_change_password).length}</strong><p>Exige alterar a palavra-passe inicial</p></article><article><span>Contas desativadas</span><strong>${data.accounts.filter(u=>!u.active).length}</strong><p>Histórico preservado</p></article></section><section class="panel"><div class="section-heading"><div><h2>Utilizadores</h2><p>Perfis: Administração, Operações e Leitura</p></div></div><div class="table-scroll"><table><thead><tr><th>Pessoa / email</th><th>Perfil</th><th>Acesso</th><th></th></tr></thead><tbody>${data.accounts.map(u=>`<tr><td><strong>${e(u.name)}${u.id===user.id?' · Tu':''}</strong><small class="cell-sub">${e(u.email)}</small></td><td>${e(roles[u.role])}</td><td>${badge(u.active?'healthy':'unknown',u.active?'Ativo':'Desativado')}${u.active&&u.must_change_password?'<small class="cell-sub">Palavra-passe inicial por alterar</small>':''}</td><td><button class="button secondary small" data-action="edit-user" data-id="${u.id}">Editar conta</button></td></tr>`).join('')}</tbody></table></div><p class="panel-footnote">As alterações de perfil, email ou estado revogam as sessões da conta. Reatribui os incidentes ativos antes de retirar o acesso ao responsável.</p></section>`;
+    `<section class="metrics account-metrics"><article><span>Contas ativas</span><strong>${data.accounts.filter(u=>u.active).length}</strong><p>Com acesso autorizado</p></article><article><span>Administradores ativos</span><strong>${data.accounts.filter(u=>u.active&&u.role==='admin').length}</strong><p>Pelo menos um é necessário</p></article><article><span>Primeiro acesso pendente</span><strong>${data.accounts.filter(u=>u.active&&u.must_change_password).length}</strong><p>Exige alterar a palavra-passe inicial</p></article><article><span>Contas desativadas</span><strong>${data.accounts.filter(u=>!u.active).length}</strong><p>Histórico preservado</p></article></section>${accessGuide()}<section class="panel"><div class="section-heading"><div><h2>Utilizadores</h2><p>Perfis: Administração, Operações e Leitura</p></div></div><div class="table-scroll"><table><thead><tr><th>Pessoa / email</th><th>Perfil</th><th>Acesso</th><th></th></tr></thead><tbody>${data.accounts.map(u=>`<tr><td><strong>${e(u.name)}${u.id===user.id?' · Tu':''}</strong><small class="cell-sub">${e(u.email)}</small></td><td>${e(roles[u.role])}</td><td>${badge(u.active?'healthy':'unknown',u.active?'Ativo':'Desativado')}${u.active&&u.must_change_password?'<small class="cell-sub">Palavra-passe inicial por alterar</small>':''}</td><td><button class="button secondary small" data-action="edit-user" data-id="${u.id}">Editar conta</button></td></tr>`).join('')}</tbody></table></div><p class="panel-footnote">As alterações de perfil, email ou estado revogam as sessões da conta. Reatribui os incidentes ativos antes de retirar o acesso ao responsável.</p></section>`;
 }
 function userForm(id=null) {
   const account=data.accounts?.find(u=>u.id===id)||{name:'',email:'',role:'viewer',active:1};
-  modal(`<span class="eyebrow teal">GESTÃO DE ACESSOS</span><h2 id="modal-title">${id?'Editar conta':'Novo utilizador'}</h2><form id="user-form" ${id?`data-id="${id}"`:''}><label>Nome<input name="name" value="${e(account.name)}" minlength="2" maxlength="100" autocomplete="off" required></label><label>Email<input name="email" value="${e(account.email)}" type="email" maxlength="200" autocomplete="off" required></label><label>Perfil<select name="role">${Object.entries(roles).map(([value,label])=>`<option value="${value}" ${account.role===value?'selected':''}>${label}</option>`).join('')}</select></label>${id?`<label class="monitoring-checkbox"><input type="checkbox" name="active" ${account.active?'checked':''}> Conta ativa</label><p class="info-note">Alterar o perfil, email ou estado termina as sessões existentes. O último administrador ativo e os responsáveis por incidentes ativos têm proteção adicional.</p>`:'<label>Palavra-passe inicial<input name="password" type="password" autocomplete="new-password" minlength="15" maxlength="200" required></label><p class="info-note">O utilizador terá de substituir esta palavra-passe no primeiro acesso. Não é enviado um email automático.</p>'}<p class="form-error" role="alert"></p><button class="button primary" type="submit">${id?'Guardar conta':'Criar conta'} ${icon('check')}</button></form>`);
+  modal(`<span class="eyebrow teal">GESTÃO DE ACESSOS</span><h2 id="modal-title">${id?'Editar conta':'Novo utilizador'}</h2><form id="user-form" ${id?`data-id="${id}"`:''}><label>Nome<input name="name" value="${e(account.name)}" minlength="2" maxlength="100" autocomplete="off" required></label><label>Email<input name="email" value="${e(account.email)}" type="email" maxlength="200" autocomplete="off" required></label><label>Perfil<select name="role" aria-describedby="profile-help">${Object.entries(roles).map(([value,label])=>`<option value="${value}" ${account.role===value?'selected':''}>${label}</option>`).join('')}</select></label><p class="profile-help" id="profile-help" aria-live="polite">${e(profileHint(account.role))}</p>${id?`<label class="monitoring-checkbox"><input type="checkbox" name="active" ${account.active?'checked':''}> Conta ativa</label><p class="info-note">Alterar o perfil, email ou estado termina as sessões existentes. O último administrador ativo e os responsáveis por incidentes ativos têm proteção adicional.</p>`:'<label>Palavra-passe inicial<input name="password" type="password" autocomplete="new-password" minlength="15" maxlength="200" required></label><p class="info-note">O utilizador terá de substituir esta palavra-passe no primeiro acesso. Não é enviado um email automático.</p>'}<p class="form-error" role="alert"></p><button class="button primary" type="submit">${id?'Guardar conta':'Criar conta'} ${icon('check')}</button></form>`);
 }
 async function connectMonitoring() {
   return modalContent(async()=>{
@@ -374,7 +435,7 @@ async function auditPage(before=null,snapshot=null) {
 function guidePage() {
   return heading('PROJETO I · 2026 / 27','Começa por aqui.','Uma primeira versão para compreender, experimentar e evoluir o projeto.')+
     `<section class="guide-layout"><article class="panel guide-article"><span class="eyebrow teal">O TEU PRIMEIRO PERCURSO</span><h2>Do serviço ao conhecimento</h2><ol class="guide-steps"><li><strong>Explora o inventário.</strong><p>Consulta as equipas, os objetivos de disponibilidade e latência e as dependências dos quatro serviços de exemplo.</p></li><li><strong>Simula uma falha.</strong><p>Na visão geral, escolhe «Simular cenário». A indisponibilidade abre um P1 e a latência elevada abre um P2. São regras locais de demonstração.</p></li><li><strong>Assume o incidente.</strong><p>Abre o incidente, escolhe um responsável e avança para «Reconhecido». O tempo entre o registo e esse momento contribui para o MTTA.</p></li><li><strong>Investiga e regista a solução.</strong><p>Consulta casos semelhantes, acrescenta notas e avança para «Em investigação». Depois regista a resolução. O tempo desde o registo contribui para o MTTR.</p></li><li><strong>Fecha com um post-mortem.</strong><p>Indica a causa raiz, a prevenção e, se aplicável, o runbook. O incidente passa a integrar a base de conhecimento.</p></li></ol></article>
-    <aside class="guide-aside"><span class="eyebrow teal">ESTADO DA ENTREGA</span><h2>Versão 0.31</h2><p>Inventário, incidentes, sessões, perfis, auditoria, SLOs e pesquisa híbrida local funcionam com persistência em SQLite.</p><h3>A seguir</h3><p>O laboratório já liga sondagens reais, logs Loki e incidentes automáticos. Regras, contas e pesquisa semântica já estão disponíveis. As cópias cifradas e o restauro isolado já foram validados. Na pasta do projeto, executa copia-seguranca.cmd para guardar o histórico. Os testes de segurança e carga já identificaram e permitiram corrigir limites de concorrência. O restauro portátil Windows/Linux também foi validado. Para criares um kit, executa exportar-chave-portatil.cmd e escolhe uma frase-passe no terminal. O ciclo operacional dispõe agora de um ensaio isolado e repetível, com tempos e evidências exportados para a pasta docs. Executa validar-ciclo-operacional.ps1 para repetir. Estes tempos correspondem a tratamento por script, sem medir o desempenho de uma pessoa. A promoção controlada e a reversão de uma base recuperada dispõem agora de um procedimento local: consulta docs/manutencao.md. Executa manutencao.ps1 -Acao Estado para consultar a fase. A promoção mantém a monitorização pausada até uma retoma explícita. A central de Notificações já reúne novos incidentes, atribuições, prioridades, recuperações e prazos ultrapassados, com leitura individual.</p><h3>Sobre os indicadores</h3><p>As médias são calculadas a partir das datas guardadas e incluem o histórico sintético. Não demonstram melhoria real. A percentagem de sondagens não equivale à disponibilidade temporal.</p><h3>Documentação do código</h3><p>Consulta o README e a pasta docs no projeto para requisitos, modelo de dados, decisões e roteiro de demonstração.</p></aside></section>`;
+    <aside class="guide-aside"><span class="eyebrow teal">ESTADO DA ENTREGA</span><h2>Versão ${e(config.version)}</h2><p>Inventário, incidentes, sessões, perfis, auditoria, SLOs e pesquisa híbrida local funcionam com persistência em SQLite.</p><h3>A seguir</h3><p>O laboratório já liga sondagens reais, logs Loki e incidentes automáticos. Regras, contas e pesquisa semântica já estão disponíveis. As cópias cifradas e o restauro isolado já foram validados. Na pasta do projeto, executa copia-seguranca.cmd para guardar o histórico. Os testes de segurança e carga já identificaram e permitiram corrigir limites de concorrência. O restauro portátil Windows/Linux também foi validado. Para criares um kit, executa exportar-chave-portatil.cmd e escolhe uma frase-passe no terminal. O ciclo operacional dispõe agora de um ensaio isolado e repetível, com tempos e evidências exportados para a pasta docs. Executa validar-ciclo-operacional.ps1 para repetir. Estes tempos correspondem a tratamento por script, sem medir o desempenho de uma pessoa. A promoção controlada e a reversão de uma base recuperada dispõem agora de um procedimento local: consulta docs/manutencao.md. Executa manutencao.ps1 -Acao Estado para consultar a fase. A promoção mantém a monitorização pausada até uma retoma explícita. A central de Notificações já reúne novos incidentes, atribuições, prioridades, recuperações e prazos ultrapassados, com leitura individual.</p><h3>Sobre os indicadores</h3><p>As médias são calculadas a partir das datas guardadas e incluem o histórico sintético. Não demonstram melhoria real. A percentagem de sondagens não equivale à disponibilidade temporal.</p><h3>Documentação do código</h3><p>Consulta o README e a pasta docs no projeto para requisitos, modelo de dados, decisões e roteiro de demonstração.</p></aside></section>`;
 }
 const noticeKinds={created:'Novo incidente',detected:'Deteção confirmada',recurrence:'Nova ocorrência',priority:'Prioridade elevada',deadline:'Prazo ultrapassado',assignment:'Atribuição',recovery:'Recuperação confirmada'};
 async function refreshNotifications() {
@@ -478,6 +539,12 @@ function preservedImpact(record) {
   return `<details class="preserved-impact"><summary>Avaliação preservada · ${record.dependents.length} ${record.dependents.length===1?'dependente':'dependentes'}${record.truncated?' · lista parcial':''}</summary><p>Recalculada no servidor em ${fmtDate(record.evaluated_at)}. Inventário desse momento; não confirma impacto real.</p><p><strong>${e(record.root.name)}</strong> · ${badge(record.root.status,statuses[record.root.status]||statuses.unknown)}</p>${record.dependents.length?`<ul>${record.dependents.map(node=>`<li><strong>${e(node.name)}</strong> · ${e(node.team)} · ${badge(node.status,statuses[node.status]||statuses.unknown)}<small>${node.depth===1?'Dependência direta':`Dependência indireta · ${e(node.depth)} níveis`} · depende de ${e(names.get(node.parent_id)||node.parent_id)}</small><small>Última observação: ${fmtDate(node.last_observed_at)} · origem ${e(node.observation_source||'sem dados')}</small></li>`).join('')}</ul>`:'<p>Sem dependentes nas relações preservadas. Dependências não registadas podem existir.</p>'}${record.truncated||record.incomplete||record.text_truncated?'<p class="info-note">Avaliação parcial: existem dependentes adicionais, relações incompletas ou campos limitados. A cópia pode não representar todo o inventário.</p>':''}<p>Os nomes e os estados acima são os guardados nesta recolha. Não são atualizados quando o inventário muda.</p></details>`;
 }
 function timelineNote(entry) {
+  if(entry.action==='Ação de prevenção criada' || entry.action==='Ação de prevenção terminada') {
+    try {
+      const action=JSON.parse(entry.note);
+      return entry.action==='Ação de prevenção criada'?`<p><strong>${e(action.title)}</strong></p><p>${e(action.owner_name)} · prazo ${e(action.due_date)} · dia UTC</p>`:`<p>Ação ${e(action.action_id)} · ${action.status==='completed'?'Concluída':'Cancelada'}</p><p>${e(action.note)}</p>`;
+    } catch {return `<p>${e(entry.note)}</p>`;}
+  }
   if(entry.action==='Impacto potencial preservado') {
     try{return preservedImpact(JSON.parse(entry.note));}catch{return `<p>${e(entry.note)}</p>`;}
   }
@@ -490,6 +557,12 @@ function timelineNote(entry) {
   return entry.note?`<p>${e(entry.note)}</p>`:'';
 }
 
+function followUpsPanel(i) {
+  const items=i.follow_ups||[];
+  if(!items.length && !['resolved','closed'].includes(i.status))return '';
+  const pending=items.filter(item=>item.status==='open').length;
+  return `<section class="followups" aria-label="Ações de prevenção"><div class="followup-heading"><div><span class="eyebrow teal">DEPOIS DA RECUPERAÇÃO</span><h3>Ações de prevenção</h3></div><span class="tag">${pending} ${pending===1?'PENDENTE':'PENDENTES'}</span></div><p class="muted">Acompanha as medidas do post-mortem. Concluir uma ação regista a decisão da equipa; não executa alterações no serviço.</p>${items.map(item=>`<article class="followup-item"><div class="followup-heading"><h4>${e(item.title)}</h4>${badge(item.status==='open'?(item.overdue?'degraded':'unknown'):item.status==='completed'?'healthy':'unknown',{open:item.overdue?'Prazo ultrapassado':'Pendente',completed:'Concluída',cancelled:'Cancelada'}[item.status])}</div><p class="followup-meta">Responsável na criação: ${e(item.owner_name)} · Prazo: ${e(item.due_date)} · dia UTC</p>${item.status!=='open'?`<p class="followup-decision">${e(item.completion_note)}</p><small>${e(item.finished_by)} · ${fmtDate(item.finished_at)}</small>`:editable()?`<form id="followup-finish-${item.id}" data-id="${i.id}" data-action-id="${item.id}" class="followup-finish"><label>Decisão<select name="status"><option value="completed">Concluir ação</option><option value="cancelled">Cancelar ação</option></select></label><label>Resultado ou motivo<textarea name="note" minlength="10" maxlength="2000" rows="2" required></textarea></label><p class="form-error" role="alert"></p><button type="submit" class="button secondary small">Registar decisão</button></form>`:''}</article>`).join('')||'<p class="muted">Ainda sem ações registadas.</p>'}${editable() && ['resolved','closed'].includes(i.status) && items.length<20?`<details class="followup-create"><summary>Acrescentar ação de prevenção</summary><form id="followup-form" data-id="${i.id}"><label>Medida a acompanhar<input name="title" minlength="5" maxlength="200" required placeholder="Ex.: Acrescentar teste de recuperação da API"></label><label>Responsável<select name="owner_id" required><option value="">Selecionar pessoa…</option>${data.users.filter(u=>u.role!=='viewer' && u.active && !u.must_change_password).map(u=>`<option value="${u.id}">${e(u.name)}</option>`).join('')}</select></label><label>Prazo · dia UTC<input name="due_date" type="date" required></label><p class="form-error" role="alert"></p><button type="submit" class="button secondary">Criar ação</button></form></details>`:''}</section>`;
+}
 async function incidentModal(id, replace=false) {
   return modalContent(async current=>{
   const i=await api(`/incidents/${id}`);if(!current())return;
@@ -505,12 +578,12 @@ async function incidentModal(id, replace=false) {
   const next = {open:'acknowledged',acknowledged:'investigating',investigating:'resolved',resolved:'closed'}[i.status];
   const actions = {acknowledged:'Reconhecer incidente',investigating:'Iniciar investigação',resolved:'Registar resolução',closed:'Fechar com post-mortem'};
   const html = `<div class="incident-detail"><span class="eyebrow teal">INC-${String(i.id).padStart(3,'0')} / ${e(service?.name)}</span><h2 id="modal-title">${e(i.title)}</h2><div class="incident-badges">${badge(i.severity)}${badge(i.status,states[i.status])}<span class="muted">Registado ${fmtDate(i.created_at)}</span></div><p class="incident-description">${e(i.description)}</p>${impactPanel(i.service_id,i)}
-    <section aria-label="Exportar dossier do incidente"><h3>Guardar dossier</h3><p class="muted">Fotografia do caso, com histórico e evidências preservadas. Os ficheiros podem conter informação interna.</p><a class="button secondary small" href="/api/incidents/${i.id}/export?format=markdown" download>Relatório Markdown</a> <a class="button secondary small" href="/api/incidents/${i.id}/export?format=json" download>Dados JSON</a></section>
-    <div class="incident-layout"><div>${i.escalation?`<div class="info-note"><strong>Prazo de reconhecimento ultrapassado</strong><p>${fmtDate(i.escalation.escalated_at)} · ${e(i.escalation.from_severity)} → ${e(i.escalation.to_severity)} · prazo de ${i.escalation.deadline_seconds} s · regra v${i.escalation.rule_version}</p></div>`:''}${i.detection_context?`<p class="muted">Deteção pela regra v${i.detection_context.rule_version}: ${i.detection_context.config.failure_samples} sondagens · limite ${i.detection_context.config.effective_latency_ms} ms.</p>`:''}${logContext?`<section><h3>Logs do serviço · últimos 15 minutos</h3>${logContext}${editable() && i.status!=='closed'?`<button class="button secondary small" data-action="save-evidence" data-id="${i.id}">Recolher logs para o caso</button>`:''}<p class="muted">Logs recentes, não limitados a este incidente. Guarda as evidências relevantes nas notas de investigação.</p></section>`:''}${i.evidence?.length?`<section class="saved-evidence"><h3>Evidências preservadas</h3>${i.evidence.map(snapshot=>`<details><summary>Recolha ${snapshot.id} · ${fmtDate(snapshot.captured_at)} · ${e(snapshot.actor)}</summary>${logsScope(snapshot.payload)}${logsTable(snapshot.payload.entries)}</details>`).join('')}</section>`:''}<section><h3>Linha temporal</h3><ol class="timeline">${i.timeline.map(t=>`<li><span class="timeline-point"></span><div><strong>${e(t.action)}</strong><small>${fmtDate(t.created_at)} · ${e(t.actor)}</small>${timelineNote(t)}</div></li>`).join('')}</ol></section>
+    <section aria-label="Exportar dossier do incidente"><h3>Guardar dossier</h3><p class="muted">Fotografia do caso, com histórico e evidências preservadas. Abre a versão de impressão e usa Ctrl+P para guardar como PDF. Os ficheiros podem conter informação interna.</p><a class="button secondary small" href="/api/incidents/${i.id}/export?format=html" target="_blank" rel="noopener noreferrer">Imprimir / guardar PDF</a> <a class="button secondary small" href="/api/incidents/${i.id}/export?format=markdown" download>Relatório Markdown</a> <a class="button secondary small" href="/api/incidents/${i.id}/export?format=json" download>Dados JSON</a></section>
+    <div class="incident-layout"><div>${followUpsPanel(i)}${i.escalation?`<div class="info-note"><strong>Prazo de reconhecimento ultrapassado</strong><p>${fmtDate(i.escalation.escalated_at)} · ${e(i.escalation.from_severity)} → ${e(i.escalation.to_severity)} · prazo de ${i.escalation.deadline_seconds} s · regra v${i.escalation.rule_version}</p></div>`:''}${i.detection_context?`<p class="muted">Deteção pela regra v${i.detection_context.rule_version}: ${i.detection_context.config.failure_samples} sondagens · limite ${i.detection_context.config.effective_latency_ms} ms.</p>`:''}${logContext?`<section><h3>Logs do serviço · últimos 15 minutos</h3>${logContext}${editable() && i.status!=='closed'?`<button class="button secondary small" data-action="save-evidence" data-id="${i.id}">Recolher logs para o caso</button>`:''}<p class="muted">Logs recentes, não limitados a este incidente. Guarda as evidências relevantes nas notas de investigação.</p></section>`:''}${i.evidence?.length?`<section class="saved-evidence"><h3>Evidências preservadas</h3>${i.evidence.map(snapshot=>`<details><summary>Recolha ${snapshot.id} · ${fmtDate(snapshot.captured_at)} · ${e(snapshot.actor)}</summary>${logsScope(snapshot.payload)}${logsTable(snapshot.payload.entries)}</details>`).join('')}</section>`:''}<section><h3>Linha temporal</h3><ol class="timeline">${i.timeline.map(t=>`<li><span class="timeline-point"></span><div><strong>${e(t.action)}</strong><small>${fmtDate(t.created_at)} · ${e(t.actor)}</small>${timelineNote(t)}</div></li>`).join('')}</ol></section>
     ${editable() && i.status!=='closed' ? `<form id="comment-form" data-id="${i.id}" class="compact-form"><label>Acrescentar evidência ou nota<textarea name="note" required maxlength="5000" rows="2"></textarea></label><p class="form-error" role="alert"></p><button class="button secondary" type="submit">Guardar nota</button></form>`:''}
     ${i.resolution?`<section class="postmortem"><h3>Resolução</h3><p>${e(i.resolution)}</p>${i.root_cause?`<h3>Causa raiz</h3><p>${e(i.root_cause)}</p><h3>Prevenção</h3><p>${e(i.prevention)}</p>`:''}${i.runbook?`<h3>Runbook</h3><pre>${e(i.runbook)}</pre>`:''}</section>`:''}
-    </div><aside class="incident-aside"><h3>Responsável</h3>${editable() && !['resolved','closed'].includes(i.status)?`<form id="assign-form" data-id="${i.id}" data-revision="${i.revision}"><label class="sr-only" for="assignee">Responsável pelo incidente</label><select id="assignee" name="user_id" required><option value="">Selecionar responsável…</option>${data.users.filter(u=>u.role!=='viewer' && u.active && !u.must_change_password).map(u=>`<option value="${u.id}" ${i.assignee_id===u.id?'selected':''}>${e(u.name)}</option>`).join('')}</select><button class="button secondary small" type="submit">Guardar atribuição</button><p class="form-error" role="alert"></p></form>`:`<p>${e(data.users.find(u=>u.id===i.assignee_id)?.name || 'Por atribuir')}</p>`}
-    ${editable() && next ? `<form id="transition-form" data-id="${i.id}" data-revision="${i.revision}" data-next="${next}" class="transition-form"><h3>Próximo passo</h3>${next==='resolved'?'<label>Como foi resolvido?<textarea name="note" minlength="10" maxlength="5000" rows="3" required></textarea></label>':next==='closed'?'<label>Causa raiz<textarea name="root_cause" minlength="10" maxlength="5000" rows="2" required></textarea></label><label>Medida de prevenção<textarea name="prevention" minlength="10" maxlength="5000" rows="2" required></textarea></label><label>Runbook (opcional)<textarea name="runbook" maxlength="5000" rows="3" placeholder="Passos de diagnóstico e resolução"></textarea></label>':'<label>Nota (opcional)<textarea name="note" maxlength="5000" rows="2"></textarea></label>'}<p class="form-error" role="alert"></p><button class="button primary full" type="submit">${actions[next]}</button></form>`:''}
+    </div><aside class="incident-aside"><h3>Responsável</h3>${editable() && !['resolved','closed'].includes(i.status)?`<form id="assign-form" data-id="${i.id}" data-revision="${i.revision}" data-status="${i.status}"><label class="sr-only" for="assignee">Responsável pelo incidente</label><select id="assignee" name="user_id" required><option value="">Selecionar responsável…</option>${data.users.filter(u=>u.role!=='viewer' && u.active && !u.must_change_password).map(u=>`<option value="${u.id}" ${i.assignee_id===u.id?'selected':''}>${e(u.name)}</option>`).join('')}</select><button class="button secondary small" type="submit">Guardar atribuição</button><p class="form-error" role="alert"></p><section class="incident-conflict" aria-label="Comparar versão do incidente" aria-live="polite" hidden></section></form>`:`<p>${e(data.users.find(u=>u.id===i.assignee_id)?.name || 'Por atribuir')}</p>`}
+    ${editable() && next ? `<form id="transition-form" data-id="${i.id}" data-revision="${i.revision}" data-status="${i.status}" data-next="${next}" class="transition-form"><section class="incident-conflict" aria-label="Comparar versão do incidente" aria-live="polite" hidden></section><h3>Próximo passo</h3>${next==='resolved'?'<label>Como foi resolvido?<textarea name="note" minlength="10" maxlength="5000" rows="3" required></textarea></label>':next==='closed'?'<label>Causa raiz<textarea name="root_cause" minlength="10" maxlength="5000" rows="2" required></textarea></label><label>Medida de prevenção<textarea name="prevention" minlength="10" maxlength="5000" rows="2" required></textarea></label><label>Runbook (opcional)<textarea name="runbook" maxlength="5000" rows="3" placeholder="Passos de diagnóstico e resolução"></textarea></label>':'<label>Nota (opcional)<textarea name="note" maxlength="5000" rows="2"></textarea></label>'}<p class="form-error" role="alert"></p><button class="button primary full" type="submit">${actions[next]}</button></form>`:''}
     ${editable() && i.status!=='closed'?`<form id="knowledge-use-form" data-id="${i.id}" class="compact-form"><h3>Conhecimento aplicado</h3><p class="muted">Regista apenas o conhecimento que realmente usaste. Consultar uma sugestão não executa uma solução.</p><label>Número do caso de referência<input name="source_incident_id" type="text" inputmode="numeric" pattern="[0-9]{1,16}" maxlength="16" list="reference-cases" placeholder="Ex.: 8" aria-describedby="reference-help" required></label><datalist id="reference-cases">${data.incidentContext.references.filter(c=>c.id!==i.id).map(c=>`<option value="${c.id}" label="INC-${c.id} · ${e(c.title)}${c.source.startsWith('demo')?' · exemplo sintético':''}"></option>`).join('')}</datalist><p class="muted" id="reference-help">Sugestões dos ${data.incidentContext.references.length} casos resolvidos ou fechados mais recentes${data.incidentContext.references_more?' · existem casos anteriores':''}. Podes indicar o número de um caso mais antigo. Consulta-o em Incidentes antes de registar como ajudou.</p><label>Como ajudou neste caso?<textarea name="reason" required minlength="10" maxlength="2000" rows="3" placeholder="Indica o diagnóstico ou os passos aproveitados e as adaptações necessárias."></textarea></label><p class="form-error" role="alert"></p><button class="button secondary small" type="submit">Registar utilização</button></form>`:''}
     <section class="suggestions"><span class="eyebrow teal">APOIO À TRIAGEM</span><h3>Casos semelhantes</h3><p class="muted">${e(suggestions.method)} · compara casos anteriores; confirma a aplicação da solução.</p>${suggestions.warning?`<p class="info-note">${e(suggestions.warning)}</p>`:''}${suggestions.results.slice(0,3).map(r=>`<button class="suggestion" data-related="${r.id}"><span>INC-${String(r.id).padStart(3,'0')} · ${knowledgeScore(r)}</span><strong>${e(r.title)}</strong><small>${e(r.provenance)}</small>${icon('arrow')}</button>`).join('') || '<p class="muted">Sem correspondências no histórico atual.</p>'}</section></aside></div></div>`;
   return html;
@@ -542,6 +615,11 @@ document.addEventListener('click', async event => {
         target.disabled=true;
         try {await post('/notifications/read',{through_id:Number(target.dataset.through)});if(page==='notifications' && ownerPage===pageRequest)await pageContent(()=>notificationsPage());await refreshNotifications();toast('Notificações anteriores marcadas como lidas. Os incidentes mantêm o seu estado.');}finally{target.disabled=false;}
       }
+      if(action==='review-conflict') {
+        const form=target.closest('form'), request=modalRequest, owner=user;
+        await inspectIncidentConflict(form,()=>request===modalRequest && user===owner && form.isConnected && $('#modal').open);
+      }
+      if(action==='accept-conflict') acceptIncidentConflict(target.closest('form'));
       if(action==='close') closeModal();
       if(action==='new-service') newService();
       if(action==='edit-service') {closeModal();serviceForm(Number(target.dataset.id));}
@@ -550,7 +628,7 @@ document.addEventListener('click', async event => {
       if(action==='slo-history') await sloHistory(Number(target.dataset.id));
       if(action==='rule-history') await ruleHistory(Number(target.dataset.id));
       if(action==='edit-user') userForm(Number(target.dataset.id));
-      if(action==='account') modal(`<span class="eyebrow teal">MINHA CONTA</span><h2 id="modal-title">Alterar palavra-passe</h2>${passwordForm()}`);
+      if(action==='account') accountModal();
       if(action==='new-incident') newIncident();
       if(action==='scenario') scenarioModal();
       if(action==='guide') location.hash='guide';
@@ -572,6 +650,11 @@ document.addEventListener('click', async event => {
   } catch(error) { toast(error.message); }
 });
 document.addEventListener('change', async event => {
+  if(event.target.name==='role' && event.target.form?.id==='user-form') {
+    const help=$('#profile-help',event.target.form);
+    if(help)help.textContent=profileHint(event.target.value);
+    return;
+  }
   if(event.target.id==='slo-window') {sloWindow=event.target.value;try{await render();}catch(error){toast(error.message);}}
 });
 window.addEventListener('hashchange', async()=>{
@@ -582,7 +665,7 @@ window.addEventListener('hashchange', async()=>{
 });
 document.addEventListener('submit', async event => {
   const form = event.target;
-  if(!['service-form','incident-form','scenario-form','assign-form','transition-form','comment-form','knowledge-use-form','audit-filter-form','incident-filter-form','knowledge-form','monitoring-form','user-form','password-form','alert-rule-form'].includes(form.id))return;
+  if(!['followup-form','service-form','incident-form','scenario-form','assign-form','transition-form','comment-form','knowledge-use-form','audit-filter-form','incident-filter-form','knowledge-form','monitoring-form','user-form','password-form','alert-rule-form'].includes(form.id) && !/^followup-finish-[0-9]+$/.test(form.id))return;
   event.preventDefault(); const values = Object.fromEntries(new FormData(form));
   const ownerModal=modalRequest, ownerPage=pageRequest;
   const currentModal=()=>ownerModal===modalRequest && $('#modal').open && form.isConnected;
@@ -642,6 +725,8 @@ document.addEventListener('submit', async event => {
       toast(result.incident_id?'Cenário executado. Incidente disponível.':'Observação de recuperação registada.');
     } else {
       const id=Number(form.dataset.id);
+      if(form.id==='followup-form') await post(`/incidents/${id}/follow-ups`,{...values,owner_id:Number(values.owner_id)});
+      if(/^followup-finish-[0-9]+$/.test(form.id)) await post(`/incidents/${id}/follow-ups/${Number(form.dataset.actionId)}/finish`,values);
       if(form.id==='assign-form') await post(`/incidents/${id}/assign`,{user_id:Number(values.user_id),expected_revision:incidentRevision(form)});
       if(form.id==='comment-form') await post(`/incidents/${id}/comments`,values);
       if(form.id==='knowledge-use-form') {
@@ -653,7 +738,11 @@ document.addEventListener('submit', async event => {
       await load();if(!currentModal())return;
       await render();if(currentModal() && await incidentModal(id,true))toast('Alteração guardada.');
     }
-  }catch(error){if(errorBox)errorBox.textContent=error.message;else toast(error.message);}
+  }catch(error){
+    if(errorBox)errorBox.textContent=error.message;else toast(error.message);
+    if(error.conflict==='incident-revision' && ['assign-form','transition-form'].includes(form.id) && currentModal())
+      await inspectIncidentConflict(form,currentModal);
+  }
   finally{button.disabled=false;}
 });
 (async()=>{

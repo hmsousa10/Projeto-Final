@@ -21,3 +21,8 @@ recovery/
 *.pem
 *.pfx
 *.p12
+
+# Artefactos de ensaios locais; os scripts e protocolos continuam versionados.
+docs/*.png
+docs/*.json
+docs/entrega-consolidada-031.md

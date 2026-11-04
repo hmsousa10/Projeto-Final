@@ -55,7 +55,8 @@ O processo registou RSS máximo de 92 088 KiB; o pico de memória reportado pelo
 
 O primeiro ensaio encontrou oito timeouts nas oito consultas SLO da fase com doze clientes. Está preservado em `validacao-carga-inicial.json`. Os leitores concorrentes repetiam o cálculo e provocavam contenção. Depois do cálculo único/cache curta, o mesmo tipo de ensaio terminou sem timeouts nas fases de 1/4/12 clientes. Os dados guardados permitem inspecionar ambas as execuções.
 
-Uma repetição com prazo de espera de dois segundos também devolveu um 503 na fase de doze clientes. Ficou preservada em alidacao-carga-repeticao-inicial.json. A espera máxima passou a cinco segundos e foi acrescentado um teste do limite de espera. A repetição final passou e o script removeu apenas os contentores temporários. A aceitação final continua a exigir 40 respostas 200 em cada fase de 1/4/12 clientes; o critério não foi alargado para aceitar rejeições nessas fases.
+Uma repetição com prazo de espera de dois segundos também devolveu um 503 na fase de doze clientes. Ficou preservada em
+alidacao-carga-repeticao-inicial.json. A espera máxima passou a cinco segundos e foi acrescentado um teste do limite de espera. A repetição final passou e o script removeu apenas os contentores temporários. A aceitação final continua a exigir 40 respostas 200 em cada fase de 1/4/12 clientes; o critério não foi alargado para aceitar rejeições nessas fases.
 
 A cache troca até três segundos de reutilização por menor trabalho repetido; não é uma comparação de cálculos integralmente novos por pedido. Foram execuções curtas, na mesma máquina de desenvolvimento, com outros processos ativos e sem isolamento de CPU física. Não há inferência estatística, promessa de latência, ensaio prolongado, rede externa, TLS ou garantia de capacidade empresarial. A latência com doze clientes ainda é relevante e não deve ser apresentada como desempenho elevado garantido.
 

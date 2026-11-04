@@ -58,7 +58,6 @@ Execução concluída em **2026-10-25T23:50:22.298719+00:00**, com **3/3 repeti�
 
 Os casos temporários INC-005, INC-006 e INC-007 pertencem exclusivamente à instalação identificada no JSON; os seus números não identificam os casos com igual número no portal habitual. Os três ficaram fechados e os históricos completos foram exportados. A primeira consulta não devolveu casos anteriores do serviço; a segunda recuperou INC-005; a terceira recuperou INC-006 e INC-005.
 
-Evidências: [resultado completo](validacao-operacional-20261025-234634-7f44fd94.json) e [ambiente Docker observado](validacao-operacional-20261025-234634-7f44fd94.json.ambiente.json). Os sete contentores e as duas redes temporárias foram removidos automaticamente no fim. A suite automática passou com **146 testes**, em 246,54 segundos, com um aviso de depreciação Starlette/httpx. As verificações de sintaxe Python, JavaScript e PowerShell também passaram.
+Evidências: resultado completo e ambiente Docker observado. Os sete contentores e as duas redes temporárias foram removidos automaticamente no fim. A suite automática passou com **146 testes**, em 246,54 segundos, com um aviso de depreciação Starlette/httpx. As verificações de sintaxe Python, JavaScript e PowerShell também passaram.
 
-
-Após a atualização do portal habitual para 0.12.0, foram confirmados os mesmos **9 incidentes e 60 entradas de histórico** observados antes do ensaio. Login de leitor e pesquisa híbrida continuaram funcionais; o marcador exclusivo do ensaio devolveu 404 no portal habitual. Ver [verificação do portal](validacao-operacional-portal.json).
+Após a atualização do portal habitual para 0.12.0, foram confirmados os mesmos **9 incidentes e 60 entradas de histórico** observados antes do ensaio. Login de leitor e pesquisa híbrida continuaram funcionais; o marcador exclusivo do ensaio devolveu 404 no portal habitual. Ver verificação do portal.

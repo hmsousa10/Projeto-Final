@@ -59,10 +59,10 @@ Alterações a regras de serviços com casos ativos são assinaladas nas respeti
 
 O ensaio usa o serviço de laboratório **Aurora · Consulta de pedidos**, sem alterar casos ativos anteriores. Configura três sondagens, latência acima de 500 ms, prioridade P3 e prazo de quinze segundos. Provoca latência real, confirma o P3, para o Prometheus e verifica que o motor independente eleva o caso para P1 uma única vez. Depois repõe o Prometheus, recupera o serviço, trata e fecha o caso e restaura a regra anterior.
 
-Validação em 24/10/2026: **80 testes automáticos passaram**, com um aviso de depreciação Starlette/httpx. O ensaio real terminou às 21:01:34 UTC: **INC-009**, regra v1, P3 → P1 após ultrapassagem do prazo de quinze segundos; caso fechado e configuração anterior reposta como v2. Evidência: [validacao-regras.json](validacao-regras.json).
+Validação em 24/10/2026: **80 testes automáticos passaram**, com um aviso de depreciação Starlette/httpx. O ensaio real terminou às 21:01:34 UTC: **INC-009**, regra v1, P3 → P1 após ultrapassagem do prazo de quinze segundos; caso fechado e configuração anterior reposta como v2. Evidência: validacao-regras.json.
 
 Na interface foi guardada a regra v1 do **Exemplo · Ligação HTTP pausada**, com três sondagens para confirmar e recuperar, prioridade P3 para latência e prazo configurado de sessenta segundos, **com escalonamento desligado**. A ligação permanece pausada. O histórico mostra a versão e o autor da gravação.
 
-Após reiniciar a aplicação, o INC-009 permaneceu fechado, com um único evento de escalonamento, o motor voltou a apresentar atividade recente e os três alvos ativos voltaram a ter amostras recentes. Interface verificada: [regras por serviço](regras-v06.png) e [histórico do caso escalonado](incidente-escalonado-v06.png).
+Após reiniciar a aplicação, o INC-009 permaneceu fechado, com um único evento de escalonamento, o motor voltou a apresentar atividade recente e os três alvos ativos voltaram a ter amostras recentes. Interface verificada: regras por serviço e histórico do caso escalonado.
 
 O motor é local, no processo da aplicação, e usa SQLite para coordenar as escritas. As verificações de concorrência e reinício não constituem validação de deployment distribuído ou alta disponibilidade. Os indicadores globais de MTTA/MTTR continuam a misturar exemplos sintéticos e ensaios locais; a avaliação experimental e as janelas formais de SLO são trabalho seguinte.

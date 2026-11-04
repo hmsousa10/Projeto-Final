@@ -25,7 +25,7 @@ Os tempos registados foram cerca de 19,5 segundos para deteção e 20,5 segundos
 
 ## Evidências e estado final
 
-O relatório da execução está em [validação do ciclo](validacao-ciclo-https-runtime.json). Os dossiers completos e o relatório por execução ficam em `data/https-cycles/<run_id>/`, ignorados pelo Git. A aplicação manteve a API disponível e a recolha ativa no final. Os hashes das tabelas históricas dos outros dois portais coincidiram com os valores anteriores ao ensaio.
+O relatório da execução está em validação do ciclo. Os dossiers completos e o relatório por execução ficam em `data/https-cycles/<run_id>/`, ignorados pelo Git. A aplicação manteve a API disponível e a recolha ativa no final. Os hashes das tabelas históricas dos outros dois portais coincidiram com os valores anteriores ao ensaio.
 
 As interrupções e os casos são reais no ambiente de ensaio; a empresa e as encomendas são fictícias. Não foram inseridas observações manualmente. A recuperação do conhecimento usou BM25 sobre um caso gerado no primeiro ciclo; não houve diagnóstico por um modelo generativo nem execução autónoma de uma recomendação de IA.
 

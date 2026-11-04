@@ -68,7 +68,7 @@ Foi criada e verificada uma cópia real da Atlas pelo script Windows e efetuado 
 
 A exportação portátil por empresa foi testada com chaves, bases e frases descartáveis. Não foi escolhido nem criado um kit real da Atlas com uma frase-passe conhecida pelo assistente. O percurso interativo Windows do kit por cliente foi analisado e a sintaxe validada; a exportação interativa completa continua a exigir uma frase escolhida pelo utilizador.
 
-Resultados detalhados em [validação de execução](validacao-copias-instalacoes-runtime.json). Os testes verificam identidade no manifesto e na base, rejeição de outra empresa/chave, restauro sem sobrescrita, sessões revogadas, monitorização pausada e compatibilidade das cópias anteriores.
+Resultados detalhados em validação de execução. Os testes verificam identidade no manifesto e na base, rejeição de outra empresa/chave, restauro sem sobrescrita, sessões revogadas, monitorização pausada e compatibilidade das cópias anteriores.
 
 ## Limites e próximo passo
 
@@ -76,4 +76,4 @@ Continuam pendentes agendamento, retenção automática, armazenamento independe
 
 ## Validação final
 
-**287 testes Python e 39 testes da interface aprovados.** Um aviso de descontinuação Starlette/httpx permanece. Os scripts PowerShell passaram a análise de sintaxe e o percurso de criação/verificação/restauro da Atlas foi executado no Windows. Os dois portais respondem com a versão 0.28.0. Consultar [o registo final e hashes](validacao-copias-instalacoes.json). Não foi feito commit nem push nesta entrega.
+**287 testes Python e 39 testes da interface aprovados.** Um aviso de descontinuação Starlette/httpx permanece. Os scripts PowerShell passaram a análise de sintaxe e o percurso de criação/verificação/restauro da Atlas foi executado no Windows. Os dois portais respondem com a versão 0.28.0. Consultar o registo final e hashes. Não foi feito commit nem push nesta entrega.

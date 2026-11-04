@@ -52,10 +52,8 @@ Ainda se trata da Aurora fictícia. Não houve acesso a uma empresa real, public
 
 A API de referência não inclui controlos de falha nem portal comercial. Os certificados e a chave de leitura não fazem parte das cópias da base SQLite: precisam de procedimentos próprios de conservação e rotação. A topologia é um ensaio local de três serviços; uma API empresarial real pode estar noutro servidor e exigir outra autenticação ou contrato. O Nexo deste ensaio só está ligado a redes internas: para uma API externa será também necessária uma rota ou política de saída de rede autorizada.
 
-Consultar também [pré-produção HTTPS](preproducao-https.md), [conectores](conectores-empresariais.md), [alertas da API](alertas-api-empresarial.md) e [validação de execução](validacao-api-https-runtime.json).
+Consultar também [pré-produção HTTPS](preproducao-https.md), [conectores](conectores-empresariais.md), [alertas da API](alertas-api-empresarial.md) e validação de execução.
 
 ## Resultado desta entrega
 
 **306 testes Python e 40 testes da interface aprovados**, com um aviso de descontinuação Starlette/httpx. O ensaio real confirmou a API privada HTTPS, as recusas de CA/nome/token indevidos e a recolha automática com observações persistidas. Após recriação, o mesmo serviço e os ficheiros TLS/token mantiveram-se válidos. O serviço empresarial passou a existir apenas no inventário da pré-produção; os históricos anteriores da Aurora e da Atlas mantiveram os mesmos hashes nas tabelas verificadas.
-
-[Registo final e hashes](validacao-api-https.json). Nenhum commit, push ou publicação externa foi realizado.

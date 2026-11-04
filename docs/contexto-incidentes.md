@@ -21,5 +21,3 @@ Os testes do contexto verificam autenticação nos três perfis, limites, campos
 Também é testada a associação de uma referência anterior às 100 sugestões. Os testes Node executam o código real da interface com DOM mínimo, confirmando a nova rota e a recusa de identificadores inválidos antes de os enviar. Os ensaios com escrita são feitos apenas em bases temporárias.
 
 O limite reduz os registos e campos transferidos para estes componentes. Não demonstra escalabilidade global: resumo, serviços e utilizadores mantêm as suas consultas existentes, e consultas filtradas ainda podem percorrer muitos registos. Não foram adicionados índices, migrações ou dependências nesta etapa.
-
-Resultados e âmbito em `validacao-contexto-incidentes.json`. Entrega local, sem commit nem push.

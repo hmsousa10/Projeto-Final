@@ -30,6 +30,7 @@ from . import lab, logs, monitoring
 from . import accounts, alerts, slo
 from .knowledge import Knowledge, corpus as knowledge_corpus
 from .version import VERSION
+from . import printable_dossier, follow_ups
 from .bootstrap import initial_password
 from .accesslog import install as install_access_filter
 from .inventory import validate_dependencies
@@ -167,7 +168,7 @@ def create_app(db_path=None, demo=None):
         response.headers['Permissions-Policy'] = 'camera=(), microphone=(), geolocation=()'
         if production:
             response.headers['Strict-Transport-Security'] = 'max-age=31536000'
-        if not request.url.path.startswith('/docs'):
+        if not request.url.path.startswith('/docs') and 'Content-Security-Policy' not in response.headers:
             response.headers['Content-Security-Policy'] = (
                 "default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; "
                 "connect-src 'self'; frame-ancestors 'none'; base-uri 'none'; form-action 'self'"
@@ -533,10 +534,15 @@ def create_app(db_path=None, demo=None):
             return dossier.incident_snapshot(db, iid)
 
     @app.get('/api/incidents/{iid}/export')
-    def export_incident(iid: int, format: Literal['markdown','json']='markdown', user=Depends(current_user)):
+    def export_incident(iid: int, format: Literal['markdown','json','html']='markdown', user=Depends(current_user)):
         with database(path) as db:
             db.execute('BEGIN')
             report = dossier.build(db, iid)
+        if format == 'html':
+            return HTMLResponse(printable_dossier.render(report), headers={
+                'Content-Disposition': f'inline; filename="nexo-incidente-{iid}.html"',
+                'Content-Security-Policy': printable_dossier.CSP,
+                'Cache-Control': 'no-store', 'X-Content-Type-Options': 'nosniff'})
         content = dossier.markdown(report) if format == 'markdown' else json.dumps(report, ensure_ascii=False, indent=2)
         extension = 'md' if format == 'markdown' else 'json'
         return Response(content, media_type='text/markdown' if format == 'markdown' else 'application/json',
@@ -625,6 +631,7 @@ def create_app(db_path=None, demo=None):
             audit(db, user['name'], 'incident.comment', f'incident:{iid}', data.note)
         return {'ok': True}
 
+    follow_ups.routes(app, path, writer, require)
     incident_knowledge.routes(app, path, writer, require)
     incident_impact.routes(app, path, writer, require, service_list)
 

@@ -49,12 +49,12 @@ As alterações do inventário ficam na auditoria e são assinaladas na linha te
 .\.venv\Scripts\python.exe scripts/validar-acessos.py
 ```
 
-O ensaio em Docker cria uma conta com credenciais aleatórias temporárias, verifica primeiro acesso, alteração de palavra-passe, revogação de sessões, restrições de Leitura e desativação. A conta é desativada no fim e as credenciais não são escritas no resultado. Evidência: [validacao-acessos.json](validacao-acessos.json).
+O ensaio em Docker cria uma conta com credenciais aleatórias temporárias, verifica primeiro acesso, alteração de palavra-passe, revogação de sessões, restrições de Leitura e desativação. A conta é desativada no fim e as credenciais não são escritas no resultado. Evidência: validacao-acessos.json.
 
 A edição pela interface foi verificada no serviço **Exemplo · Ligação HTTP pausada**: equipa **Demonstração · Operações**, criticidade **Média**, objetivo de latência **600 ms** e dependência do serviço de referência **Laboratório · Portal HTTP**. A ligação **service-8** permaneceu pausada e com o mesmo ID.
 
 Validação em 24/10/2026: **68 testes automáticos passaram**, com um aviso de depreciação Starlette/httpx. O ensaio de acessos em Docker terminou às 20:44:47 UTC; a conta de validação **4** ficou desativada. As contas de demonstração anteriores mantiveram o respetivo acesso. Os testes usam bases temporárias para verificar a proteção do último administrador, atribuições históricas, desativação, troca de palavra-passe, sessões, dependências e alterações concorrentes.
 
-Os formulários de criação e edição de utilizadores foram inspecionados no navegador; a gravação da conta de validação manteve o estado desativado. A aplicação foi reiniciada com contas e alterações do inventário preservadas. [Imagem da página de utilizadores](utilizadores-v05.png).
+Os formulários de criação e edição de utilizadores foram inspecionados no navegador; a gravação da conta de validação manteve o estado desativado. A aplicação foi reiniciada com contas e alterações do inventário preservadas. Imagem da página de utilizadores.
 
 Referência para a escolha do comprimento e ausência de regras de composição: [NIST SP 800-63B-4](https://pages.nist.gov/800-63-4/sp800-63b.html). O projeto ainda não foi avaliado integralmente contra esse documento.

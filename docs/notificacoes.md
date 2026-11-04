@@ -45,10 +45,3 @@ Os ficheiros CSS e JavaScript são agora referenciados com a versão da aplicaç
 Testes automáticos verificam autenticação, separação da leitura entre contas, persistência após novo login, manutenção do estado do incidente, chegada de um novo aviso durante a marcação, cursor monotónico, paginação sem repetições, limites e excertos, rejeição de campos indevidos e um único aviso produzido pelo motor de prazos real.
 
 Os ensaios de escrita usam bases temporárias. A instalação habitual é verificada por leitura, sem acrescentar incidentes nem marcar os avisos do utilizador como lidos. Resultados e imagem da interface são guardados na pasta `docs` após a verificação.
-
-
-Resultado em 26/10/2026: **169 testes passaram** em 236,90 segundos, com um aviso de depreciação Starlette/httpx. Os **11 testes específicos das notificações** passaram novamente após os ajustes finais de categorias e excertos, em 28,34 segundos. A primeira execução desses testes encontrou um erro na chamada de logout do próprio teste, corrigido antes da execução completa.
-
-No portal habitual foram confirmados **9 incidentes, 60 entradas de histórico e 24 avisos operacionais**. Foi verificada a presença do aviso de prazo, a exclusão dos exemplos sintéticos, a ausência de duplicados na página e as referências CSS/JavaScript com versão e hash. A interface abriu o caso INC-009 com a linha temporal e a pesquisa híbrida. O navegador mostrou os estilos finais, sem overflow horizontal na largura observada. Não foram acrescentados casos ou alterada a leitura do utilizador para este ensaio.
-
-Consultar [verificação final](validacao-notificacoes.json) e [imagem da interface](notificacoes-v014.png). A aplicação ficou aberta na nova central.

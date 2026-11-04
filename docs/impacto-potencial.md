@@ -26,4 +26,4 @@ Os testes Node usam o código real da interface com DOM mínimo. Verificam senti
 
 A verificação no laboratório consulta o serviço de exemplo Base de dados e os seus dependentes, sem provocar falhas ou alterar as relações. Estes serviços são exemplos sintéticos, identificados no portal; não estão ligados à base SQLite interna do Nexo. A captura não demonstra uma falha real.
 
-Resultados em `validacao-impacto-potencial.json` e captura em `impacto-potencial-v022.png`. A alteração é de interface, além do número da versão; não muda o esquema, as dependências ou os contratos da API. Não se repetiu a suite Python nesta etapa. Mantém-se local, sem commit nem push.
+ A alteração é de interface, além do número da versão; não muda o esquema, as dependências ou os contratos da API. Não se repetiu a suite Python nesta etapa.

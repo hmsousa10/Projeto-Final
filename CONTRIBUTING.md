@@ -60,3 +60,15 @@ As instalações de runtime também usam requirements-lock.txt como ficheiro de 
 ## Testes locais da interface
 
 Com Node instalado, executar `node --test tests/frontend/navigation.test.cjs`. Estes testes controlam atrasos e respostas fora de ordem sobre o código real da interface. Não usam dependências JavaScript adicionais. O workflow inclui estes testes nos pushes e pull requests destinados a main.
+
+## Artefactos locais
+
+`docs/*.json` e `docs/*.png` são saídas de ensaios e capturas locais e estão
+excluídos do Git. Não acrescentar diários de execução, descrições de publicação
+ou um parágrafo por versão ao README. Documentar o comportamento atual no guia
+respetivo e usar commits/pull requests para descrever as alterações.
+
+Os dados e resultados de `evaluation/` que definem ou documentam a experiência de
+pesquisa continuam versionados. Distinguir resultados experimentais reproduzíveis
+de ficheiros específicos de uma máquina. Não alterar resultados antigos para os
+apresentar como verificações de uma versão nova.

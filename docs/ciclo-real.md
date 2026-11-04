@@ -60,12 +60,12 @@ O percurso operacional é o mesmo: medições, deteção, incidente, intervenç�
 .\.venv\Scripts\python.exe scripts/validar-ciclo-real.py
 ```
 
-O segundo comando provoca falhas reais nos serviços locais de teste, trata e fecha um caso, procura-o no histórico e provoca nova ocorrência. Repõe o serviço após cada falha e deixa o segundo incidente recuperado mas aberto para tratamento manual. Não apaga casos anteriores. O resultado observado é guardado em [validacao-ciclo-real.json](validacao-ciclo-real.json).
+O segundo comando provoca falhas reais nos serviços locais de teste, trata e fecha um caso, procura-o no histórico e provoca nova ocorrência. Repõe o serviço após cada falha e deixa o segundo incidente recuperado mas aberto para tratamento manual. Não apaga casos anteriores. O resultado observado é guardado em validacao-ciclo-real.json.
 
 As médias de MTTA/MTTR do dashboard ainda misturam os exemplos iniciais com os ensaios locais. Não são resultados de uma avaliação de ganhos numa empresa real.
 
 Validação observada em 24/10/2026: **39 testes automáticos passaram**, com um aviso de depreciação Starlette/httpx. O ensaio real terminou às 20:15:25 UTC: caso **INC-006** fechado, com logs preservados, e nova ocorrência **INC-007** recuperada, ainda aberta para tratamento manual. A Aurora voltou a responder HTTP 200. O primeiro ensaio também deixou o caso INC-005 fechado; todos são ensaios académicos identificados nas notas, não ocorrências de uma organização real.
 
-Interface verificada no navegador: navegação no laboratório, controlo de recuperação, consulta do caso fechado e visualização das evidências preservadas. Imagens: [Nexo](laboratorio-v03.png) e [Aurora](aurora-v03.png).
+Interface verificada no navegador: navegação no laboratório, controlo de recuperação, consulta do caso fechado e visualização das evidências preservadas. Imagens: Nexo e Aurora.
 
 Referências técnicas: [API Loki](https://grafana.com/docs/loki/latest/reference/loki-http-api/) e [configuração de armazenamento local](https://grafana.com/docs/loki/latest/configure/examples/configuration-examples/).

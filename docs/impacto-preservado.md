@@ -31,4 +31,4 @@ Os testes em bases temporárias verificam permissões, rejeição de conteúdo i
 
 Os testes Node usam o ficheiro real da interface com DOM mínimo. Verificam a separação dos dados preservados, escape de texto, visibilidade do botão por perfil/estado e resposta atrasada após mudança de janela.
 
-A verificação visual no laboratório principal consulta apenas o botão e os avisos. Não guarda avaliações de teste no histórico do utilizador. Resultados e âmbito em `validacao-impacto-preservado.json`, com captura em `impacto-preservado-v023.png`. Alterações locais, sem commit nem push.
+A verificação visual no laboratório principal consulta apenas o botão e os avisos. Não guarda avaliações de teste no histórico do utilizador.

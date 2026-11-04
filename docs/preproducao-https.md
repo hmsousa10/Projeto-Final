@@ -40,7 +40,7 @@ Cria um serviço identificado de ensaio apenas no catálogo da pré-produção e
 
 O ensaio inspeciona ainda a configuração Docker e inicia um contentor descartável sem privilégios na rede privada para tentar declarar HTTPS por cabeçalhos. Esse pedido é recusado pelo Nexo, porque a origem da ligação não é o proxy autorizado. O registo de tentativas de autenticação também é verificado para confirmar que um endereço forjado pelo cliente não foi usado pelo limitador.
 
-Resultados em [validação de execução](validacao-https-runtime.json). Os testes do navegador não foram usados para contornar avisos de certificados.
+ Os testes do navegador não foram usados para contornar avisos de certificados.
 
 ## Proxy e isolamento
 
@@ -74,4 +74,4 @@ Não basta substituir o nome no ensaio local e publicar as portas. Continuam nec
 
 **297 testes Python e 40 testes da interface aprovados**, com um aviso de descontinuação Starlette/httpx. O ensaio TLS real passou, incluindo a recriação dos contentores com dados, segredo inicial e CA preservados. Os hashes das tabelas históricas dos portais anteriores coincidiram com os valores recolhidos antes da validação; Aurora manteve 9 serviços, 10 incidentes e 73 entradas na linha temporal, e Atlas manteve 2 serviços e nenhum incidente. Os dois foram atualizados para 0.30.0.
 
-[Registo final e hashes](validacao-https.json). Não houve commit, push ou publicação externa nesta entrega.
+ Não houve commit, push ou publicação externa nesta entrega.

@@ -6,6 +6,7 @@ from fastapi import HTTPException
 
 from .db import now
 from .version import VERSION
+from .follow_ups import projection
 
 
 def incident_snapshot(db, iid):
@@ -21,6 +22,7 @@ def incident_snapshot(db, iid):
     result['detection_context'] = {**dict(context), 'config': json.loads(context['config'])} if context else None
     escalation = db.execute('SELECT * FROM incident_escalations WHERE incident_id=?', (iid,)).fetchone()
     result['escalation'] = dict(escalation) if escalation else None
+    result['follow_ups'] = projection(db, iid)
     return result
 
 
@@ -54,13 +56,14 @@ def markdown(report):
                 literal(json.dumps({'service': report['service_at_export'], 'assignee': report['assignee_at_export']},
                                    ensure_ascii=False, indent=2)), '## Estado e datas do incidente\n',
                 literal(json.dumps({k: v for k, v in incident.items() if k not in
-                    ('title','description','resolution','root_cause','prevention','runbook','timeline','evidence','detection_context','escalation')},
+                    ('title','description','resolution','root_cause','prevention','runbook','timeline','evidence','detection_context','escalation','follow_ups')},
                                    ensure_ascii=False, indent=2))]
     for key, title in [('title','Título'),('description','Descrição'),('resolution','Resolução'),
                        ('root_cause','Causa raiz'),('prevention','Prevenção'),('runbook','Runbook')]:
         sections.extend([f'## {title}\n', literal(incident[key] or 'Não registado')])
     for key, title in [('detection_context','Regra preservada na deteção'),('escalation','Escalonamento registado')]:
         sections.extend([f'## {title}\n', literal(json.dumps(incident[key], ensure_ascii=False, indent=2))])
+    sections.extend(['## Ações de prevenção\n', literal(json.dumps(incident.get('follow_ups',[]),ensure_ascii=False,indent=2))])
     sections.append('## Linha temporal completa\n')
     for n, entry in enumerate(incident['timeline'], 1):
         sections.extend([f'### Evento {n}\n', literal(json.dumps(entry, ensure_ascii=False, indent=2))])

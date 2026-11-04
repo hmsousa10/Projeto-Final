@@ -36,7 +36,7 @@ A gravação usa uma transação de escrita: verifica novamente a configuração
 
 Os testes verificam confirmação, deduplicação concorrente, respostas ocupadas, pausa durante uma consulta, recorrência, prioridades, prazo de reconhecimento, bloqueio de resolução prematura, exportação e pausa depois de restauro. Há um ensaio com servidor HTTP real isolado: respostas 503 abrem o caso; duas respostas JSON válidas confirmam recuperação; o caso é tratado, fechado e exportado. Os testes Node verificam os controlos por perfil, o acesso ao incidente durante falhas e a regra sem dependência de Prometheus.
 
-No laboratório principal apenas se ativa a ligação saudável. O inventário passa a incluir o serviço da API; não são introduzidas falhas de teste nem fechados casos anteriores. Resultados em validacao-alertas-api.json e captura em alertas-api-v025.png. Alterações locais, sem commit/push.
+No laboratório principal apenas se ativa a ligação saudável. O inventário passa a incluir o serviço da API; não são introduzidas falhas de teste nem fechados casos anteriores. Resultados em validacao-alertas-api.json e captura em alertas-api-v025.png.
 
 ## Validação académica sem empresa parceira
 

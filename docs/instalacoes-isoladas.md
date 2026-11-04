@@ -50,7 +50,7 @@ Com a Aurora e a Atlas ativas na mesma imagem:
 
 O ensaio verifica as identidades, a recusa de sessões cruzadas nos dois sentidos, a ausência de contas de demonstração na Atlas, a API sem porta publicada, as redes e volumes independentes e os segredos montados apenas para leitura. Cria um serviço identificado como ensaio **apenas na Atlas**, recria os seus contentores e confirma a persistência. O registo permanece para permitir demonstração visual; repetir o ensaio reutiliza-o. Não injeta falhas nem altera serviços ou incidentes na Aurora. A autenticação de verificação acrescenta os registos normais de auditoria de acesso.
 
-O resultado fica em [validação de execução](validacao-instalacoes-runtime.json). Estes testes verificam a configuração e os percursos descritos; não constituem um teste de intrusão nem certificação de isolamento contra comprometimento do anfitrião.
+O resultado fica em validação de execução. Estes testes verificam a configuração e os percursos descritos; não constituem um teste de intrusão nem certificação de isolamento contra comprometimento do anfitrião.
 
 ## Limites e próximo bloco
 
@@ -62,4 +62,4 @@ O passo seguinte é preparar a configuração de um servidor de pré-produção 
 
 A suite geral terminou com **277 testes Python aprovados** e um aviso de descontinuação Starlette/httpx. Os **39 testes da interface** passaram. O ensaio Docker confirmou a mesma imagem, recusa de sessões cruzadas, redes e volumes separados, segredos montados apenas para leitura e persistência após recriação. A Aurora manteve 9 serviços, 10 incidentes e 73 entradas na linha temporal. A Atlas ficou com a API monitorizada e o serviço identificado de ensaio, sem incidentes.
 
-A interface foi verificada no navegador, com recolha ativa, texto da empresa corrigido e sem erros/avisos de consola. [Registo da validação](validacao-instalacoes.json) e [captura da Atlas](instalacao-atlas-v027.png).
+A interface foi verificada no navegador, com recolha ativa, texto da empresa corrigido e sem erros/avisos de consola. Registo da validação e captura da Atlas.
