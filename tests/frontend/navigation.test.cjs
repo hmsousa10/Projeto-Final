@@ -387,3 +387,100 @@ test('os formulários usam a revisão da fotografia do incidente',async()=>{
   assert.match(html,/id="assign-form" data-id="1" data-revision="13"/);
   assert.match(html,/id="transition-form" data-id="1" data-revision="13"/);
 });
+
+function conflictForm(status='investigating') {
+  const panel={hidden:true,textContent:'',innerHTML:''},error={textContent:''};
+  return {dataset:{id:'1',revision:'2',status},values:{note:'Resolução ainda por guardar.'},panel,error,isConnected:true,
+    querySelector:s=>s==='.incident-conflict'?panel:error};
+}
+test('comparação escapa conteúdo e permite revisão apenas no mesmo estado',()=>{
+  const e=setup();e.context.form=conflictForm();
+  e.context.latest={revision:3,status:'investigating',severity:'P1',assignee_id:1,resolution:'<script>injetado</script>'};
+  const html=e.run('conflictComparison(latest,form)');
+  assert.match(html,/&lt;script&gt;/);assert.doesNotMatch(html,/<script>/);
+  assert.match(html,/Usar versão consultada/);
+  e.context.latest.status='resolved';
+  assert.doesNotMatch(e.run('conflictComparison(latest,form)'),/accept-conflict/);
+  assert.match(e.run('conflictComparison(latest,form)'),/ciclo do incidente avançou/);
+});
+test('aceitar versão é explícito, preserva o texto e não envia escrita',()=>{
+  const e=setup(),form=conflictForm();e.context.form=form;
+  form.conflictSnapshot={revision:5,status:'investigating'};
+  e.run("api=()=>{throw new Error('não deve escrever');};acceptIncidentConflict(form)");
+  assert.equal(form.dataset.revision,'5');
+  assert.equal(form.values.note,'Resolução ainda por guardar.');
+  assert.match(form.panel.textContent,/Confirma os campos/);
+  assert.equal(form.conflictSnapshot,null);
+});
+test('uma mudança de estado impede aceitar o formulário antigo',()=>{
+  const e=setup(),form=conflictForm();e.context.form=form;
+  form.conflictSnapshot={revision:5,status:'closed'};
+  e.run('acceptIncidentConflict(form)');assert.equal(form.dataset.revision,'2');
+});
+test('consulta pendente não atualiza janela fechada ou substituída',async()=>{
+  const e=setup(),form=conflictForm();e.context.form=form;e.context.pending=deferred();
+  e.run('api=()=>pending.promise;stillCurrent=true');
+  const request=e.run('inspectIncidentConflict(form,()=>stillCurrent)');
+  e.run('stillCurrent=false');e.context.pending.resolve({revision:3,status:'investigating'});
+  await request;assert.equal(form.conflictSnapshot,null);assert.equal(form.panel.innerHTML,'');
+});
+test('a consulta mais recente vence respostas fora de ordem',async()=>{
+  const e=setup(),form=conflictForm();e.context.form=form;
+  e.context.first=deferred();e.context.second=deferred();e.run('let calls=0;api=()=>++calls===1?first.promise:second.promise');
+  const a=e.run('inspectIncidentConflict(form,()=>true)'),b=e.run('inspectIncidentConflict(form,()=>true)');
+  e.context.second.resolve({revision:9,status:'investigating',severity:'P1'});await b;
+  e.context.first.resolve({revision:3,status:'investigating',severity:'P2'});await a;
+  assert.equal(form.conflictSnapshot.revision,9);assert.match(form.panel.innerHTML,/revisão 9/);
+});
+test('falha da consulta preserva o rascunho e impede aceitar revisão anterior',async()=>{
+  const e=setup(),form=conflictForm();e.context.form=form;form.conflictSnapshot={revision:4,status:'investigating'};
+  e.run("api=async()=>{throw new Error('Sem ligação');}");
+  await e.run('inspectIncidentConflict(form,()=>true)');
+  assert.equal(form.conflictSnapshot,null);assert.equal(form.dataset.revision,'2');
+  assert.match(form.panel.textContent,/Sem ligação/);assert.equal(form.values.note,'Resolução ainda por guardar.');
+});
+
+test('conflito de gravação consulta o caso sem repetir a escrita nem perder campos',async()=>{
+  const e=setup(),form=conflictForm(),button={disabled:false};
+  form.id='transition-form';form.dataset.next='resolved';
+  const lookup=form.querySelector;form.querySelector=s=>s==='button[type="submit"]'?button:lookup(s);
+  e.nodes['#modal'].open=true;e.context.calls=[];
+  e.run(`api=async(p,o)=>{calls.push([p,o?.method||'GET']);if(o?.method==='PATCH')throw Object.assign(new Error('Conflito'),{conflict:'incident-revision'});return {revision:8,status:'investigating',severity:'P1'};}`);
+  await e.handlers.submit({target:form,preventDefault(){}});
+  assert.equal(e.context.calls.length,2);
+  assert.equal(e.context.calls[0][1],'PATCH');assert.equal(e.context.calls[1][1],'GET');
+  assert.equal(form.dataset.revision,'2');assert.equal(form.conflictSnapshot.revision,8);
+  assert.equal(form.values.note,'Resolução ainda por guardar.');assert.equal(button.disabled,false);
+});
+test('a API distingue conflito de revisão de outros erros HTTP',async()=>{
+  const e=setup();
+  e.context.fetch=async()=>({ok:false,status:409,json:async()=>({detail:'Versão antiga'}),headers:{get:()=> 'incident-revision'}});
+  await assert.rejects(e.run("api('/incidents/1')"),error=>error.conflict==='incident-revision' && error.status===409);
+});
+
+test('ações de prevenção distinguem atraso e escapam todo o texto variável',()=>{
+  const e=setup();e.context.actionCase={id:1,status:'closed',follow_ups:[{id:12,title:'<script>ação</script>',owner_name:'<img>',due_date:'2000-01-01',status:'open',overdue:true}]};
+  const html=e.run('followUpsPanel(actionCase)');
+  assert.match(html,/Prazo ultrapassado/);assert.match(html,/&lt;script&gt;/);assert.doesNotMatch(html,/<script>|<img>/);
+  assert.match(html,/followup-finish-12/);assert.match(html,/followup-form/);
+  e.run("user.role='viewer'");const readonly=e.run('followUpsPanel(actionCase)');
+  assert.doesNotMatch(readonly,/<form/);assert.match(readonly,/Prazo ultrapassado/);
+});
+test('incidente ativo sem ações não oferece prevenção antes da resolução',()=>{
+  const e=setup();e.context.actionCase={id:1,status:'open',follow_ups:[]};
+  assert.equal(e.run('followUpsPanel(actionCase)'),'');
+});
+test('decisão terminada mostra o motivo sem permitir nova gravação',()=>{
+  const e=setup();e.context.actionCase={id:1,status:'closed',follow_ups:[{id:12,title:'Teste da API',owner_name:'Pessoa',due_date:'2000-01-01',status:'cancelled',overdue:false,completion_note:'<script>Motivo</script>',finished_by:'Pessoa'}]};
+  const html=e.run('followUpsPanel(actionCase)');
+  assert.match(html,/Cancelada/);assert.match(html,/&lt;script&gt;Motivo/);assert.doesNotMatch(html,/followup-finish-12/);
+});
+test('guardar ação não reabre uma janela que foi fechada entretanto',async()=>{
+  const e=setup(),button={disabled:false},error={textContent:''};
+  e.nodes['#modal'].open=true;e.context.saved=deferred();e.context.calls=[];
+  e.run('api=(p,o)=>{calls.push(p);return saved.promise};load=async()=>{};let reopened=0;incidentModal=async()=>{reopened++}');
+  const form={id:'followup-finish-12',dataset:{id:'1',actionId:'12'},values:{status:'completed',note:'Verificações concluídas pela equipa.'},isConnected:true,querySelector:s=>s==='button[type="submit"]'?button:error};
+  const pending=e.handlers.submit({target:form,preventDefault(){}});
+  e.run('closeModal()');form.isConnected=false;e.context.saved.resolve({status:'completed'});await pending;
+  assert.equal(e.context.calls[0],'/incidents/1/follow-ups/12/finish');assert.equal(e.run('reopened'),0);assert.equal(button.disabled,false);
+});

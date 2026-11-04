@@ -15,7 +15,9 @@ def test_stale_assignment_is_rejected_without_side_effects(client):
     with database(client.app.state.db_path) as db:
         before = [tuple(r) for r in db.execute('SELECT * FROM audit')]
         timeline = [tuple(r) for r in db.execute('SELECT * FROM timeline')]
-    assert client.post(f'/api/incidents/{iid}/assign', json={**payload, 'user_id': 1}).status_code == 409
+    conflict = client.post(f'/api/incidents/{iid}/assign', json={**payload, 'user_id': 1})
+    assert conflict.status_code == 409
+    assert conflict.headers['X-Nexo-Conflict'] == 'incident-revision'
     with database(client.app.state.db_path) as db:
         assert before == [tuple(r) for r in db.execute('SELECT * FROM audit')]
         assert timeline == [tuple(r) for r in db.execute('SELECT * FROM timeline')]

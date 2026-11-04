@@ -6,4 +6,5 @@ def check_revision(row, expected):
     if expected is not None and row['revision'] != expected:
         raise HTTPException(409,
             'Este incidente foi alterado desde que o abriste. O teu texto continua no formulário. '
-            'Copia-o se necessário e reabre o incidente para consultar a versão atual antes de tentar novamente.')
+            'Consulta a versão atual antes de tentar novamente.',
+            headers={'X-Nexo-Conflict': 'incident-revision'})
