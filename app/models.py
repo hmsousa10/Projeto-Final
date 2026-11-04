@@ -43,7 +43,12 @@ class IncidentInput(Input):
     severity: Literal['P1', 'P2', 'P3', 'P4'] = 'P2'
 
 
-class IncidentUpdate(Input):
+class IncidentRevision(Input):
+    # Optional for legacy API clients; the portal always sends the revision it displayed.
+    expected_revision: int | None = Field(default=None, strict=True, ge=0, le=9007199254740991)
+
+
+class IncidentUpdate(IncidentRevision):
     status: Literal['open', 'acknowledged', 'investigating', 'resolved', 'closed']
     note: str = Field(default='', max_length=5000)
     root_cause: str = Field(default='', max_length=5000)
@@ -51,7 +56,7 @@ class IncidentUpdate(Input):
     runbook: str = Field(default='', max_length=5000)
 
 
-class Assignment(Input):
+class Assignment(IncidentRevision):
     user_id: int = Field(gt=0)
 
 

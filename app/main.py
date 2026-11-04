@@ -18,6 +18,7 @@ from fastapi.exceptions import RequestValidationError
 from fastapi.staticfiles import StaticFiles
 from starlette.middleware.trustedhost import TrustedHostMiddleware
 
+from .incident_concurrency import check_revision
 from .db import audit, database, event, initialize, now
 from .models import Assignment, Comment, IncidentInput, IncidentUpdate, Login, Scenario, ServiceInput, LabFault, MonitoringInput, AlertRuleInput
 from .models import password_policy
@@ -570,6 +571,7 @@ def create_app(db_path=None, demo=None):
         with database(path) as db:
             db.execute('BEGIN IMMEDIATE')
             row = require(db, 'incidents', iid)
+            check_revision(row, data.expected_revision)
             if NEXT.get(row['status']) != data.status:
                 raise HTTPException(409, 'Transição inválida. Segue a ordem do ciclo de incidente.')
             if data.status == 'acknowledged' and not row['assignee_id']:
@@ -600,6 +602,7 @@ def create_app(db_path=None, demo=None):
         with database(path) as db:
             db.execute('BEGIN IMMEDIATE')
             row = require(db, 'incidents', iid)
+            check_revision(row, data.expected_revision)
             if row['status'] in ('resolved', 'closed'):
                 raise HTTPException(409, 'Este incidente já está resolvido.')
             assigned = require(db, 'users', data.user_id)

@@ -352,3 +352,38 @@ test('a interface distingue o modo de produção do ambiente local',()=>{
   assert.match(e.nodes['#app'].innerHTML,/MODO PRODUÇÃO/);
   assert.doesNotMatch(e.nodes['#app'].innerHTML,/>AMBIENTE LOCAL</);
 });
+
+test('formulários enviam a revisão apresentada e preservam texto quando há conflito',async()=>{
+  for(const id of ['assign-form','transition-form']) {
+    const e=setup(),error={textContent:''},button={disabled:false};
+    e.context.sent=[];
+    e.run(`api=async(p,o)=>{sent.push(JSON.parse(o.body));throw new Error('Este incidente foi alterado');};`);
+    const form={id,dataset:{id:'1',revision:'7',next:'resolved'},values:{user_id:'2',note:'Resolução escrita pelo operador.'},isConnected:true,
+      querySelector:s=>s==='button[type="submit"]'?button:error};
+    await e.handlers.submit({target:form,preventDefault(){}});
+    assert.equal(e.context.sent[0].expected_revision,7);
+    assert.match(error.textContent,/foi alterado/);
+    assert.equal(form.values.note,'Resolução escrita pelo operador.');
+    assert.equal(button.disabled,false);
+  }
+});
+
+test('versão ausente ou inválida nunca desativa silenciosamente a proteção',()=>{
+  const e=setup();
+  for(const revision of [undefined,'','NaN','-1','9007199254740992']) {
+    e.context.form={dataset:{revision}};
+    assert.throws(()=>e.run('incidentRevision(form)'),/Reabre o incidente/);
+  }
+  e.context.form={dataset:{revision:'0'}};
+  assert.equal(e.run('incidentRevision(form)'),0);
+});
+
+test('os formulários usam a revisão da fotografia do incidente',async()=>{
+  const e=setup();
+  e.context.case1={...fixture(1),status:'open',revision:13};
+  caseApi(e);
+  await e.run('incidentModal(1)');
+  const html=e.nodes['#modal-content'].innerHTML;
+  assert.match(html,/id="assign-form" data-id="1" data-revision="13"/);
+  assert.match(html,/id="transition-form" data-id="1" data-revision="13"/);
+});

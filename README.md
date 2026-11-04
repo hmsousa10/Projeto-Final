@@ -4,7 +4,7 @@ Plataforma Web de Observabilidade e Operações Assistidas por IA para Sistemas 
 
 Projeto I de Engenharia Informática · Hugo Sousa · a22405716 · 2026/27.
 
-Esta é a **versão 0.31 local**: inventário, gestão de incidentes, pesquisa semântica local, cópias cifradas e restauro isolado, com um laboratório Docker que inclui um portal empresarial fictício, sondagens HTTP reais, logs Loki, incidentes automáticos e evidências preservadas. Os serviços de laboratório estão identificados; os exemplos anteriores continuam sintéticos. O portal completo ainda está em desenvolvimento.
+Esta é a **versão 0.32 local**: inventário, gestão de incidentes, pesquisa semântica local, cópias cifradas e restauro isolado, com um laboratório Docker que inclui um portal empresarial fictício, sondagens HTTP reais, logs Loki, incidentes automáticos e evidências preservadas. Os serviços de laboratório estão identificados; os exemplos anteriores continuam sintéticos. O portal completo ainda está em desenvolvimento.
 
 **Prioridade atual:** implementar e validar o portal por etapas, procurando chegar a uma versão completa em cerca de um mês, com prazo ajustável aos resultados. A documentação de Projeto I continua em paralelo; a entrega preliminar mantém-se em 9 de novembro de 2026.
 
@@ -220,3 +220,12 @@ A pré-produção liga agora a uma API fictícia da Aurora também por HTTPS, co
 ## Entrega consolidada
 
 Consultar [Entrega consolidada 0.31](docs/entrega-consolidada-031.md) para o âmbito publicado, validação disponível e separação entre código e dados locais.
+
+## Colaboração entre operadores · v0.32
+
+A atribuição e as transições de incidentes comparam a versão aberta no formulário
+com a versão atual, dentro da mesma transação de escrita. Se outro operador ou a
+recolha automática tiver alterado o caso, o portal recusa a gravação e preserva
+o texto do formulário para consulta e revisão.
+
+Consultar [funcionamento, compatibilidade e demonstração](docs/concorrencia-incidentes.md).

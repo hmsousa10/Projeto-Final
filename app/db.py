@@ -117,6 +117,13 @@ def initialize(path):
             latency_percent REAL NOT NULL, valid_from TEXT NOT NULL, actor TEXT NOT NULL,
             PRIMARY KEY(service_id,version));
         """)
+        # Existing installations gain a monotonic concurrency token without rewriting history.
+        if 'revision' not in {r['name'] for r in db.execute('PRAGMA table_info(incidents)')}:
+            db.execute('ALTER TABLE incidents ADD COLUMN revision INTEGER NOT NULL DEFAULT 0')
+        db.execute("""CREATE TRIGGER IF NOT EXISTS incident_revision AFTER UPDATE ON incidents
+            WHEN NEW.revision = OLD.revision BEGIN
+                UPDATE incidents SET revision=OLD.revision+1 WHERE id=NEW.id;
+            END""")
         # Additive migration: preserve observations, incidents and legacy lab mappings.
         columns = {r['name'] for r in db.execute('PRAGMA table_info(telemetry_targets)')}
         for name, definition in {
