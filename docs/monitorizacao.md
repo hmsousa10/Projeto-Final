@@ -62,10 +62,10 @@ As amostras com mais de 45 segundos não definem estado atual. O importador cons
 
 O ensaio configura **Aurora · Consulta de pedidos**, confirma a descoberta efetiva no Prometheus, provoca uma falha no serviço de laboratório, confirma o incidente, pausa a recolha e verifica a remoção do alvo e a preservação do histórico. Depois recupera o serviço, retoma as sondagens e fecha o caso com resolução e prevenção. O serviço fica ligado e operacional. Não executa falhas em endereços de empresas externas.
 
-Validação observada em 24/10/2026: **57 testes passaram**, com um aviso de depreciação Starlette/httpx. O ensaio Docker terminou às 20:30:38 UTC com serviço **7**, alvo **service-7** e caso **INC-008** fechado. Resultado guardado em [validacao-monitorizacao.json](validacao-monitorizacao.json).
+Validação observada em 24/10/2026: **57 testes passaram**, com um aviso de depreciação Starlette/httpx. O ensaio Docker terminou às 20:30:38 UTC com serviço **7**, alvo **service-7** e caso **INC-008** fechado. Resultado guardado em validacao-monitorizacao.json.
 
 O percurso pela interface também foi verificado: criar serviço no inventário, selecionar endereço autorizado, guardar uma ligação inicialmente pausada e pausar/retomar uma ligação ativa. Foi deixado o serviço **Exemplo · Ligação HTTP pausada** sem iniciar sondagens, para experimentar a retoma. A ligação **Aurora · Consulta de pedidos** permanece ativa.
 
-Após reiniciar a aplicação, os quatro mapeamentos foram preservados: três ativos e um pausado; o caso INC-008 continuou fechado. [Imagem da interface validada](monitorizacao-v04.png).
+Após reiniciar a aplicação, os quatro mapeamentos foram preservados: três ativos e um pausado; o caso INC-008 continuou fechado. Imagem da interface validada.
 
 Referência do protocolo: [HTTP Service Discovery do Prometheus](https://prometheus.io/docs/prometheus/latest/http_sd/).

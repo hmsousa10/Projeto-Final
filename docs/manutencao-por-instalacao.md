@@ -67,8 +67,8 @@ Foi preparada uma cópia nova da Atlas, promovida, verificada e concluída, segu
 
 Os hashes das tabelas históricas da Aurora e da Atlas coincidiram com os valores recolhidos antes dos dois percursos. A Aurora manteve 9 serviços, 10 incidentes e 73 entradas na linha temporal; a Atlas manteve 2 serviços e nenhum incidente. As sessões antigas da Atlas foram revogadas, como previsto. Foram conservados dois pontos de retorno e duas cópias anteriores à reversão.
 
-Após verificar o estado recuperado, a recolha empresarial da Atlas foi retomada explicitamente através da API autenticada e foi confirmada uma nova amostra válida. O ensaio não provocou uma falha no serviço empresarial nem criou incidentes fictícios. Consultar [a validação de execução](validacao-manutencao-instalacoes-runtime.json).
+Após verificar o estado recuperado, a recolha empresarial da Atlas foi retomada explicitamente através da API autenticada e foi confirmada uma nova amostra válida. O ensaio não provocou uma falha no serviço empresarial nem criou incidentes fictícios. Consultar a validação de execução.
 
 ## Validação final
 
-**292 testes Python e 39 testes da interface aprovados**, com um aviso de descontinuação Starlette/httpx. Os scripts passaram a análise de sintaxe PowerShell. Os dois portais respondem com a versão 0.29.0. A única operação de ensaio com estado `failed` é a falha provocada: o registo conserva esse resultado e confirma a reversão automática. [Registo final e hashes](validacao-manutencao-instalacoes.json). Não foi feito commit nem push.
+**292 testes Python e 39 testes da interface aprovados**, com um aviso de descontinuação Starlette/httpx. Os scripts passaram a análise de sintaxe PowerShell. Os dois portais respondem com a versão 0.29.0. A única operação de ensaio com estado `failed` é a falha provocada: o registo conserva esse resultado e confirma a reversão automática.  Não foi feito commit nem push.

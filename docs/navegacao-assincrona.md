@@ -30,4 +30,4 @@ São testes da lógica assíncrona com um DOM mínimo, não uma suite completa d
 
 ## Estado
 
-Entrega local, mantendo as alterações de v0.18. Não foi criado commit nem efetuado push nesta etapa. Não houve alteração ao esquema SQLite nem às regras do ciclo de incidentes. Resultados em validacao-navegacao.json.
+Entrega local, mantendo as alterações de v0.18. Não foi criado commit nem efetuado push nesta etapa. Não houve alteração ao esquema SQLite nem às regras do ciclo de incidentes.

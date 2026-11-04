@@ -68,7 +68,7 @@ Alertas de negócio com confirmação de amostras, histórico destes totais, equ
 
 Os testes usam servidores HTTP reais isolados para verificar Bearer, cache, redirecionamentos recusados, autenticação separada dos controlos, falha e recuperação, payloads inválidos, tamanhos, totais incoerentes e datas fora da janela. A API do Nexo é testada nos três perfis. Os testes Node verificam identificação da empresa, indicação de dados fictícios, escape de texto, estados sem totais falsos e navegação durante respostas atrasadas.
 
-Resultados em validacao-integracao-empresarial.json e captura em integracao-empresarial-v024.png. Alterações locais, sem commit nem push. O esquema SQLite e as dependências Python mantêm-se.
+  O esquema SQLite e as dependências Python mantêm-se.
 
 ## Evolução posterior · v0.25 local
 

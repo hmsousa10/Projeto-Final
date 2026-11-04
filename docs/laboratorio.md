@@ -57,6 +57,6 @@ Validação efetuada neste computador com Docker Desktop 29.9.2:
 - Teste `scripts/validar-laboratorio.py`: ligação ao Prometheus, alvo saudável, alvo degradado por latência, paragem real do alvo detetada, recuperação detetada, indisponibilidade do coletor visível, expiração das amostras e recuperação da recolha — todos passaram.
 - Na conclusão do teste, portal HTTP com 1,83 ms e API HTTP com 801,99 ms; valores pontuais, não resultados de um ensaio de desempenho.
 - Aplicação reconstruída e reiniciada após o teste; sessão e histórico de sondagens preservados no volume.
-- Interface verificada no navegador, com as duas origens identificadas. Imagem: [laboratorio-v02.png](laboratorio-v02.png).
+- Interface verificada no navegador, com as duas origens identificadas. Imagem: laboratorio-v02.png.
 
 Estes testes verificam a primeira integração operacional. Não demonstram conformidade integral com o enunciado nem segurança de produção.

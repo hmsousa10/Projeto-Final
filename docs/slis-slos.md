@@ -81,13 +81,13 @@ O p95 apresentado é **descritivo**, por ordem estatística mais próxima, calcu
 
 O ensaio usa a janela de um minuto: confirma seis intervalos reais no portal, disponibilidade adequada e violação do objetivo de latência na API com atraso de base. Para o Prometheus, confirma intervalos desconhecidos e conclusão inconclusiva no portal, repõe a recolha e aguarda que as lacunas saiam da janela móvel. Não injeta amostras sintéticas para obter estes resultados.
 
-Resultado observado em 24/10/2026, às 21:24:31 UTC: seis intervalos e cobertura de 100% antes; durante a falha de recolha, cinco intervalos, um desconhecido, limites de disponibilidade de 83,333% a 100% e estado inconclusivo; depois, seis intervalos e resultado novamente avaliável. Evidência: [validacao-slo.json](validacao-slo.json).
+Resultado observado em 24/10/2026, às 21:24:31 UTC: seis intervalos e cobertura de 100% antes; durante a falha de recolha, cinco intervalos, um desconhecido, limites de disponibilidade de 83,333% a 100% e estado inconclusivo; depois, seis intervalos e resultado novamente avaliável. Evidência: validacao-slo.json.
 
 **92 testes automáticos passaram**, com um aviso de depreciação Starlette/httpx. Incluem duplicados, valores inválidos, falhas rápidas, janelas incompletas, fronteiras de tempo, políticas, permissões e casos sem medições. A suite completa também detetou um problema de precisão no instante exato de escalonamento; a comparação foi corrigida para usar datas com a mesma precisão, com um teste de regressão determinístico.
 
 A interface confirmou a mudança de janela e a edição do serviço **Exemplo · Ligação HTTP pausada**: o objetivo de respostas boas passou de 95% para **97,5% em até 600 ms**, guardando a política v2 e preservando a v1. O alvo permaneceu pausado.
 
-Após reiniciar a aplicação, os objetivos, casos e ligações mantiveram-se. A janela de um minuto apresentou os dois portais rápidos dentro dos objetivos, a API lenta fora do objetivo de latência e o alvo pausado sem dados suficientes. Imagens: [vista inicial](slo-v07.png) e [página completa](slo-v07-completo.png).
+Após reiniciar a aplicação, os objetivos, casos e ligações mantiveram-se. A janela de um minuto apresentou os dois portais rápidos dentro dos objetivos, a API lenta fora do objetivo de latência e o alvo pausado sem dados suficientes. Imagens: vista inicial e página completa.
 
 ## Limites operacionais
 

@@ -57,7 +57,28 @@ o envio dos dois formulários e verificam que o conflito mantém o texto e reati
 o botão. Estes testes usam DOM mínimo e não substituem a demonstração em dois
 navegadores.
 
-Validação local em 4 de novembro de 2026: bateria geral com 323 testes Python
-aprovados, teste adicional de migração aprovado e 43 testes JavaScript aprovados.
-A bateria Python apresentou um aviso de depreciação já existente no TestClient.
-O ensaio manual em dois navegadores não foi executado nesta entrega.
+## Recuperar um conflito no formulário · v0.33
+
+O servidor identifica especificamente os conflitos de revisão no cabeçalho
+`X-Nexo-Conflict: incident-revision`. Outros erros 409, como uma transição inválida
+ou recuperação ainda não confirmada, mantêm a sua mensagem habitual.
+
+Após um conflito de revisão, a interface consulta o caso sem substituir o
+formulário. O painel apresenta revisão, estado, prioridade, responsável e campos
+de resolução já guardados. A consulta não escreve na base de dados.
+
+Se o estado continuar igual, **Usar versão consultada** atualiza apenas a revisão
+do formulário. O texto e a seleção de responsável mantêm-se. O operador tem de
+rever e carregar novamente no botão de guardar: não existe repetição automática.
+Se alguém alterar entretanto o caso, o servidor volta a recusar a gravação.
+
+Se o ciclo tiver avançado, o painel não permite reutilizar o formulário antigo.
+É necessário conservar o texto pretendido e reabrir o caso para consultar as ações
+do novo estado. **Consultar novamente** atualiza apenas a comparação. Respostas
+fora de ordem ou de uma janela já fechada não substituem o contexto atual.
+
+Os rascunhos ficam apenas no formulário em memória. Fechar a janela, atualizar a
+página ou terminar a sessão pode perdê-los. Esta versão não guarda texto no
+armazenamento do navegador nem faz fusões automáticas entre decisões.
+
+### Validação da v0.33
